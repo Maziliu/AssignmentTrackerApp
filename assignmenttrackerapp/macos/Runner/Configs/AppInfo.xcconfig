@@ -8,7 +8,7 @@
 PRODUCT_NAME = assignmenttrackerapp
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.maziliu.assignmenttrackerapp
+PRODUCT_BUNDLE_IDENTIFIER = com.martin.assignmenttrackerapp
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2024 com.maziliu. All rights reserved.

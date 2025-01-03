@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "8122294932",
-    "project_id": "maziliu-assignment-tracker-app",
-    "storage_bucket": "maziliu-assignment-tracker-app.firebasestorage.app"
+    "project_number": "720966427604",
+    "project_id": "assignment-tracker-app-f54e5",
+    "storage_bucket": "assignment-tracker-app-f54e5.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:8122294932:android:4a82d789fd699ee28c4a81",
+        "mobilesdk_app_id": "1:720966427604:android:903b5fc0f0335471c9ec41",
         "android_client_info": {
-          "package_name": "com.maziliu.assignmenttrackerapp"
+          "package_name": "com.martin.assignmenttrackerapp"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBF1XEtNvUVXEEacp6tPP4eVB48T5TqMZ0"
+          "current_key": "AIzaSyBnb0oOvkG9m2kwW10peDUXX15mbQYKEhs"
         }
       ],
       "services": {
