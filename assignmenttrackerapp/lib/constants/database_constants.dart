@@ -16,3 +16,5 @@ const createAssignmentTable = '''CREATE TABLE IF NOT EXISTS "assignment" (
         "title" TEXT NOT NULL,
         FOREIGN KEY ("user_id") REFERENCES "user" ("id")
       );''';
+
+const allTableCreates = [createUserTable, createAssignmentTable];
