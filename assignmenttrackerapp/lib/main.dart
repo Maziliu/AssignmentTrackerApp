@@ -5,7 +5,7 @@ import 'package:assignmenttrackerapp/services/auth/auth_services.dart';
 import 'package:assignmenttrackerapp/views/auth/login_view.dart';
 import 'package:assignmenttrackerapp/views/auth/register_view.dart';
 import 'package:assignmenttrackerapp/views/auth/verify_email_view.dart';
-import 'package:assignmenttrackerapp/views/dashboard_view.dart';
+import 'package:assignmenttrackerapp/views/dashboard/dashboard_view.dart';
 
 void main() {
   runApp(const AppEntryPoint());

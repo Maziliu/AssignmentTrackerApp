@@ -1,4 +1,6 @@
-class DatabaseAssignment {
+import 'package:assignmenttrackerapp/services/database/classes/db_object.dart';
+
+class DatabaseAssignment implements DatabaseObject {
   final int _id, _userId;
   final DateTime _creationDate, _dueDate;
   final String _title;
@@ -29,15 +31,18 @@ class DatabaseAssignment {
   String get title => _title;
 
   @override
+  bool operator ==(covariant DatabaseObject other) {
+    if (other is DatabaseAssignment) {
+      return id == other.id;
+    }
+    return false;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
+
+  @override
   String toString() {
     return 'ID: $_id USERID: $_userId';
   }
-
-  @override
-  bool operator ==(covariant DatabaseAssignment other) {
-    return _id == other._id;
-  }
-
-  @override
-  int get hashCode => _id.hashCode;
 }

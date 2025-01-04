@@ -1,4 +1,6 @@
-class DatabaseUser {
+import 'package:assignmenttrackerapp/services/database/classes/db_object.dart';
+
+class DatabaseUser implements DatabaseObject {
   final int _id;
   final String _email;
 
@@ -21,8 +23,12 @@ class DatabaseUser {
   }
 
   @override
-  bool operator ==(covariant DatabaseUser other) {
-    return _id == other._id;
+  bool operator ==(covariant DatabaseObject other) {
+    if (other is DatabaseUser) {
+      return _id == other._id;
+    }
+
+    return false;
   }
 
   @override

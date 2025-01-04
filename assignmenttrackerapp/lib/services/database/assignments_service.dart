@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:assignmenttrackerapp/constants/database_constants.dart';
+import 'package:assignmenttrackerapp/services/database/classes/cache_stream.dart';
 import 'package:assignmenttrackerapp/services/database/classes/db_assignment.dart';
 import 'package:assignmenttrackerapp/services/database/database_exceptions.dart';
 import 'package:sqflite/sqflite.dart';
@@ -9,6 +10,15 @@ import 'package:path/path.dart';
 
 class AssignmentsService {
   Database? _database;
+
+  CacheStream<DatabaseAssignment> cache = CacheStream<DatabaseAssignment>();
+
+  Future<void> _cacheAssignments() async {
+    final assignments = await getAllAssignments();
+    for (DatabaseAssignment assignment in assignments) {
+      cache.updateCache(assignment);
+    }
+  }
 
   Database _getDatabase() {
     final database = _database;
@@ -42,6 +52,9 @@ class AssignmentsService {
       //Create user and assignment tables if it doesnt exist
       await database.execute(createUserTable);
       await database.execute(createAssignmentTable);
+
+      //Load into mem
+      await _cacheAssignments();
     } on MissingPlatformDirectoryException {
       throw DocumentsDirectoryNotFoundException();
     }
@@ -66,24 +79,26 @@ class AssignmentsService {
       throw CouldNotUpdateAssignment();
     }
 
-    return DatabaseAssignment(
-        id: originalAssignment.id,
-        userId: originalAssignment.userId,
-        creationDate: originalAssignment.creationDate,
-        dueDate: dueDate,
-        title: title);
+    final updatedAssignment =
+        await getAssignmentUsingId(id: originalAssignment.id);
+
+    cache.updateCache(updatedAssignment);
+
+    return updatedAssignment;
   }
 
-  Future<Iterable<DatabaseAssignment>> getAllAssignments() async {
+  Future<List<DatabaseAssignment>> getAllAssignments() async {
     final database = _getDatabase();
     final results = await database.query(assignmentTableName);
 
-    return results.map((row) => DatabaseAssignment.fromRow(row));
+    return results.map((row) => DatabaseAssignment.fromRow(row)).toList();
   }
 
   Future<int> deleteAllAssignments() async {
     final database = _getDatabase();
     final count = await database.delete(assignmentTableName);
+
+    cache.clearCache();
 
     return count;
   }
@@ -102,7 +117,11 @@ class AssignmentsService {
       throw CouldNotFindAssignment();
     }
 
-    return DatabaseAssignment.fromRow(results.first);
+    final assignment = DatabaseAssignment.fromRow(results.first);
+
+    cache.updateCache(assignment);
+
+    return assignment;
   }
 
   Future<DatabaseAssignment> createAssignment(
@@ -119,14 +138,17 @@ class AssignmentsService {
     };
 
     final assignmentId = await database.insert(assignmentTableName, row);
-
-    return DatabaseAssignment(
+    final assignment = DatabaseAssignment(
       id: assignmentId,
       userId: userId,
       creationDate: DateTime.fromMillisecondsSinceEpoch(creationDate),
       dueDate: dueDate,
       title: title,
     );
+
+    cache.updateCache(assignment);
+
+    return assignment;
   }
 
   Future<void> deleteAssignment({required int id}) async {
@@ -140,5 +162,7 @@ class AssignmentsService {
     if (count != 1) {
       throw CouldNotDeleteAssignment();
     }
+
+    cache.removeFromCacheUsingId(id);
   }
 }
