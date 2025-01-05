@@ -1,4 +1,4 @@
-import 'package:assignmenttrackerapp/services/database/classes/db_object.dart';
+import 'package:assignmenttrackerapp/models/db_object.dart';
 
 class DatabaseAssignment implements DatabaseObject {
   final int _id, _userId;

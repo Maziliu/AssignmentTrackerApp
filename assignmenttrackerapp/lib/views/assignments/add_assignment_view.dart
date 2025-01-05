@@ -1,6 +1,6 @@
 import 'package:assignmenttrackerapp/services/auth/auth_services.dart';
 import 'package:assignmenttrackerapp/services/database/assignments_service.dart';
-import 'package:assignmenttrackerapp/services/database/classes/db_assignment.dart';
+import 'package:assignmenttrackerapp/models/db_assignment.dart';
 import 'package:assignmenttrackerapp/services/database/core_service.dart';
 import 'package:flutter/material.dart';
 

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:assignmenttrackerapp/constants/database_constants.dart';
-import 'package:assignmenttrackerapp/services/database/classes/cache_stream.dart';
-import 'package:assignmenttrackerapp/services/database/classes/db_assignment.dart';
+import 'package:assignmenttrackerapp/models/cache_stream.dart';
+import 'package:assignmenttrackerapp/models/db_assignment.dart';
 import 'package:assignmenttrackerapp/services/database/database_exceptions.dart';
 import 'package:assignmenttrackerapp/services/database/database_service.dart';
 

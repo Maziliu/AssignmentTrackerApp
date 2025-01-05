@@ -1,11 +1,11 @@
 import 'package:assignmenttrackerapp/constants/routes.dart';
 import 'package:assignmenttrackerapp/enums/overflow_menu_options.dart';
 import 'package:assignmenttrackerapp/services/auth/auth_services.dart';
-import 'package:assignmenttrackerapp/services/database/classes/db_user.dart';
+import 'package:assignmenttrackerapp/models/db_user.dart';
 import 'package:assignmenttrackerapp/services/database/core_service.dart';
 import 'package:assignmenttrackerapp/themes/themes.dart';
 import 'package:assignmenttrackerapp/utils/dialog_helpers.dart';
-import 'package:assignmenttrackerapp/views/assignments/assignments_screen.dart';
+import 'package:assignmenttrackerapp/views/assignments/assignments_view.dart';
 import 'package:flutter/material.dart';
 
 class DashboardView extends StatefulWidget {

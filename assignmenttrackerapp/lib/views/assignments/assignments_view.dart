@@ -1,6 +1,7 @@
 import 'package:assignmenttrackerapp/services/database/assignments_service.dart';
-import 'package:assignmenttrackerapp/services/database/classes/db_assignment.dart';
+import 'package:assignmenttrackerapp/models/db_assignment.dart';
 import 'package:assignmenttrackerapp/views/assignments/add_assignment_view.dart';
+import 'package:assignmenttrackerapp/views/widgets/task_widget.dart';
 import 'package:flutter/material.dart';
 
 class AssignmentsScreen extends StatefulWidget {
@@ -45,16 +46,14 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
               itemCount: assignments.length,
               itemBuilder: (context, index) {
                 final assignment = assignments[index];
-                return ListTile(
-                  title: Text(
-                    assignment.title,
-                    maxLines: 1,
-                    softWrap: true,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  subtitle: Text(
-                    'Due: ${assignment.dueDate.toString().split(' ')[0]}',
-                  ),
+                return TaskWidget<DatabaseAssignment>(
+                  data: assignment,
+                  titleBuilder: (assignment) => assignment.title,
+                  subtitleBuilder: (assignment) =>
+                      assignment.dueDate.toString().split(' ')[0],
+                  locationBuilder: (assignment) => 'location',
+                  onDelete: () => {},
+                  onUpdate: () => {},
                 );
               },
             );

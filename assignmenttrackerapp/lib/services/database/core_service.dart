@@ -1,6 +1,6 @@
 import 'package:assignmenttrackerapp/constants/database_constants.dart';
 import 'package:assignmenttrackerapp/services/database/assignments_service.dart';
-import 'package:assignmenttrackerapp/services/database/classes/db_user.dart';
+import 'package:assignmenttrackerapp/models/db_user.dart';
 import 'package:assignmenttrackerapp/services/database/database_exceptions.dart';
 import 'package:assignmenttrackerapp/services/database/database_service.dart';
 
