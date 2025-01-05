@@ -18,7 +18,6 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
   @override
   void initState() {
     super.initState();
-    // Load all assignments into the cache on initialization
     widget._assignmentsService.getAllAssignments();
   }
 
@@ -51,7 +50,7 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
                   titleBuilder: (assignment) => assignment.title,
                   subtitle1Builder: (assignment) => assignment.course,
                   subtitle2Builder: (assignment) =>
-                      assignment.dueDate.toString().split(' ')[0],
+                      "${assignment.dueDate.toString().split(' ')[0]} at ${assignment.dueDate.toString().split(' ')[1].split('.')[0]}",
                   onDelete: () async {
                     await widget._assignmentsService
                         .deleteAssignment(id: assignment.id);

@@ -3,7 +3,6 @@ import 'package:assignmenttrackerapp/services/database/assignments_service.dart'
 import 'package:assignmenttrackerapp/models/db_assignment.dart';
 import 'package:assignmenttrackerapp/services/database/core_service.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 
 class AddAssignmentView extends StatefulWidget {
   const AddAssignmentView({super.key});
@@ -17,22 +16,40 @@ class _AddAssignmentViewState extends State<AddAssignmentView> {
   late final AssignmentsService _assignmentsService;
   late final TextEditingController _titleController;
   late final TextEditingController _courseController;
-  DateTime? _selectedDate;
+  DateTime? _selectedDateTime;
   int _selectedRepeatIntervalLengthInDays = 1;
   int _selectedRepeatAmount = 0;
 
-  // Function to pick a date
-  Future<void> _pickDate(BuildContext context) async {
+  Future<void> _pickDateAndTime(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      firstDate: DateTime.now(),
+      initialDate: _selectedDateTime ?? DateTime.now(),
+      firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
 
-    if (pickedDate != null && pickedDate != _selectedDate) {
-      setState(() {
-        _selectedDate = pickedDate;
-      });
+    if (pickedDate != null) {
+      if (context.mounted) {
+        final TimeOfDay? pickedTime = await showTimePicker(
+          context: context,
+          initialTime:
+              TimeOfDay.fromDateTime(_selectedDateTime ?? DateTime.now()),
+        );
+
+        if (pickedTime != null) {
+          final selectedDateTime = DateTime(
+            pickedDate.year,
+            pickedDate.month,
+            pickedDate.day,
+            pickedTime.hour,
+            pickedTime.minute,
+          );
+
+          setState(() {
+            _selectedDateTime = selectedDateTime;
+          });
+        }
+      }
     }
   }
 
@@ -45,8 +62,8 @@ class _AddAssignmentViewState extends State<AddAssignmentView> {
     final currentUser = AuthServices.firebase().currentUser!;
     final user = await CoreService().getUser(email: currentUser.email!);
 
-    for (int i = 0; i < _selectedRepeatAmount; i++) {
-      int selectedInMs = _selectedDate!.millisecondsSinceEpoch;
+    for (int i = 0; i <= _selectedRepeatAmount; i++) {
+      int selectedInMs = _selectedDateTime!.millisecondsSinceEpoch;
       int offsetInMs = 86400000 * i * _selectedRepeatIntervalLengthInDays;
 
       DateTime dueDate =
@@ -123,13 +140,13 @@ class _AddAssignmentViewState extends State<AddAssignmentView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  _selectedDate == null
+                  _selectedDateTime == null
                       ? 'No date selected'
-                      : _selectedDate.toString().split(' ')[0],
+                      : "${_selectedDateTime.toString().split(' ')[0]} at ${_selectedDateTime.toString().split(' ')[1].split('.')[0]}",
                 ),
                 SizedBox(width: 10),
                 ElevatedButton(
-                  onPressed: () => _pickDate(context),
+                  onPressed: () => _pickDateAndTime(context),
                   child: const Icon(Icons.calendar_month),
                 ),
               ],

@@ -50,4 +50,7 @@ class DatabaseAssignment implements DatabaseObject {
   String toString() {
     return 'ID: $_id USERID: $_userId';
   }
+
+  @override
+  int get ownerId => _userId;
 }

@@ -1,7 +1,7 @@
 abstract class DatabaseObject {
-  @override
-  bool operator ==(covariant DatabaseObject other);
+  final int _ownerId;
 
-  @override
-  int get hashCode;
+  DatabaseObject({required ownerId}) : _ownerId = ownerId;
+
+  int get ownerId => _ownerId;
 }

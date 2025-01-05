@@ -24,6 +24,7 @@ class _DashboardViewState extends State<DashboardView> {
         const Center(child: Text('Daily')),
         AssignmentsScreen(assignmentsService: _coreService.assignmentsService),
         const Center(child: Text('Exams')),
+        const Center(child: Text('Courses')),
       ];
 
   void _onItemTapped(int index) {
@@ -114,9 +115,14 @@ class _DashboardViewState extends State<DashboardView> {
             icon: Icon(Icons.school),
             label: 'Exams',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: 'Courses',
+          ),
         ],
         currentIndex: _selectedTabIndex,
         selectedItemColor: assignmentTrackerTheme.colorScheme.primary,
+        unselectedItemColor: assignmentTrackerTheme.colorScheme.secondary,
         onTap: _onItemTapped,
       ),
     );

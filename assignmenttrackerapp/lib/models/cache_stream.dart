@@ -1,6 +1,10 @@
 import 'dart:async';
 
-class CacheStream<K> {
+import 'package:assignmenttrackerapp/models/db_object.dart';
+import 'package:assignmenttrackerapp/services/database/core_service.dart';
+import 'package:assignmenttrackerapp/services/database/stream_filter.dart';
+
+class CacheStream<K extends DatabaseObject> {
   final List<K> _cachedObjects = [];
   late final StreamController<List<K>> _cacheController;
 
@@ -29,7 +33,10 @@ class CacheStream<K> {
   }
 
   List<K> get cachedObjects => _cachedObjects;
-  Stream<List<K>> get cacheStream => _cacheController.stream;
+  Stream<List<K>> get cacheStream => _cacheController.stream.filter((obj) {
+        final currentUser = CoreService.getCurrentUser();
+        return obj.ownerId == currentUser.id;
+      });
 
   void dispose() {
     _cacheController.close();

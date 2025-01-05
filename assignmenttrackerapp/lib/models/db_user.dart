@@ -35,4 +35,7 @@ class DatabaseUser implements DatabaseObject {
   int get hashCode {
     return _id.hashCode;
   }
+
+  @override
+  int get ownerId => _id;
 }

@@ -8,7 +8,6 @@ import 'package:sqflite/sqflite.dart';
 
 mixin DatabaseHandler {
   Database? _database;
-
   Database getDatabase() {
     if (_database == null) {
       throw NonExistentDatabaseException();
