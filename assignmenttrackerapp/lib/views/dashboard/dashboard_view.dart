@@ -1,10 +1,11 @@
 import 'package:assignmenttrackerapp/constants/routes.dart';
 import 'package:assignmenttrackerapp/enums/overflow_menu_options.dart';
 import 'package:assignmenttrackerapp/services/auth/auth_services.dart';
+import 'package:assignmenttrackerapp/services/database/classes/db_user.dart';
 import 'package:assignmenttrackerapp/services/database/core_service.dart';
 import 'package:assignmenttrackerapp/themes/themes.dart';
 import 'package:assignmenttrackerapp/utils/dialog_helpers.dart';
-import 'package:assignmenttrackerapp/views/dashboard/assignments_screen.dart';
+import 'package:assignmenttrackerapp/views/assignments/assignments_screen.dart';
 import 'package:flutter/material.dart';
 
 class DashboardView extends StatefulWidget {
@@ -17,11 +18,12 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
   int _selectedTabIndex = 0;
   late final CoreService _coreService;
+  late final Future<DatabaseUser> _userFuture;
 
   List<Widget> get mainScreens => [
-        Center(child: Text('Daily')),
+        const Center(child: Text('Daily')),
         AssignmentsScreen(assignmentsService: _coreService.assignmentsService),
-        Center(child: Text('Exams'))
+        const Center(child: Text('Exams')),
       ];
 
   void _onItemTapped(int index) {
@@ -35,57 +37,65 @@ class _DashboardViewState extends State<DashboardView> {
     super.initState();
     _coreService = CoreService();
     _coreService.openDB();
+    _userFuture = _coreService.getOrCreateUser(
+      email: AuthServices.firebase().currentUser!.email!,
+    );
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _coreService.closeDB();
-  }
-
-  String get userEmail => AuthServices.firebase().currentUser!.email!;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Main"),
+        title: const Text("Dashboard"),
         actions: [
           PopupMenuButton<OverflowMenuOptions>(
             onSelected: (value) async {
-              switch (value) {
-                case OverflowMenuOptions.logout:
-                  final shouldLogout =
-                      await showLogoutConfirmationDialog(context);
-                  if (shouldLogout) {
-                    await AuthServices.firebase().logout();
+              if (value == OverflowMenuOptions.logout) {
+                final shouldLogout =
+                    await showLogoutConfirmationDialog(context);
+                if (shouldLogout) {
+                  await AuthServices.firebase().logout();
+                  if (mounted) {
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       loginRoute,
                       (route) => false,
                     );
                   }
-                  break;
+                }
               }
             },
-            itemBuilder: (context) {
-              return const [
-                PopupMenuItem<OverflowMenuOptions>(
-                  value: OverflowMenuOptions.logout,
-                  child: Text("Logout"),
-                ),
-              ];
-            },
-          )
+            itemBuilder: (context) => const [
+              PopupMenuItem<OverflowMenuOptions>(
+                value: OverflowMenuOptions.logout,
+                child: Text("Logout"),
+              ),
+            ],
+          ),
         ],
       ),
-      body: FutureBuilder(
-        future: _coreService.getOrCreateUser(email: userEmail),
+      body: FutureBuilder<DatabaseUser>(
+        future: _userFuture,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
-              return Center(child: mainScreens[_selectedTabIndex]);
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    'Error: ${snapshot.error}',
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                );
+              }
+              return mainScreens[_selectedTabIndex];
+            case ConnectionState.waiting:
+            case ConnectionState.active:
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             default:
-              return const CircularProgressIndicator();
+              return const Center(
+                child: Text('Unexpected state.'),
+              );
           }
         },
       ),
@@ -102,7 +112,7 @@ class _DashboardViewState extends State<DashboardView> {
           BottomNavigationBarItem(
             icon: Icon(Icons.school),
             label: 'Exams',
-          )
+          ),
         ],
         currentIndex: _selectedTabIndex,
         selectedItemColor: assignmentTrackerTheme.colorScheme.primary,

@@ -1,4 +1,5 @@
 import 'package:assignmenttrackerapp/themes/themes.dart';
+import 'package:assignmenttrackerapp/views/assignments/add_assignment_view.dart';
 import 'package:flutter/material.dart';
 import 'package:assignmenttrackerapp/constants/routes.dart';
 import 'package:assignmenttrackerapp/services/auth/auth_services.dart';
@@ -6,8 +7,11 @@ import 'package:assignmenttrackerapp/views/auth/login_view.dart';
 import 'package:assignmenttrackerapp/views/auth/register_view.dart';
 import 'package:assignmenttrackerapp/views/auth/verify_email_view.dart';
 import 'package:assignmenttrackerapp/views/dashboard/dashboard_view.dart';
+import 'package:flutter/services.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   runApp(const AppEntryPoint());
 }
 
@@ -58,6 +62,7 @@ class _AppEntryPointState extends State<AppEntryPoint> {
         registerRoute: (context) => const RegisterView(),
         dashboardRoute: (context) => const DashboardView(),
         verifyEmailRoute: (context) => const VerifyEmailView(),
+        addAssignmentRoute: (context) => const AddAssignmentView(),
       },
     );
   }

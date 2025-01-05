@@ -2,10 +2,15 @@ import 'dart:async';
 
 class CacheStream<K> {
   final List<K> _cachedObjects = [];
-  final StreamController _cacheController =
-      StreamController<List<K>>.broadcast();
+  late final StreamController<List<K>> _cacheController;
 
-  void updateCache(K item, {isDelete = false}) {
+  CacheStream() {
+    _cacheController = StreamController<List<K>>.broadcast(onListen: () {
+      _cacheController.sink.add(_cachedObjects);
+    });
+  }
+
+  void updateCache(K item, {bool isDelete = false}) {
     _cachedObjects.removeWhere((obj) => obj == item);
     if (!isDelete) {
       _cachedObjects.add(item);
@@ -24,5 +29,9 @@ class CacheStream<K> {
   }
 
   List<K> get cachedObjects => _cachedObjects;
-  Stream get cacheStream => _cacheController.stream;
+  Stream<List<K>> get cacheStream => _cacheController.stream;
+
+  void dispose() {
+    _cacheController.close();
+  }
 }

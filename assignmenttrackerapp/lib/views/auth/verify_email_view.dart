@@ -15,6 +15,9 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
   Future<void> _verifyEmail() async {
     try {
       await AuthServices.firebase().sendVerificationEmail();
+      if (mounted) {
+        showSuccessMessage(context, 'Verification email sent.');
+      }
     } on TooManyRequestsAuthException {
       if (mounted) {
         showErrorMessage(context, 'Too many requests. Please try again later.');
@@ -26,8 +29,18 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
       }
     } on GenericAuthException {
       if (mounted) {
-        showErrorMessage(context, 'An error occurred');
+        showErrorMessage(context, 'An error occurred. Please try again.');
       }
+    }
+  }
+
+  Future<void> _restart() async {
+    await AuthServices.firebase().logout();
+    if (mounted) {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        registerRoute,
+        (route) => false,
+      );
     }
   }
 
@@ -37,28 +50,32 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
       appBar: AppBar(
         title: const Text("Verify Email"),
       ),
-      body: Column(
-        children: [
-          const Text("An email has been sent"),
-          const Text(
-              "If you have not received the email, click the button below"),
-          TextButton(
-            onPressed: () async {
-              await _verifyEmail();
-            },
-            child: const Text("Send email verification"),
-          ),
-          TextButton(
-            onPressed: () async {
-              await AuthServices.firebase().logout();
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                registerRoute,
-                (route) => false,
-              );
-            },
-            child: Text("Restart"),
-          ),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text(
+              "An email has been sent to your registered address.",
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              "If you have not received the email, click the button below to resend it.",
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: _verifyEmail,
+              child: const Text("Resend Verification Email"),
+            ),
+            TextButton(
+              onPressed: _restart,
+              child: const Text("Restart"),
+            ),
+          ],
+        ),
       ),
     );
   }

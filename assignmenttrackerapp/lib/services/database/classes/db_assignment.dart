@@ -20,8 +20,9 @@ class DatabaseAssignment implements DatabaseObject {
   DatabaseAssignment.fromRow(Map<String, Object?> row)
       : _id = row['id'] as int,
         _userId = row['user_id'] as int,
-        _creationDate = row['creation_date'] as DateTime,
-        _dueDate = row['due_date'] as DateTime,
+        _creationDate =
+            DateTime.fromMillisecondsSinceEpoch(row['creation_date'] as int),
+        _dueDate = DateTime.fromMillisecondsSinceEpoch(row['due_date'] as int),
         _title = row['title'] as String;
 
   int get id => _id;

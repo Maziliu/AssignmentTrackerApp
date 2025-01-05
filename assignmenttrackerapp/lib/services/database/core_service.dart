@@ -21,6 +21,11 @@ class CoreService extends DatabaseService {
     return DatabaseUser.fromRow(row);
   }
 
+  void dispose() {
+    _assignmentsService.dispose();
+    closeDB();
+  }
+
   //CRUD Functions
   Future<DatabaseUser> createUser({required String email}) async {
     await checkDbIsOpen();
