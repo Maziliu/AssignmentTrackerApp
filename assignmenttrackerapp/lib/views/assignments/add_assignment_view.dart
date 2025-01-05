@@ -3,6 +3,7 @@ import 'package:assignmenttrackerapp/services/database/assignments_service.dart'
 import 'package:assignmenttrackerapp/models/db_assignment.dart';
 import 'package:assignmenttrackerapp/services/database/core_service.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 
 class AddAssignmentView extends StatefulWidget {
   const AddAssignmentView({super.key});
@@ -15,7 +16,10 @@ class _AddAssignmentViewState extends State<AddAssignmentView> {
   DatabaseAssignment? _assignment;
   late final AssignmentsService _assignmentsService;
   late final TextEditingController _titleController;
+  late final TextEditingController _courseController;
   DateTime? _selectedDate;
+  int _selectedRepeatIntervalLengthInDays = 1;
+  int _selectedRepeatAmount = 0;
 
   // Function to pick a date
   Future<void> _pickDate(BuildContext context) async {
@@ -32,7 +36,7 @@ class _AddAssignmentViewState extends State<AddAssignmentView> {
     }
   }
 
-  Future<void> _createAssignment() async {
+  Future<void> _createAssignment(BuildContext context) async {
     final existingAssignment = _assignment;
     if (existingAssignment != null) {
       return;
@@ -40,10 +44,26 @@ class _AddAssignmentViewState extends State<AddAssignmentView> {
 
     final currentUser = AuthServices.firebase().currentUser!;
     final user = await CoreService().getUser(email: currentUser.email!);
-    _assignment = await _assignmentsService.createAssignment(
-        userId: user.id, dueDate: _selectedDate!, title: _titleController.text);
-    if (mounted) {
-      Navigator.pop(context);
+
+    for (int i = 0; i < _selectedRepeatAmount; i++) {
+      int selectedInMs = _selectedDate!.millisecondsSinceEpoch;
+      int offsetInMs = 86400000 * i * _selectedRepeatIntervalLengthInDays;
+
+      DateTime dueDate =
+          DateTime.fromMillisecondsSinceEpoch(selectedInMs + offsetInMs);
+
+      String title = "${_titleController.text} ${(i + 1)}";
+
+      _assignment = await _assignmentsService.createAssignment(
+        userId: user.id,
+        dueDate: dueDate,
+        title: title,
+        course: _courseController.text,
+      );
+    }
+
+    if (context.mounted) {
+      Navigator.of(context).pop();
     }
   }
 
@@ -57,12 +77,15 @@ class _AddAssignmentViewState extends State<AddAssignmentView> {
   void initState() {
     _assignmentsService = AssignmentsService();
     _titleController = TextEditingController();
+    _courseController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
     _titleController.dispose();
+    _courseController.dispose();
+    _deleteEmptyAssignment();
     super.dispose();
   }
 
@@ -86,6 +109,16 @@ class _AddAssignmentViewState extends State<AddAssignmentView> {
               ),
             ),
             SizedBox(height: 20),
+            TextFormField(
+              controller: _courseController,
+              decoration: InputDecoration(
+                labelText: 'Course Name',
+                border: OutlineInputBorder(),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              ),
+            ),
+            SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -102,8 +135,75 @@ class _AddAssignmentViewState extends State<AddAssignmentView> {
               ],
             ),
             SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Repeat every'),
+                const SizedBox(width: 10),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: DropdownButton<int>(
+                      value: _selectedRepeatIntervalLengthInDays,
+                      items: List.generate(
+                        30,
+                        (index) => DropdownMenuItem<int>(
+                          value: index + 1,
+                          child: Text((index + 1).toString()),
+                        ),
+                        growable: true,
+                      ),
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedRepeatIntervalLengthInDays = newValue!;
+                        });
+                      },
+                      underline: const SizedBox(),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Text('days '),
+                const SizedBox(width: 10),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: DropdownButton<int>(
+                      value: _selectedRepeatAmount,
+                      items: List.generate(
+                        31,
+                        (index) => DropdownMenuItem<int>(
+                          value: index,
+                          child: Text((index).toString()),
+                        ),
+                        growable: true,
+                      ),
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedRepeatAmount = newValue!;
+                        });
+                      },
+                      underline: const SizedBox(),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Text('times'),
+              ],
+            ),
+            SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _createAssignment,
+              onPressed: () {
+                _createAssignment(context);
+              },
               child: const Text('Save Assignment'),
             ),
           ],

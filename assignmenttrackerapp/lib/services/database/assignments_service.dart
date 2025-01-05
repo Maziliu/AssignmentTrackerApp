@@ -21,12 +21,14 @@ class AssignmentsService extends DatabaseService<DatabaseAssignment> {
   Future<DatabaseAssignment> updateAssignment(
       {required DatabaseAssignment originalAssignment,
       required DateTime dueDate,
-      required String title}) async {
+      required String title,
+      required String course}) async {
     await getAssignmentUsingId(id: originalAssignment.id);
 
     final updatedRow = {
       'due_date': dueDate.millisecondsSinceEpoch,
-      'title': title
+      'title': title,
+      'course': course
     };
 
     final count = await updateRecord(originalAssignment.id, updatedRow);
@@ -78,13 +80,15 @@ class AssignmentsService extends DatabaseService<DatabaseAssignment> {
   Future<DatabaseAssignment> createAssignment(
       {required int userId,
       required DateTime dueDate,
-      required String title}) async {
+      required String title,
+      required String course}) async {
     final creationDate = DateTime.now().millisecondsSinceEpoch;
     final row = {
       'user_id': userId,
       'creation_date': creationDate,
       'due_date': dueDate.millisecondsSinceEpoch,
-      'title': title
+      'title': title,
+      'course': course
     };
 
     final assignmentId = await insertRecord(row);
@@ -94,6 +98,7 @@ class AssignmentsService extends DatabaseService<DatabaseAssignment> {
       creationDate: DateTime.fromMillisecondsSinceEpoch(creationDate),
       dueDate: dueDate,
       title: title,
+      course: course,
     );
 
     cache.updateCache(assignment);

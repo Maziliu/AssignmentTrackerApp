@@ -3,15 +3,17 @@ import 'package:assignmenttrackerapp/models/db_object.dart';
 class DatabaseAssignment implements DatabaseObject {
   final int _id, _userId;
   final DateTime _creationDate, _dueDate;
-  final String _title;
+  final String _title, _course;
 
-  DatabaseAssignment({
-    required int id,
-    required int userId,
-    required DateTime creationDate,
-    required DateTime dueDate,
-    required String title,
-  })  : _title = title,
+  DatabaseAssignment(
+      {required int id,
+      required int userId,
+      required DateTime creationDate,
+      required DateTime dueDate,
+      required String title,
+      required String course})
+      : _course = course,
+        _title = title,
         _dueDate = dueDate,
         _creationDate = creationDate,
         _userId = userId,
@@ -23,13 +25,15 @@ class DatabaseAssignment implements DatabaseObject {
         _creationDate =
             DateTime.fromMillisecondsSinceEpoch(row['creation_date'] as int),
         _dueDate = DateTime.fromMillisecondsSinceEpoch(row['due_date'] as int),
-        _title = row['title'] as String;
+        _title = row['title'] as String,
+        _course = row['course'] as String;
 
   int get id => _id;
   int get userId => _userId;
   DateTime get creationDate => _creationDate;
   DateTime get dueDate => _dueDate;
   String get title => _title;
+  String get course => _course;
 
   @override
   bool operator ==(covariant DatabaseObject other) {

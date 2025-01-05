@@ -49,11 +49,14 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
                 return TaskWidget<DatabaseAssignment>(
                   data: assignment,
                   titleBuilder: (assignment) => assignment.title,
-                  subtitleBuilder: (assignment) =>
+                  subtitle1Builder: (assignment) => assignment.course,
+                  subtitle2Builder: (assignment) =>
                       assignment.dueDate.toString().split(' ')[0],
-                  locationBuilder: (assignment) => 'location',
-                  onDelete: () => {},
-                  onUpdate: () => {},
+                  onDelete: () async {
+                    await widget._assignmentsService
+                        .deleteAssignment(id: assignment.id);
+                  },
+                  onUpdate: () async {},
                 );
               },
             );

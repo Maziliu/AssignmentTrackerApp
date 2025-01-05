@@ -50,18 +50,19 @@ class _DashboardViewState extends State<DashboardView> {
         actions: [
           PopupMenuButton<OverflowMenuOptions>(
             onSelected: (value) async {
-              if (value == OverflowMenuOptions.logout) {
-                final shouldLogout =
-                    await showLogoutConfirmationDialog(context);
-                if (shouldLogout) {
-                  await AuthServices.firebase().logout();
-                  if (mounted) {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      loginRoute,
-                      (route) => false,
-                    );
+              switch (value) {
+                case OverflowMenuOptions.logout:
+                  final shouldLogout =
+                      await showLogoutConfirmationDialog(context);
+                  if (shouldLogout) {
+                    await AuthServices.firebase().logout();
+                    if (mounted) {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        loginRoute,
+                        (route) => false,
+                      );
+                    }
                   }
-                }
               }
             },
             itemBuilder: (context) => const [

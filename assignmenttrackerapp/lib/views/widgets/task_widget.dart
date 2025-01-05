@@ -1,19 +1,20 @@
+import 'package:assignmenttrackerapp/utils/snackbar_helper.dart';
 import 'package:flutter/material.dart';
 
 class TaskWidget<K> extends StatelessWidget {
   final K data;
   final String Function(K) titleBuilder;
-  final String Function(K) subtitleBuilder;
-  final String Function(K) locationBuilder;
-  final VoidCallback onDelete;
-  final VoidCallback onUpdate;
+  final String Function(K) subtitle1Builder;
+  final String Function(K) subtitle2Builder;
+  final Future<void> Function() onDelete;
+  final Future<void> Function() onUpdate;
 
   const TaskWidget({
     super.key,
     required this.data,
     required this.titleBuilder,
-    required this.subtitleBuilder,
-    required this.locationBuilder,
+    required this.subtitle1Builder,
+    required this.subtitle2Builder,
     required this.onDelete,
     required this.onUpdate,
   });
@@ -29,35 +30,63 @@ class TaskWidget<K> extends StatelessWidget {
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
-          '${subtitleBuilder(data)}\n${locationBuilder(data)}',
+          '${subtitle1Builder(data)}\n${subtitle2Builder(data)}',
           style: const TextStyle(color: Colors.grey),
         ),
         isThreeLine: true,
-        onTap: onUpdate,
+        onTap: () async {
+          _handleUpdate(context);
+        },
         onLongPress: () async {
-          final shouldDelete = await showDialog<bool>(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Confirm Delete'),
-              content: const Text('Are you sure you want to delete this task?'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context, false),
-                  child: const Text('Cancel'),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pop(context, true),
-                  child: const Text('Delete'),
-                ),
-              ],
-            ),
-          );
-
-          if (shouldDelete == true) {
-            onDelete();
-          }
+          _handleDelete(context);
         },
       ),
     );
+  }
+
+  Future<void> _handleUpdate(BuildContext context) async {
+    try {
+      await onUpdate();
+      if (context.mounted) {
+        showSuccessMessage(context, 'Task updated successfully');
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showErrorMessage(context, 'Failed to update task: $e');
+      }
+    }
+  }
+
+  Future<void> _handleDelete(BuildContext context) async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirm Delete'),
+        content: const Text('Are you sure you want to delete this task?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete == true) {
+      try {
+        await onDelete();
+        if (context.mounted) {
+          showSuccessMessage(context, 'Task deleted successfully');
+        }
+      } catch (e) {
+        if (context.mounted) {
+          showErrorMessage(context, 'Failed to delete task: $e');
+        }
+      }
+    }
   }
 }

@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS "assignment" (
   "creation_date" INTEGER NOT NULL,
   "due_date" INTEGER NOT NULL,
   "title" TEXT NOT NULL,
+  "course" TEXT NOT NULL,
   FOREIGN KEY ("user_id") REFERENCES "user" ("id")
 );''';
 
