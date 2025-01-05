@@ -26,7 +26,7 @@ class AssignmentsService extends DatabaseService<DatabaseAssignment> {
     final count = await updateRecord(originalAssignment.id, updatedRow);
 
     if (count == 0) {
-      throw CouldNotUpdateAssignment();
+      throw UnableToUpdateAssignmentException();
     }
 
     final updatedAssignment =
@@ -59,7 +59,7 @@ class AssignmentsService extends DatabaseService<DatabaseAssignment> {
     final results = await getRecordById(id);
 
     if (results.isEmpty) {
-      throw CouldNotFindAssignment();
+      throw AssignmentNotFoundException();
     }
 
     final assignment = DatabaseAssignment.fromRow(results.first);
@@ -99,7 +99,7 @@ class AssignmentsService extends DatabaseService<DatabaseAssignment> {
     final count = await deleteRecord(id);
 
     if (count != 1) {
-      throw CouldNotDeleteAssignment();
+      throw UnableToDeleteAssignmentException();
     }
 
     cache.removeFromCacheUsingId(id);

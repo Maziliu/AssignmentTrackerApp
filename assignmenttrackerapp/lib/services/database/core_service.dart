@@ -1,13 +1,74 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:assignmenttrackerapp/constants/database_constants.dart';
 import 'package:assignmenttrackerapp/services/database/assignments_service.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:assignmenttrackerapp/services/database/classes/db_user.dart';
+import 'package:assignmenttrackerapp/services/database/database_exceptions.dart';
+import 'package:assignmenttrackerapp/services/database/database_service.dart';
 
-class CoreService {
-  Database? _database;
-
+class CoreService extends DatabaseService {
   final AssignmentsService _assignmentsService;
 
-  CoreService({
-    required assignmentsService,
-  }) : _assignmentsService = assignmentsService;
+  CoreService()
+      : _assignmentsService = AssignmentsService(),
+        super(userTableName);
+
+  AssignmentsService get assignmentsService => _assignmentsService;
+
+  @override
+  DatabaseUser mapRowToModel(Map<String, Object?> row) {
+    return DatabaseUser.fromRow(row);
+  }
+
+  //CRUD Functions
+  Future<DatabaseUser> createUser({required String email}) async {
+    await checkDbIsOpen();
+    final database = getDatabase();
+
+    final result = await database.query(
+      userTableName,
+      limit: 1,
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+
+    if (result.isNotEmpty) {
+      throw ExistingUserException();
+    }
+
+    final row = {
+      'email': email,
+    };
+    final userId = await insertRecord(row);
+
+    if (userId == 0) {
+      throw UnableToCreateUserException();
+    }
+
+    return DatabaseUser(id: userId, email: email);
+  }
+
+  Future<DatabaseUser> getUser({required String email}) async {
+    await checkDbIsOpen();
+    final database = getDatabase();
+
+    final results = await database.query(
+      userTableName,
+      limit: 1,
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+
+    if (results.isEmpty) {
+      throw UserNotFoundException();
+    }
+
+    return DatabaseUser.fromRow(results.first);
+  }
+
+  Future<DatabaseUser> getOrCreateUser({required String email}) async {
+    try {
+      return await getUser(email: email);
+    } on UserNotFoundException {
+      return await createUser(email: email);
+    }
+  }
 }

@@ -1,13 +1,20 @@
 //Database Exceptions
-class DatabaseExistsAlreadyException implements Exception {}
+class ExistingDatabaseException implements Exception {}
 
 class DocumentsDirectoryNotFoundException implements Exception {}
 
-class DatabaseDoesNotExistException implements Exception {}
+class NonExistentDatabaseException implements Exception {}
 
 //Assignment Table
-class CouldNotDeleteAssignment implements Exception {}
+class UnableToDeleteAssignmentException implements Exception {}
 
-class CouldNotFindAssignment implements Exception {}
+class AssignmentNotFoundException implements Exception {}
 
-class CouldNotUpdateAssignment implements Exception {}
+class UnableToUpdateAssignmentException implements Exception {}
+
+//User Table
+class UnableToCreateUserException implements Exception {}
+
+class UserNotFoundException implements Exception {}
+
+class ExistingUserException implements Exception {}

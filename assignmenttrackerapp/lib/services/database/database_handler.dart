@@ -9,7 +9,7 @@ mixin DatabaseHandler {
 
   Database getDatabase() {
     if (_database == null) {
-      throw DatabaseDoesNotExistException();
+      throw NonExistentDatabaseException();
     }
     return _database!;
   }
@@ -17,14 +17,14 @@ mixin DatabaseHandler {
   Future<void> checkDbIsOpen() async {
     try {
       await openDB();
-    } on DatabaseExistsAlreadyException {
+    } on ExistingDatabaseException {
       // Pass as this function guarantees the database is open
     }
   }
 
   Future<void> closeDB() async {
     if (_database == null) {
-      throw DatabaseDoesNotExistException();
+      throw NonExistentDatabaseException();
     }
     await _database?.close();
     _database = null;
@@ -32,17 +32,17 @@ mixin DatabaseHandler {
 
   Future<void> openDB() async {
     if (_database != null) {
-      throw DatabaseExistsAlreadyException();
+      throw ExistingDatabaseException();
     }
 
     try {
       final appDocDir = await getApplicationDocumentsDirectory();
       final databasePath = join(appDocDir.path, databaseName);
       final database = await openDatabase(
-          databasePath); //Note: if the db does not exist this will create it; empty with no tables
+          databasePath); //Note: if the db does not exist this will create it empty with no tables
       _database = database;
 
-      //Create all tables
+      //Create all tables if exists
       for (String sqfliteCommand in allTableCreates) {
         await database.execute(sqfliteCommand);
       }

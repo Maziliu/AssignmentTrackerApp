@@ -2,9 +2,10 @@ import 'package:assignmenttrackerapp/services/database/assignments_service.dart'
 import 'package:flutter/material.dart';
 
 class AssignmentsScreen extends StatefulWidget {
-  final AssignmentsService assignmentsService;
+  final AssignmentsService _assignmentsService;
 
-  const AssignmentsScreen({super.key, required this.assignmentsService});
+  const AssignmentsScreen({super.key, required assignmentsService})
+      : _assignmentsService = assignmentsService;
 
   @override
   State<AssignmentsScreen> createState() => _AssignmentsScreenState();

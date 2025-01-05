@@ -1,7 +1,7 @@
 import 'package:assignmenttrackerapp/constants/routes.dart';
 import 'package:assignmenttrackerapp/enums/overflow_menu_options.dart';
 import 'package:assignmenttrackerapp/services/auth/auth_services.dart';
-import 'package:assignmenttrackerapp/services/database/assignments_service.dart';
+import 'package:assignmenttrackerapp/services/database/core_service.dart';
 import 'package:assignmenttrackerapp/themes/themes.dart';
 import 'package:assignmenttrackerapp/utils/dialog_helpers.dart';
 import 'package:assignmenttrackerapp/views/dashboard/assignments_screen.dart';
@@ -16,11 +16,11 @@ class DashboardView extends StatefulWidget {
 
 class _DashboardViewState extends State<DashboardView> {
   int _selectedTabIndex = 0;
-  late final AssignmentsService _assignmentsService;
+  late final CoreService _coreService;
 
   List<Widget> get mainScreens => [
         Center(child: Text('Daily')),
-        AssignmentsScreen(assignmentsService: _assignmentsService),
+        AssignmentsScreen(assignmentsService: _coreService.assignmentsService),
         Center(child: Text('Exams'))
       ];
 
@@ -33,14 +33,14 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   void initState() {
     super.initState();
-    _assignmentsService = AssignmentsService();
-    _assignmentsService.openDB();
+    _coreService = CoreService();
+    _coreService.openDB();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _assignmentsService.closeDB();
+    _coreService.closeDB();
   }
 
   @override
