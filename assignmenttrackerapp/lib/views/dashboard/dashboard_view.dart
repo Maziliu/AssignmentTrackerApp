@@ -43,6 +43,8 @@ class _DashboardViewState extends State<DashboardView> {
     _coreService.closeDB();
   }
 
+  String get userEmail => AuthServices.firebase().currentUser!.email!;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,7 +78,17 @@ class _DashboardViewState extends State<DashboardView> {
           )
         ],
       ),
-      body: Center(child: mainScreens[_selectedTabIndex]),
+      body: FutureBuilder(
+        future: _coreService.getOrCreateUser(email: userEmail),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.done:
+              return Center(child: mainScreens[_selectedTabIndex]);
+            default:
+              return const CircularProgressIndicator();
+          }
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

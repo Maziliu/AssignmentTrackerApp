@@ -7,9 +7,13 @@ import 'package:assignmenttrackerapp/services/database/database_exceptions.dart'
 import 'package:assignmenttrackerapp/services/database/database_service.dart';
 
 class AssignmentsService extends DatabaseService<DatabaseAssignment> {
+  static final AssignmentsService _instance = AssignmentsService._singleton();
+
   CacheStream<DatabaseAssignment> cache = CacheStream<DatabaseAssignment>();
 
-  AssignmentsService() : super(assignmentTableName);
+  AssignmentsService._singleton() : super(assignmentTableName);
+
+  factory AssignmentsService() => _instance;
 
   //CRUD functions
   Future<DatabaseAssignment> updateAssignment(

@@ -14,8 +14,15 @@ class AssignmentsScreen extends StatefulWidget {
 class _AssignmentsScreenState extends State<AssignmentsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(child: Text('Assignemtns')),
-    );
+    return StreamBuilder(
+        stream: widget._assignmentsService.cache.cacheStream,
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return const Text('Waiting');
+            default:
+              return const CircularProgressIndicator();
+          }
+        });
   }
 }

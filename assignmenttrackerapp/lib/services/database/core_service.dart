@@ -5,11 +5,14 @@ import 'package:assignmenttrackerapp/services/database/database_exceptions.dart'
 import 'package:assignmenttrackerapp/services/database/database_service.dart';
 
 class CoreService extends DatabaseService {
+  static final CoreService _instance = CoreService._singleton();
   final AssignmentsService _assignmentsService;
 
-  CoreService()
+  CoreService._singleton()
       : _assignmentsService = AssignmentsService(),
         super(userTableName);
+
+  factory CoreService() => _instance;
 
   AssignmentsService get assignmentsService => _assignmentsService;
 
