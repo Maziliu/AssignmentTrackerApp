@@ -61,6 +61,7 @@ class _AddAssignmentViewState extends State<AddAssignmentView> {
       return;
     }
 
+    //TODO: Note for future when making offline usage. THIS REQ INTERNET CONN AND FIREBASE CHANGE LATER
     final currentUser = AuthServices.firebase().currentUser!;
     final user = await CoreService().getUser(email: currentUser.email!);
 

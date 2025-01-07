@@ -2,20 +2,25 @@ import 'package:assignmenttrackerapp/services/database/assignments_service.dart'
 import 'package:assignmenttrackerapp/models/db_assignment.dart';
 import 'package:assignmenttrackerapp/views/assignments/add_assignment_view.dart';
 import 'package:assignmenttrackerapp/views/assignments/update_assignment_view.dart';
-import 'package:assignmenttrackerapp/views/widgets/task_widget.dart';
+import 'package:assignmenttrackerapp/views/widgets/standard_editable_item_widget.dart';
 import 'package:flutter/material.dart';
 
-class AssignmentsScreen extends StatefulWidget {
+class AssignmentsView extends StatefulWidget {
   final AssignmentsService _assignmentsService;
 
-  const AssignmentsScreen({super.key, required assignmentsService})
+  const AssignmentsView({super.key, required assignmentsService})
       : _assignmentsService = assignmentsService;
 
   @override
-  State<AssignmentsScreen> createState() => _AssignmentsScreenState();
+  State<AssignmentsView> createState() => _AssignmentsViewState();
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'Assignments';
+  }
 }
 
-class _AssignmentsScreenState extends State<AssignmentsScreen> {
+class _AssignmentsViewState extends State<AssignmentsView> {
   @override
   void initState() {
     super.initState();
@@ -46,12 +51,12 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
               itemCount: assignments.length,
               itemBuilder: (context, index) {
                 final assignment = assignments[index];
-                return TaskWidget<DatabaseAssignment>(
+                return StandardEditableItemWidget<DatabaseAssignment>(
                   data: assignment,
                   titleBuilder: (assignment) => assignment.title,
                   subtitle1Builder: (assignment) => assignment.course,
                   subtitle2Builder: (assignment) =>
-                      "${assignment.dueDate.toString().split(' ')[0]} at ${assignment.dueDate.toString().split(' ')[1].split('.')[0]}",
+                      "Due on ${assignment.dueDate.toString().split(' ')[0]} at ${assignment.dueDate.toString().split(' ')[1].split('.')[0]}",
                   onDelete: () async {
                     await widget._assignmentsService
                         .deleteAssignment(id: assignment.id);

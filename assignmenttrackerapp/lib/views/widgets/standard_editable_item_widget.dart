@@ -1,7 +1,8 @@
+import 'package:assignmenttrackerapp/themes/themes.dart';
 import 'package:assignmenttrackerapp/utils/snackbar_helper.dart';
 import 'package:flutter/material.dart';
 
-class TaskWidget<K> extends StatelessWidget {
+class StandardEditableItemWidget<K> extends StatelessWidget {
   final K data;
   final String Function(K) titleBuilder;
   final String Function(K) subtitle1Builder;
@@ -9,7 +10,7 @@ class TaskWidget<K> extends StatelessWidget {
   final Future<void> Function() onDelete;
   final Future<void> Function() onUpdate;
 
-  const TaskWidget({
+  const StandardEditableItemWidget({
     super.key,
     required this.data,
     required this.titleBuilder,
@@ -48,11 +49,11 @@ class TaskWidget<K> extends StatelessWidget {
     try {
       await onUpdate();
       if (context.mounted) {
-        showSuccessMessage(context, 'Task updated successfully');
+        showSuccessMessage(context, 'Item updated successfully');
       }
     } catch (e) {
       if (context.mounted) {
-        showErrorMessage(context, 'Failed to update task: $e');
+        showErrorMessage(context, 'Failed to update item: $e');
       }
     }
   }
@@ -62,7 +63,7 @@ class TaskWidget<K> extends StatelessWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Confirm Delete'),
-        content: const Text('Are you sure you want to delete this task?'),
+        content: const Text('Are you sure you want to delete this item?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -84,7 +85,7 @@ class TaskWidget<K> extends StatelessWidget {
         }
       } catch (e) {
         if (context.mounted) {
-          showErrorMessage(context, 'Failed to delete task: $e');
+          showErrorMessage(context, 'Failed to delete item: $e');
         }
       }
     }

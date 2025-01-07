@@ -22,7 +22,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   List<Widget> get mainScreens => [
         const Center(child: Text('Daily')),
-        AssignmentsScreen(assignmentsService: _coreService.assignmentsService),
+        AssignmentsView(assignmentsService: _coreService.assignmentsService),
         const Center(child: Text('Exams')),
         const Center(child: Text('Courses')),
       ];
@@ -47,7 +47,7 @@ class _DashboardViewState extends State<DashboardView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Dashboard"),
+        title: Text(mainScreens[_selectedTabIndex].toString()),
         actions: [
           PopupMenuButton<OverflowMenuOptions>(
             onSelected: (value) async {

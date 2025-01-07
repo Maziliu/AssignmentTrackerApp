@@ -41,4 +41,15 @@ final ThemeData assignmentTrackerTheme = ThemeData(
     ),
   ),
   scaffoldBackgroundColor: Color(0xFF121212),
+  cardTheme: CardTheme(
+    color: Color(0xFF333340),
+    elevation: 6,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(16),
+    ),
+    shadowColor: Colors.black.withOpacity(0.3),
+    margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+    surfaceTintColor: Colors.transparent,
+  ),
+  hoverColor: Color(0xFF2A2A3C),
 );
