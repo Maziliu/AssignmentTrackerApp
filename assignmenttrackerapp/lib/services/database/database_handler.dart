@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:assignmenttrackerapp/constants/database_constants.dart';
 import 'package:assignmenttrackerapp/services/database/database_exceptions.dart';
 import 'package:path/path.dart';

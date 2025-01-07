@@ -1,6 +1,7 @@
 import 'package:assignmenttrackerapp/services/database/assignments_service.dart';
 import 'package:assignmenttrackerapp/models/db_assignment.dart';
 import 'package:assignmenttrackerapp/views/assignments/add_assignment_view.dart';
+import 'package:assignmenttrackerapp/views/assignments/update_assignment_view.dart';
 import 'package:assignmenttrackerapp/views/widgets/task_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -55,7 +56,14 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
                     await widget._assignmentsService
                         .deleteAssignment(id: assignment.id);
                   },
-                  onUpdate: () async {},
+                  onUpdate: () async {
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => UpdateAssignmentView(
+                                assignment: assignment,
+                              )),
+                    );
+                  },
                 );
               },
             );
