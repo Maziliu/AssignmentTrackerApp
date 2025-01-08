@@ -38,7 +38,7 @@ class _DashboardViewState extends State<DashboardView> {
   void initState() {
     super.initState();
     _coreService = CoreService();
-    _coreService.openDB();
+    _coreService.checkDbIsOpen();
     _userFuture = _coreService.getOrCreateUser(
       email: AuthServices.firebase().currentUser!.email!,
     );
@@ -58,7 +58,7 @@ class _DashboardViewState extends State<DashboardView> {
                       await showLogoutConfirmationDialog(context);
                   if (shouldLogout) {
                     await AuthServices.firebase().logout();
-                    if (mounted) {
+                    if (context.mounted) {
                       Navigator.of(context).pushNamedAndRemoveUntil(
                         loginRoute,
                         (route) => false,

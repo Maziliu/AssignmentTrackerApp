@@ -1,5 +1,6 @@
 import 'package:assignmenttrackerapp/models/db_course.dart';
 import 'package:assignmenttrackerapp/services/database/courses_service.dart';
+import 'package:assignmenttrackerapp/views/courses/add_course_view.dart';
 import 'package:assignmenttrackerapp/views/widgets/standard_editable_item_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -83,7 +84,14 @@ class _CoursesViewState extends State<CoursesView> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AddCourseView(),
+            ),
+          );
+        },
         child: Icon(Icons.add),
       ),
     );

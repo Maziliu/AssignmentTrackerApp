@@ -1,5 +1,6 @@
 import 'package:assignmenttrackerapp/themes/themes.dart';
 import 'package:assignmenttrackerapp/views/assignments/add_assignment_view.dart';
+import 'package:assignmenttrackerapp/views/courses/add_course_view.dart';
 import 'package:flutter/material.dart';
 import 'package:assignmenttrackerapp/constants/routes.dart';
 import 'package:assignmenttrackerapp/services/auth/auth_services.dart';
@@ -63,6 +64,7 @@ class _AppEntryPointState extends State<AppEntryPoint> {
         dashboardRoute: (context) => const DashboardView(),
         verifyEmailRoute: (context) => const VerifyEmailView(),
         addAssignmentRoute: (context) => const AddAssignmentView(),
+        addCourseRoute: (context) => const AddCourseView(),
       },
     );
   }
