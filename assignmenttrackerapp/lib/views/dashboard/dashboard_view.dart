@@ -6,6 +6,7 @@ import 'package:assignmenttrackerapp/services/database/core_service.dart';
 import 'package:assignmenttrackerapp/themes/themes.dart';
 import 'package:assignmenttrackerapp/utils/dialog_helpers.dart';
 import 'package:assignmenttrackerapp/views/assignments/assignments_view.dart';
+import 'package:assignmenttrackerapp/views/courses/courses_view.dart';
 import 'package:flutter/material.dart';
 
 class DashboardView extends StatefulWidget {
@@ -24,7 +25,7 @@ class _DashboardViewState extends State<DashboardView> {
         const Center(child: Text('Daily')),
         AssignmentsView(assignmentsService: _coreService.assignmentsService),
         const Center(child: Text('Exams')),
-        const Center(child: Text('Courses')),
+        CoursesView(coursesService: _coreService.coursesService),
       ];
 
   void _onItemTapped(int index) {

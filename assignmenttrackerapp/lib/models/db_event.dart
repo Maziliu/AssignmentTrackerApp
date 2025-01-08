@@ -1,3 +1,4 @@
+import 'package:assignmenttrackerapp/enums/days_of_the_week.dart';
 import 'package:assignmenttrackerapp/enums/event_type.dart';
 import 'package:assignmenttrackerapp/models/db_object.dart';
 import 'package:assignmenttrackerapp/services/database/database_exceptions.dart';
@@ -111,6 +112,26 @@ class DatabaseEvent implements DatabaseObject {
   EventType get eventType => _eventType;
   int get id => _id;
   int get userId => _userId;
+
+  String get scheduledDaysString {
+    return [
+      for (int i = 0; i < 7; i++)
+        if (_scheduledDays[i]) DaysOfTheWeek.values[i]
+    ].join(', ');
+  }
+
+  String get timeSlotsString {
+    List<String> pairStrings = [];
+
+    for (Pair p in timeSlots) {
+      String lowerBoundConverted = p.first.toString().split(' ')[1];
+      String upperBoundConverted = p.second.toString().split(' ')[1];
+
+      pairStrings.add([lowerBoundConverted, upperBoundConverted].join('-'));
+    }
+
+    return pairStrings.join(',');
+  }
 
   set scheduledDays(List<bool> days) {
     for (int i = 0; i < days.length; i++) {

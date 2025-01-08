@@ -1,6 +1,7 @@
 import 'package:assignmenttrackerapp/constants/database_constants.dart';
 import 'package:assignmenttrackerapp/services/database/assignments_service.dart';
 import 'package:assignmenttrackerapp/models/db_user.dart';
+import 'package:assignmenttrackerapp/services/database/courses_service.dart';
 import 'package:assignmenttrackerapp/services/database/database_exceptions.dart';
 import 'package:assignmenttrackerapp/services/database/database_service.dart';
 
@@ -8,14 +9,17 @@ class CoreService extends DatabaseService {
   static DatabaseUser? _user;
   static final CoreService _instance = CoreService._singleton();
   final AssignmentsService _assignmentsService;
+  final CoursesService _coursesService;
 
   CoreService._singleton()
       : _assignmentsService = AssignmentsService(),
+        _coursesService = CoursesService(),
         super(userTableName, null);
 
   factory CoreService() => _instance;
 
   AssignmentsService get assignmentsService => _assignmentsService;
+  CoursesService get coursesService => _coursesService;
 
   static DatabaseUser getCurrentUser() {
     if (_user == null) {

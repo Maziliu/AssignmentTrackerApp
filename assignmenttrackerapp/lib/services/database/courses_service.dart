@@ -140,6 +140,8 @@ class CoursesService extends DatabaseService {
         courseId: course.courseId,
         eventType: EventType.lab,
       );
+
+      cache.updateCache(course);
     }
 
     return allCoursesInDB;
