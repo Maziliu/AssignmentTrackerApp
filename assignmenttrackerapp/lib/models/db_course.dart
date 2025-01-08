@@ -4,7 +4,7 @@ import 'package:assignmenttrackerapp/models/db_object.dart';
 class DatabaseCourse implements DatabaseObject {
   final int _id, _userId;
   final String _courseName;
-  final DatabaseEvent _courseEvent, _tutorialEvent, _labEvent;
+  late final DatabaseEvent? _courseEvent, _tutorialEvent, _labEvent;
 
   DatabaseCourse({
     required int id,
@@ -23,20 +23,26 @@ class DatabaseCourse implements DatabaseObject {
   DatabaseCourse.fromRow(Map<String, Object?> row)
       : _id = row['id'] as int,
         _userId = row['userId'] as int,
-        _courseName = row['course_name'] as String,
-        _courseEvent = DatabaseEvent.fromRow(
-            row['course_time_slots'] as Map<String, Object?>),
-        _tutorialEvent = DatabaseEvent.fromRow(
-            row['tutorial_time_slots'] as Map<String, Object?>),
-        _labEvent = DatabaseEvent.fromRow(
-            row['lab_time_slots'] as Map<String, Object?>);
+        _courseName = row['course_name'] as String;
 
-  DatabaseEvent get courseEvent => _courseEvent;
-  DatabaseEvent get tutorialEvent => _tutorialEvent;
-  DatabaseEvent get labEvent => _labEvent;
+  DatabaseEvent? get courseEvent => _courseEvent;
+  DatabaseEvent? get tutorialEvent => _tutorialEvent;
+  DatabaseEvent? get labEvent => _labEvent;
 
   int get courseId => _id;
   String get courseName => _courseName;
+
+  set courseEvent(val) {
+    _courseEvent = val;
+  }
+
+  set tutorialEvent(val) {
+    _tutorialEvent = val;
+  }
+
+  set labEvent(val) {
+    _labEvent = val;
+  }
 
   @override
   String toString() {

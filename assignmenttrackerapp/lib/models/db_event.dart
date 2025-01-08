@@ -109,6 +109,8 @@ class DatabaseEvent implements DatabaseObject {
   List<Pair<DateTime?, DateTime?>> get timeSlots => _timeSlots;
   int get courseId => _courseId;
   EventType get eventType => _eventType;
+  int get id => _id;
+  int get userId => _userId;
 
   set scheduledDays(List<bool> days) {
     for (int i = 0; i < days.length; i++) {

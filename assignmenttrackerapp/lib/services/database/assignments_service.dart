@@ -113,10 +113,6 @@ class AssignmentsService extends DatabaseService<DatabaseAssignment> {
     cache.removeFromCacheUsingId(id);
   }
 
-  void dispose() {
-    cache.dispose();
-  }
-
   @override
   CacheStream<DatabaseAssignment> get cache =>
       super.cache as CacheStream<DatabaseAssignment>;

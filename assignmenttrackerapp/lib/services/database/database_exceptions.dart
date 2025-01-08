@@ -23,3 +23,16 @@ class ExistingUserException implements Exception {}
 class InvalidArrayLengthException implements Exception {}
 
 class InvalidBitmaskValueException implements Exception {}
+
+class UnableToDeleteCourseException implements Exception {}
+
+class CourseNotFoundException implements Exception {}
+
+class UnableToUpdateCourseException implements Exception {}
+
+//Event Table
+class UnableToGetEventException implements Exception {}
+
+class UnableToDeleteEventException implements Exception {}
+
+class UnableToUpdateEventException implements Exception {}
