@@ -95,6 +95,10 @@ class CoursesService extends DatabaseService {
   }
 
   @override
+  CacheStream<DatabaseCourse> get cache =>
+      super.cache as CacheStream<DatabaseCourse>;
+
+  @override
   DatabaseCourse mapRowToModel(Map<String, Object?> row) {
     return DatabaseCourse.fromRow(row);
   }
