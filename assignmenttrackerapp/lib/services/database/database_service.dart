@@ -3,11 +3,12 @@ import 'package:assignmenttrackerapp/models/db_object.dart';
 import 'package:assignmenttrackerapp/services/database/database_handler.dart';
 
 abstract class DatabaseService<T> with DatabaseHandler {
-  late final String tableName;
+  late final String _tableName;
   late final CacheStream<DatabaseObject>? _cache;
 
-  DatabaseService(this.tableName, CacheStream<DatabaseObject> cache)
-      : _cache = cache;
+  DatabaseService(String tableName, CacheStream<DatabaseObject>? cache)
+      : _tableName = tableName,
+        _cache = cache;
 
   T mapRowToModel(Map<String, Object?> row);
 
@@ -67,4 +68,5 @@ abstract class DatabaseService<T> with DatabaseHandler {
   }
 
   CacheStream<DatabaseObject> get cache => _cache!;
+  String get tableName => _tableName;
 }

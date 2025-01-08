@@ -13,7 +13,7 @@ class CoreService extends DatabaseService {
 
   CoreService._singleton()
       : _assignmentsService = AssignmentsService(),
-        super(userTableName, CacheStream<DatabaseObject>());
+        super(userTableName, null);
 
   factory CoreService() => _instance;
 
