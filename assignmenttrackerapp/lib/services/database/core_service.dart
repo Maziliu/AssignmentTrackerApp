@@ -1,4 +1,6 @@
 import 'package:assignmenttrackerapp/constants/database_constants.dart';
+import 'package:assignmenttrackerapp/models/cache_stream.dart';
+import 'package:assignmenttrackerapp/models/db_object.dart';
 import 'package:assignmenttrackerapp/services/database/assignments_service.dart';
 import 'package:assignmenttrackerapp/models/db_user.dart';
 import 'package:assignmenttrackerapp/services/database/database_exceptions.dart';
@@ -11,7 +13,7 @@ class CoreService extends DatabaseService {
 
   CoreService._singleton()
       : _assignmentsService = AssignmentsService(),
-        super(userTableName);
+        super(userTableName, CacheStream<DatabaseObject>());
 
   factory CoreService() => _instance;
 
@@ -29,9 +31,11 @@ class CoreService extends DatabaseService {
     return DatabaseUser.fromRow(row);
   }
 
+  @override
   void dispose() {
     _assignmentsService.dispose();
     closeDB();
+    super.dispose();
   }
 
   //CRUD Functions

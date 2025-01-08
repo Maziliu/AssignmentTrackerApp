@@ -9,11 +9,8 @@ import 'package:assignmenttrackerapp/services/database/database_service.dart';
 class AssignmentsService extends DatabaseService<DatabaseAssignment> {
   static final AssignmentsService _instance = AssignmentsService._singleton();
 
-  late final CacheStream<DatabaseAssignment> cache;
-
   AssignmentsService._singleton()
-      : cache = CacheStream(),
-        super(assignmentTableName);
+      : super(assignmentTableName, CacheStream<DatabaseAssignment>());
 
   factory AssignmentsService() => _instance;
 
@@ -119,6 +116,10 @@ class AssignmentsService extends DatabaseService<DatabaseAssignment> {
   void dispose() {
     cache.dispose();
   }
+
+  @override
+  CacheStream<DatabaseAssignment> get cache =>
+      super.cache as CacheStream<DatabaseAssignment>;
 
   @override
   DatabaseAssignment mapRowToModel(Map<String, Object?> row) {

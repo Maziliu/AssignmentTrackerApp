@@ -18,3 +18,8 @@ class UnableToCreateUserException implements Exception {}
 class UserNotFoundException implements Exception {}
 
 class ExistingUserException implements Exception {}
+
+//Course Table
+class InvalidArrayLengthException implements Exception {}
+
+class InvalidBitmaskValueException implements Exception {}

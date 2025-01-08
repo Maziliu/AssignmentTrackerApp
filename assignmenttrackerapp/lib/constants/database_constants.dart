@@ -1,6 +1,7 @@
 const databaseName = 'assignment_tracker_db';
 const assignmentTableName = 'assignment';
 const userTableName = 'user';
+const courseTableName = 'course';
 
 // SQL commands
 const createUserTable = '''

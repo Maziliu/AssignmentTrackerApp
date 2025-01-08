@@ -1,9 +1,13 @@
+import 'package:assignmenttrackerapp/models/cache_stream.dart';
+import 'package:assignmenttrackerapp/models/db_object.dart';
 import 'package:assignmenttrackerapp/services/database/database_handler.dart';
 
 abstract class DatabaseService<T> with DatabaseHandler {
   late final String tableName;
+  late final CacheStream<DatabaseObject>? _cache;
 
-  DatabaseService(this.tableName);
+  DatabaseService(this.tableName, CacheStream<DatabaseObject> cache)
+      : _cache = cache;
 
   T mapRowToModel(Map<String, Object?> row);
 
@@ -55,4 +59,12 @@ abstract class DatabaseService<T> with DatabaseHandler {
 
     return await database.delete(tableName);
   }
+
+  void dispose() {
+    if (_cache != null) {
+      _cache.dispose();
+    }
+  }
+
+  CacheStream<DatabaseObject> get cache => _cache!;
 }
