@@ -86,42 +86,45 @@ class _UpdateAssignmentViewState extends State<UpdateAssignmentView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: const Text('Update Assignment'),
       ),
-      body: StandardColumn(
-        children: [
-          StandardTextField(
-            labelText: 'Assignment Name',
-            controller: _titleController,
-          ),
-          StandardTextField(
-            labelText: 'Course Name',
-            controller: _courseController,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                _selectedDateTime == null
-                    ? 'No date selected'
-                    : "${_selectedDateTime.toString().split(' ')[0]} at ${_selectedDateTime.toString().split(' ')[1].split('.')[0]}",
-              ),
-              SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: () => _pickDateAndTime(context),
-                child: const Icon(Icons.calendar_month),
-              ),
-            ],
-          ),
-          ElevatedButton(
-            onPressed: () {
-              _updateAssignment();
-              Navigator.pop(context);
-            },
-            child: const Text('Save'),
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: StandardColumn(
+          children: [
+            StandardTextField(
+              labelText: 'Assignment Name',
+              controller: _titleController,
+            ),
+            StandardTextField(
+              labelText: 'Course Name',
+              controller: _courseController,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  _selectedDateTime == null
+                      ? 'No date selected'
+                      : "${_selectedDateTime.toString().split(' ')[0]} at ${_selectedDateTime.toString().split(' ')[1].split('.')[0]}",
+                ),
+                SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () => _pickDateAndTime(context),
+                  child: const Icon(Icons.calendar_month),
+                ),
+              ],
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _updateAssignment();
+                Navigator.pop(context);
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        ),
       ),
     );
   }

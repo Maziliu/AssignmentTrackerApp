@@ -3,6 +3,7 @@ import 'package:assignmenttrackerapp/enums/event_type.dart';
 import 'package:assignmenttrackerapp/models/db_object.dart';
 import 'package:assignmenttrackerapp/services/database/database_exceptions.dart';
 import 'package:assignmenttrackerapp/utils/pair.dart';
+import 'package:flutter/material.dart';
 
 //Notes for how i am storing this in the DB.
 //_scheduledDays is a bitmask of vals from 0 - 127.
@@ -12,8 +13,8 @@ class DatabaseEvent implements DatabaseObject {
   final int _id, _userId, _courseId;
   final EventType _eventType;
   final List<bool> _scheduledDays = [for (int i = 0; i < 7; i++) false];
-  final List<Pair<DateTime?, DateTime?>> _timeSlots = [
-    for (int i = 0; i < 7; i++) Pair(first: null, second: null)
+  final List<Pair<TimeOfDay?, TimeOfDay?>> _timeSlots = [
+    for (int i = 0; i < 7; i++) Pair()
   ];
 
   DatabaseEvent({
@@ -36,10 +37,10 @@ class DatabaseEvent implements DatabaseObject {
       _scheduledDays[i] = decoded[i];
     }
 
-    List<Pair<DateTime?, DateTime?>> decodedTimeSlots =
+    List<Pair<TimeOfDay?, TimeOfDay?>> decodedTimeSlots =
         decodeTimeSlots(row['time_slots'] as String);
     for (int i = 0; i < decodedTimeSlots.length; i++) {
-      if (!decodedTimeSlots[i].isEmpty) {
+      if (decodedTimeSlots[i].isNotEmpty) {
         _timeSlots[i] = decodedTimeSlots[i];
       }
     }
@@ -68,37 +69,35 @@ class DatabaseEvent implements DatabaseObject {
     return [for (int i = 0; i < 7; i++) (encodedVal & (1 << i) != 0)];
   }
 
-  static List<Pair<DateTime?, DateTime?>> decodeTimeSlots(
+  static List<Pair<TimeOfDay?, TimeOfDay?>> decodeTimeSlots(
       String encodedString) {
     List<String> pairStrings = encodedString.split(';');
-    List<Pair<DateTime?, DateTime?>> result = [];
+    List<Pair<TimeOfDay?, TimeOfDay?>> result = [];
 
     for (String pair in pairStrings) {
       if (pair.isNotEmpty) {
         List<String> timeStrings = pair.split(',');
 
-        DateTime? startTime = timeStrings[0].isNotEmpty
-            ? DateTime.tryParse(timeStrings[0])
+        TimeOfDay? startTime = timeStrings[0].isNotEmpty
+            ? TimeOfDay.fromDateTime(DateTime.tryParse(timeStrings[0])!)
             : null;
-        DateTime? endTime = timeStrings.length > 1 && timeStrings[1].isNotEmpty
-            ? DateTime.tryParse(timeStrings[1])
+        TimeOfDay? endTime = timeStrings.length > 1 && timeStrings[1].isNotEmpty
+            ? TimeOfDay.fromDateTime(DateTime.tryParse(timeStrings[1])!)
             : null;
 
-        result.add(Pair(first: startTime, second: endTime));
+        result.add(Pair.pair(first: startTime, second: endTime));
       }
     }
 
     return result;
   }
 
-  static String encodeTimeSlots(List<Pair<DateTime?, DateTime?>> timeSlots) {
+  static String encodeTimeSlots(List<Pair<TimeOfDay?, TimeOfDay?>> timeSlots) {
     List<String> pairStrings = [];
 
     for (var pair in timeSlots) {
-      String startTime =
-          pair.first != null ? pair.first!.toIso8601String() : '';
-      String endTime =
-          pair.second != null ? pair.second!.toIso8601String() : '';
+      String startTime = pair.first != null ? pair.first!.toString() : '';
+      String endTime = pair.second != null ? pair.second!.toString() : '';
 
       pairStrings.add('$startTime,$endTime');
     }
@@ -106,8 +105,19 @@ class DatabaseEvent implements DatabaseObject {
     return pairStrings.join(';');
   }
 
+  String formatTimeOfDay(TimeOfDay time, {bool use24HourFormat = false}) {
+    final int hour = use24HourFormat
+        ? time.hour
+        : (time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod);
+    final String period =
+        use24HourFormat ? '' : (time.period == DayPeriod.am ? ' AM' : ' PM');
+    final String minute = time.minute.toString().padLeft(2, '0');
+
+    return '$hour:$minute$period';
+  }
+
   List<bool> get scheduledDays => _scheduledDays;
-  List<Pair<DateTime?, DateTime?>> get timeSlots => _timeSlots;
+  List<Pair<TimeOfDay?, TimeOfDay?>> get timeSlots => _timeSlots;
   int get courseId => _courseId;
   EventType get eventType => _eventType;
   int get id => _id;
@@ -124,10 +134,12 @@ class DatabaseEvent implements DatabaseObject {
     List<String> pairStrings = [];
 
     for (Pair p in timeSlots) {
-      String lowerBoundConverted = p.first.toString().split(' ')[1];
-      String upperBoundConverted = p.second.toString().split(' ')[1];
+      if (p.isNotEmpty) {
+        String lowerBoundConverted = formatTimeOfDay(p.first);
+        String upperBoundConverted = formatTimeOfDay(p.second);
 
-      pairStrings.add([lowerBoundConverted, upperBoundConverted].join('-'));
+        pairStrings.add([lowerBoundConverted, upperBoundConverted].join(' - '));
+      }
     }
 
     return pairStrings.join(',');
@@ -139,7 +151,7 @@ class DatabaseEvent implements DatabaseObject {
     }
   }
 
-  set timeSlots(List<Pair<DateTime?, DateTime?>> timeSlots) {
+  set timeSlots(List<Pair<TimeOfDay?, TimeOfDay?>> timeSlots) {
     for (int i = 0; i < timeSlots.length; i++) {
       _timeSlots[i] = timeSlots[i];
     }

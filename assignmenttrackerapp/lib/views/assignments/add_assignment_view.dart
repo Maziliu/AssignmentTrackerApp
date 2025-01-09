@@ -126,112 +126,115 @@ class _AddAssignmentViewState extends State<AddAssignmentView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: const Text('New Assignment'),
       ),
-      body: StandardColumn(
-        children: [
-          TextFormField(
-            controller: _titleController,
-            decoration: InputDecoration(
-              labelText: 'Assignment Name',
-              border: OutlineInputBorder(),
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            ),
-          ),
-          TextFormField(
-            controller: _courseController,
-            decoration: InputDecoration(
-              labelText: 'Course Name',
-              border: OutlineInputBorder(),
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                _selectedDateTime == null
-                    ? 'No date selected'
-                    : "${_selectedDateTime.toString().split(' ')[0]} at ${_selectedDateTime.toString().split(' ')[1].split('.')[0]}",
+      body: SingleChildScrollView(
+        child: StandardColumn(
+          children: [
+            TextFormField(
+              controller: _titleController,
+              decoration: InputDecoration(
+                labelText: 'Assignment Name',
+                border: OutlineInputBorder(),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               ),
-              SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: () => _pickDateAndTime(context),
-                child: const Icon(Icons.calendar_month),
+            ),
+            TextFormField(
+              controller: _courseController,
+              decoration: InputDecoration(
+                labelText: 'Course Name',
+                border: OutlineInputBorder(),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Repeat every '),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  _selectedDateTime == null
+                      ? 'No date selected'
+                      : "${_selectedDateTime.toString().split(' ')[0]} at ${_selectedDateTime.toString().split(' ')[1].split('.')[0]}",
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: DropdownButton<int>(
-                    value: _selectedRepeatIntervalLengthInDays,
-                    items: List.generate(
-                      30,
-                      (index) => DropdownMenuItem<int>(
-                        value: index + 1,
-                        child: Text((index + 1).toString()),
+                SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () => _pickDateAndTime(context),
+                  child: const Icon(Icons.calendar_month),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Repeat every '),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: DropdownButton<int>(
+                      value: _selectedRepeatIntervalLengthInDays,
+                      items: List.generate(
+                        30,
+                        (index) => DropdownMenuItem<int>(
+                          value: index + 1,
+                          child: Text((index + 1).toString()),
+                        ),
+                        growable: true,
                       ),
-                      growable: true,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedRepeatIntervalLengthInDays = newValue!;
+                        });
+                      },
+                      underline: const SizedBox(),
                     ),
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectedRepeatIntervalLengthInDays = newValue!;
-                      });
-                    },
-                    underline: const SizedBox(),
                   ),
                 ),
-              ),
-              Text(' days '),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: DropdownButton<int>(
-                    value: _selectedRepeatAmount,
-                    items: List.generate(
-                      31,
-                      (index) => DropdownMenuItem<int>(
-                        value: index,
-                        child: Text((index).toString()),
+                Text(' days '),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: DropdownButton<int>(
+                      value: _selectedRepeatAmount,
+                      items: List.generate(
+                        31,
+                        (index) => DropdownMenuItem<int>(
+                          value: index,
+                          child: Text((index).toString()),
+                        ),
+                        growable: true,
                       ),
-                      growable: true,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedRepeatAmount = newValue!;
+                        });
+                      },
+                      underline: const SizedBox(),
                     ),
-                    onChanged: (newValue) {
-                      setState(() {
-                        _selectedRepeatAmount = newValue!;
-                      });
-                    },
-                    underline: const SizedBox(),
                   ),
                 ),
-              ),
-              Text(' times'),
-            ],
-          ),
-          ElevatedButton(
-            onPressed: () {
-              _createAssignment(context);
-              Navigator.of(context).pop();
-            },
-            child: const Text('Save Assignment'),
-          ),
-        ],
+                Text(' times'),
+              ],
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _createAssignment(context);
+                Navigator.of(context).pop();
+              },
+              child: const Text('Save Assignment'),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -58,12 +58,14 @@ class _CoursesViewState extends State<CoursesView> {
                 return StandardEditableItemWidget<DatabaseCourse>(
                   data: course,
                   titleBuilder: (course) => course.courseName,
-                  subtitle1Builder: (course) =>
-                      course.courseEvent!.scheduledDaysString,
-                  subtitle2Builder: (course) =>
-                      course.courseEvent!.timeSlotsString,
+                  subtitle1Builder: (course) => (course.courseEvent != null)
+                      ? course.courseEvent!.scheduledDaysString
+                      : '',
+                  subtitle2Builder: (course) => (course.courseEvent != null)
+                      ? course.courseEvent!.timeSlotsString
+                      : '',
                   onDelete: () async {
-                    await widget._coursesService.deleteCourseById(
+                    await widget._coursesService.deleteCourseByIdAndEventIds(
                       id: course.courseId,
                       eventIds: [
                         if (course.courseEvent != null) course.courseEvent!.id,

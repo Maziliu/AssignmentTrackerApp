@@ -22,7 +22,7 @@ class DatabaseCourse implements DatabaseObject {
 
   DatabaseCourse.fromRow(Map<String, Object?> row)
       : _id = row['id'] as int,
-        _userId = row['userId'] as int,
+        _userId = row['user_id'] as int,
         _courseName = row['course_name'] as String;
 
   DatabaseEvent? get courseEvent => _courseEvent;

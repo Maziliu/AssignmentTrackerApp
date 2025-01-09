@@ -1,13 +1,13 @@
 class Pair<K, T> {
-  final K? _first;
-  final T? _second;
+  K? first;
+  T? second;
 
-  Pair({required K first, required second})
-      : _first = first,
-        _second = second;
+  Pair()
+      : first = null,
+        second = null;
 
-  K? get first => _first;
-  T? get second => _second;
+  Pair.pair({required K this.first, required this.second});
 
-  bool get isEmpty => _first == null && _second == null;
+  bool get isEmpty => first == null && second == null;
+  bool get isNotEmpty => !isEmpty;
 }

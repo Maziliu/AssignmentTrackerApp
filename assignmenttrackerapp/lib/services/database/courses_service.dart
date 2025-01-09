@@ -6,7 +6,8 @@ import 'package:assignmenttrackerapp/models/db_event.dart';
 import 'package:assignmenttrackerapp/services/database/database_exceptions.dart';
 import 'package:assignmenttrackerapp/services/database/database_service.dart';
 import 'package:assignmenttrackerapp/utils/pair.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 class CoursesService extends DatabaseService {
   static final CoursesService _instance = CoursesService._singleton();
@@ -37,7 +38,7 @@ class CoursesService extends DatabaseService {
       eventType: EventType.course,
       scheduledDays: courseEventMap['scheduled_days'] as List<bool>,
       timeSlots:
-          courseEventMap['time_slots'] as List<Pair<DateTime?, DateTime?>>,
+          courseEventMap['time_slots'] as List<Pair<TimeOfDay?, TimeOfDay?>>,
     );
 
     DatabaseEvent tutorialEvent = await createEvent(
@@ -46,7 +47,7 @@ class CoursesService extends DatabaseService {
       eventType: EventType.tutorial,
       scheduledDays: tutorialEventMap['scheduled_days'] as List<bool>,
       timeSlots:
-          tutorialEventMap['time_slots'] as List<Pair<DateTime?, DateTime?>>,
+          tutorialEventMap['time_slots'] as List<Pair<TimeOfDay?, TimeOfDay?>>,
     );
 
     DatabaseEvent labEvent = await createEvent(
@@ -54,7 +55,8 @@ class CoursesService extends DatabaseService {
       courseId: courseId,
       eventType: EventType.lab,
       scheduledDays: labEventMap['scheduled_days'] as List<bool>,
-      timeSlots: labEventMap['time_slots'] as List<Pair<DateTime?, DateTime?>>,
+      timeSlots:
+          labEventMap['time_slots'] as List<Pair<TimeOfDay?, TimeOfDay?>>,
     );
 
     DatabaseCourse course = DatabaseCourse(
@@ -76,8 +78,11 @@ class CoursesService extends DatabaseService {
     required int courseId,
     required EventType eventType,
     required List<bool> scheduledDays,
-    required List<Pair<DateTime?, DateTime?>> timeSlots,
+    required List<Pair<TimeOfDay?, TimeOfDay?>> timeSlots,
   }) async {
+    await checkDbIsOpen();
+    Database database = getDatabase();
+
     final row = {
       'user_id': userId,
       'course_id': courseId,
@@ -86,7 +91,7 @@ class CoursesService extends DatabaseService {
       'time_slots': DatabaseEvent.encodeTimeSlots(timeSlots),
     };
 
-    final eventId = await insertRecord(row);
+    final eventId = await database.insert(eventTableName, row);
 
     final event = DatabaseEvent(
       id: eventId,
@@ -196,7 +201,7 @@ class CoursesService extends DatabaseService {
       {required int courseId,
       required EventType eventType,
       required List<bool> scheduledDays,
-      required List<Pair<DateTime?, DateTime?>> timeSlots}) async {
+      required List<Pair<TimeOfDay?, TimeOfDay?>> timeSlots}) async {
     DatabaseEvent? originalEvent = await getEventByCourseIdAndType(
         courseId: courseId, eventType: eventType);
 
@@ -235,7 +240,7 @@ class CoursesService extends DatabaseService {
     }
   }
 
-  Future<void> deleteCourseById(
+  Future<void> deleteCourseByIdAndEventIds(
       {required int id, required List<int> eventIds}) async {
     final count = await deleteRecord(id);
 
@@ -248,6 +253,33 @@ class CoursesService extends DatabaseService {
     }
 
     cache.removeFromCacheUsingId(id);
+  }
+
+  Future<void> deleteCourseById({required int id}) async {
+    await checkDbIsOpen();
+    Database database = getDatabase();
+
+    final DatabaseCourse course = await getCourseById(id: id);
+
+    if (course.courseEvent != null) {
+      await deleteEventById(id: course.courseEvent!.id);
+    }
+    if (course.tutorialEvent != null) {
+      await deleteEventById(id: course.tutorialEvent!.id);
+    }
+    if (course.labEvent != null) {
+      await deleteEventById(id: course.labEvent!.id);
+    }
+
+    final count = await database.delete(
+      courseTableName,
+      where: 'course_id = ?',
+      whereArgs: [id],
+    );
+
+    if (count == 0) {
+      throw UnableToDeleteCourseException();
+    }
   }
 
   @override
