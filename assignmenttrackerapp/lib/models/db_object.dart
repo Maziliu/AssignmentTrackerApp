@@ -1,7 +1,7 @@
 abstract class DatabaseObject {
-  final int _ownerId;
+  final int _id;
 
-  DatabaseObject({required ownerId}) : _ownerId = ownerId;
+  DatabaseObject({required int id}) : _id = id;
 
-  int get ownerId => _ownerId;
+  int get id => _id;
 }

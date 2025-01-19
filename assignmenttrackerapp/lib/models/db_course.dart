@@ -1,68 +1,61 @@
+import 'package:assignmenttrackerapp/models/datastream_object.dart';
 import 'package:assignmenttrackerapp/models/db_event.dart';
+import 'package:assignmenttrackerapp/models/db_grade_scale.dart';
+import 'package:assignmenttrackerapp/models/db_graded_component.dart';
 import 'package:assignmenttrackerapp/models/db_object.dart';
+import 'package:assignmenttrackerapp/models/db_time_slot.dart';
+import 'package:assignmenttrackerapp/utils/schedule_helpers.dart';
 
-class DatabaseCourse implements DatabaseObject {
-  final int _id, _userId;
-  final String _courseName;
-  late final DatabaseEvent? _courseEvent, _tutorialEvent, _labEvent;
+class DatabaseCourse extends DatabaseObject implements DatastreamObject {
+  final int _profileId, _scheduleBitMask;
+  final DatabaseGradedComponent _gradedComponent;
+  final DatabaseGradeScale _gradeScale;
+  final String _courseName, _courseCode;
+  final DatabaseTimeSlot _timeSlot;
+  final List<DatabaseEvent> _additionalCourseEvents;
 
-  DatabaseCourse({
-    required int id,
-    required int userId,
-    required String courseName,
-    required DatabaseEvent courseEvent,
-    required DatabaseEvent tutorialEvent,
-    required DatabaseEvent labEvent,
-  })  : _id = id,
-        _userId = userId,
+  DatabaseCourse(
+      {required super.id,
+      required int profileId,
+      required int scheduleBitMask,
+      required DatabaseGradedComponent gradedComponent,
+      required DatabaseGradeScale gradeScale,
+      required String courseName,
+      required String courseCode,
+      required DatabaseTimeSlot timeSlot,
+      required List<DatabaseEvent> additionalCourseEvents})
+      : _profileId = profileId,
+        _scheduleBitMask = scheduleBitMask,
+        _gradedComponent = gradedComponent,
+        _gradeScale = gradeScale,
         _courseName = courseName,
-        _courseEvent = courseEvent,
-        _tutorialEvent = tutorialEvent,
-        _labEvent = labEvent;
+        _courseCode = courseCode,
+        _timeSlot = timeSlot,
+        _additionalCourseEvents = additionalCourseEvents;
 
   DatabaseCourse.fromRow(Map<String, Object?> row)
-      : _id = row['id'] as int,
-        _userId = row['user_id'] as int,
-        _courseName = row['course_name'] as String;
+      : _profileId = row['profile_id'] as int,
+        _scheduleBitMask = row['schedule_bitmask'] as int,
+        _gradedComponent = row['graded_component'] as DatabaseGradedComponent,
+        _gradeScale = row['grade_scale'] as DatabaseGradeScale,
+        _courseName = row['course_name'] as String,
+        _courseCode = row['course_code'] as String,
+        _timeSlot = row['time_slot'] as DatabaseTimeSlot,
+        _additionalCourseEvents =
+            row['additional_course_events'] as List<DatabaseEvent>,
+        super(id: row['id'] as int);
 
-  DatabaseEvent? get courseEvent => _courseEvent;
-  DatabaseEvent? get tutorialEvent => _tutorialEvent;
-  DatabaseEvent? get labEvent => _labEvent;
-
-  int get courseId => _id;
+  List<bool> get scheduledDays => decodeScheduledDaysArray(_scheduleBitMask);
+  DatabaseGradedComponent get gradedComponent => _gradedComponent;
+  DatabaseGradeScale get gradeScale => _gradeScale;
   String get courseName => _courseName;
-
-  set courseEvent(val) {
-    _courseEvent = val;
-  }
-
-  set tutorialEvent(val) {
-    _tutorialEvent = val;
-  }
-
-  set labEvent(val) {
-    _labEvent = val;
-  }
+  String get courseCode => _courseCode;
+  DatabaseTimeSlot get timeSlot => _timeSlot;
+  List<DatabaseEvent> get additionalCourseEvents => _additionalCourseEvents;
 
   @override
-  String toString() {
-    return 'ID: $_id, Course: $_courseName';
-  }
+  String toString() => courseCode;
 
   @override
-  bool operator ==(covariant DatabaseObject other) {
-    if (other is DatabaseCourse) {
-      return _id == other._id;
-    }
-
-    return false;
-  }
-
-  @override
-  int get hashCode {
-    return _id.hashCode;
-  }
-
-  @override
-  int get ownerId => _userId;
+  int get profileId => _profileId;
 }

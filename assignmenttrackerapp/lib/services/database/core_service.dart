@@ -1,24 +1,28 @@
 import 'package:assignmenttrackerapp/constants/database_constants.dart';
-import 'package:assignmenttrackerapp/services/database/assignments_service.dart';
+import 'package:assignmenttrackerapp/models/cache_stream.dart';
+import 'package:assignmenttrackerapp/models/datastream_object.dart';
+import 'package:assignmenttrackerapp/services/database/assesment_service.dart';
 import 'package:assignmenttrackerapp/models/db_user.dart';
 import 'package:assignmenttrackerapp/services/database/courses_service.dart';
+import 'package:assignmenttrackerapp/services/database/crud_service.dart';
 import 'package:assignmenttrackerapp/services/database/database_exceptions.dart';
 import 'package:assignmenttrackerapp/services/database/database_service.dart';
+import 'package:assignmenttrackerapp/services/database/datastream_service.dart';
 
 class CoreService extends DatabaseService {
   static DatabaseUser? _user;
   static final CoreService _instance = CoreService._singleton();
-  final AssignmentsService _assignmentsService;
+  final AssesmentService _assesmentService;
   final CoursesService _coursesService;
 
   CoreService._singleton()
-      : _assignmentsService = AssignmentsService(),
+      : _assesmentService = AssesmentService(),
         _coursesService = CoursesService(),
-        super(userTableName, null);
+        super(userTableName);
 
   factory CoreService() => _instance;
 
-  AssignmentsService get assignmentsService => _assignmentsService;
+  AssesmentService get assignmentsService => _assesmentService;
   CoursesService get coursesService => _coursesService;
 
   static DatabaseUser getCurrentUser() {
@@ -31,13 +35,6 @@ class CoreService extends DatabaseService {
   @override
   DatabaseUser mapRowToModel(Map<String, Object?> row) {
     return DatabaseUser.fromRow(row);
-  }
-
-  @override
-  void dispose() {
-    _assignmentsService.dispose();
-    closeDB();
-    super.dispose();
   }
 
   //CRUD Functions
@@ -103,5 +100,11 @@ class CoreService extends DatabaseService {
 
       return user;
     }
+  }
+
+  @override
+  void dispose() {
+    _assesmentService.dispose();
+    closeDB();
   }
 }

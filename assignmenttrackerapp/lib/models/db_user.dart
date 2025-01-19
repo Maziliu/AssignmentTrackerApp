@@ -1,41 +1,21 @@
 import 'package:assignmenttrackerapp/models/db_object.dart';
 
-class DatabaseUser implements DatabaseObject {
-  final int _id;
+class DatabaseUser extends DatabaseObject {
   final String _email;
 
-  const DatabaseUser({
-    required int id,
+  DatabaseUser({
+    required super.id,
     required String email,
-  })  : _email = email,
-        _id = id;
+  }) : _email = email;
 
   DatabaseUser.fromRow(Map<String, Object?> row)
-      : _id = row['id'] as int,
-        _email = row['email'] as String;
+      : _email = row['email'] as String,
+        super(id: row['id'] as int);
 
-  int get id => _id;
   String get email => _email;
 
   @override
   String toString() {
-    return 'ID: $_id, EMAIL: $_email';
+    return 'ID: $id, EMAIL: $_email';
   }
-
-  @override
-  bool operator ==(covariant DatabaseObject other) {
-    if (other is DatabaseUser) {
-      return _id == other._id;
-    }
-
-    return false;
-  }
-
-  @override
-  int get hashCode {
-    return _id.hashCode;
-  }
-
-  @override
-  int get ownerId => _id;
 }
