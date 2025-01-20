@@ -1,6 +1,7 @@
 import 'package:assignmenttrackerapp/constants/database_constants.dart';
 import 'package:assignmenttrackerapp/exceptions/database_exceptions.dart';
 import 'package:assignmenttrackerapp/models/db_course.dart';
+import 'package:assignmenttrackerapp/models/db_grade_scale.dart';
 import 'package:assignmenttrackerapp/models/db_graded_component.dart';
 import 'package:assignmenttrackerapp/repositories/abstracts/sqlite_base_repository.dart';
 import 'package:assignmenttrackerapp/repositories/interfaces/course_repository.dart';
@@ -44,7 +45,14 @@ class SqliteCourseRepository extends SqliteBaseRepository
 
     if (courseResult.isEmpty) throw UnableToFindCourseException();
 
-    DatabaseGradedComponent gradedComponent;
+    final Map<String, Object?> courseComponentIds = {'gradedComponentId' : courseResult.first['graded_component_id'], 'gradeScaleId' : courseResult.first['grade_scale_id'],};
+
+    DatabaseGradedComponent gradedComponent = await _gradedComponentRepository.findGradedComponentById(id: courseComponentIds['gradedComponentId'] as int);
+    DatabaseGradeScale gradeScale = await _gradeScaleRepository.findGradeScaleById(id: courseComponentIds['gradeScaleId'] as int);
+
+    final Map<String, Object?> completeCourseRow = {...courseResult.first, ...{'gradedComponent' : gradedComponent, 'gradeScale' : gradeScale},};
+
+    return DatabaseCourse.fromRow(completeCourseRow);
   }
 
   @override
@@ -54,8 +62,21 @@ class SqliteCourseRepository extends SqliteBaseRepository
       required Map<String, Object?> gradeScaleValues,
       required Map<String, Object?> timeSlotValues,
       required List<Map<String, Object?>>? additionalEventsValues}) async {
-    // TODO: implement insertCourse
-    throw UnimplementedError();
+    
+    try{
+      await insertDatabaseEntry(tableName: courseTableName, row: courseValues);
+    } on UnableToInsertDatabaseEntryException {
+      throw UnableToInsertCourseException();
+    }
+    await _gradedComponentRepository.insertGradedComponent(values: gradedComponentValues);
+    await _gradeScaleRepository.insertGradeScale(values: gradeScaleValues);
+    await _timeSlotRepository.insertTimeSlot(values: timeSlotValues);
+
+    if(additionalEventsValues != null) {
+      for(Map<String, Object?> event in additionalEventsValues) {
+        await _eventRepository.insertEvent(eventValues: event['values'] as Map<String, Object?>, timeSlotValues: event['timeslot'] as Map<String, Object?>);
+      }
+    } 
   }
 
   @override
@@ -70,7 +91,25 @@ class SqliteCourseRepository extends SqliteBaseRepository
       required Map<String, Object?>? updatedTimeSlotValues,
       required List<Map<String, Object?>>?
           updatedAdditionalEventsValues}) async {
-    // TODO: implement updateCourseById
-    throw UnimplementedError();
+    
+    try{
+      await updateDatabaseEntryById(tableName: courseTableName, rowId: courseId, updatedValues: updatedCourseValues);
+    } on UnableToUpdateDatabaseEntryException {
+      throw UnableToUpdateCourseException();
+    }
+    
+    if(gradedComponentId != null) {
+      await updateDatabaseEntryById(tableName: gradedComponentTableName, rowId: gradedComponentId, updatedValues: updatedGradedComponentValues!);
+    }
+
+    if(gradeScaleId != null) {
+      await updateDatabaseEntryById(tableName: gradeScaleTableName, rowId: gradeScaleId, updatedValues: updatedGradeScaleValues!);
+    }
+
+    if(timeSlotId != null) {
+      await updateDatabaseEntryById(tableName: timeSlotTableName, rowId: timeSlotId, updatedValues: updatedTimeSlotValues!);
+    }
+
+    return await findCourseById(id: courseId);
   }
 }

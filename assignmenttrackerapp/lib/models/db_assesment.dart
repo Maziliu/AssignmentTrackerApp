@@ -34,7 +34,7 @@ class DatabaseAssesment extends DatabaseObject implements DatastreamObject {
         _courseId = row['course_id'] as int,
         _gradedComponent = row['graded_component'] as DatabaseGradedComponent,
         _assesmentName = row['assesment_name'] as String,
-        _type = row['type'] as AssessmentType,
+        _type = AssessmentType.values.byName(row['type'] as String),
         _isComplete = row['is_complete'] as bool,
         _timeSlot = row['time_slot'] as DatabaseTimeSlot,
         super(id: row['id'] as int);

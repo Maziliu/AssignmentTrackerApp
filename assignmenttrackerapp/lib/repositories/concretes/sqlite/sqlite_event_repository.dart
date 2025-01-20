@@ -3,7 +3,7 @@ import 'package:assignmenttrackerapp/exceptions/database_exceptions.dart';
 import 'package:assignmenttrackerapp/models/db_event.dart';
 import 'package:assignmenttrackerapp/models/db_time_slot.dart';
 import 'package:assignmenttrackerapp/repositories/abstracts/sqlite_base_repository.dart';
-import 'package:assignmenttrackerapp/repositories/concretes/sqlite_time_slot_repository.dart';
+import 'package:assignmenttrackerapp/repositories/concretes/sqlite/sqlite_time_slot_repository.dart';
 import 'package:assignmenttrackerapp/repositories/interfaces/event_repository.dart';
 import 'package:assignmenttrackerapp/repositories/interfaces/time_slot_repository.dart';
 import 'package:sqflite/sqflite.dart';

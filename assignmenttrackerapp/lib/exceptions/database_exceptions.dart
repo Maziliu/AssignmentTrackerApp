@@ -71,3 +71,21 @@ class UnableToDeleteCourseException implements Exception {}
 class UnableToUpdateCourseException implements Exception {}
 
 class UnableToInsertCourseException implements Exception {}
+
+//Assessment Table
+class UnableToFindAssessmentException implements Exception {}
+
+class UnableToDeleteAssessmentException implements Exception {}
+
+class UnableToUpdateAssessmentException implements Exception {}
+
+class UnableToInsertAssessmentException implements Exception {}
+
+//Profile Table
+class UnableToFindProfileException implements Exception {}
+
+class UnableToDeleteProfileException implements Exception {}
+
+class UnableToUpdateProfileException implements Exception {}
+
+class UnableToInsertProfileException implements Exception {}
