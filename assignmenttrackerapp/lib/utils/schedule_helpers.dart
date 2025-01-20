@@ -1,4 +1,4 @@
-import 'package:assignmenttrackerapp/services/database/database_exceptions.dart';
+import 'package:assignmenttrackerapp/exceptions/database_exceptions.dart';
 import 'package:assignmenttrackerapp/utils/pair.dart';
 import 'package:flutter/material.dart';
 

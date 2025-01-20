@@ -1,7 +1,7 @@
 import 'package:assignmenttrackerapp/models/db_course.dart';
 import 'package:assignmenttrackerapp/services/auth/auth_services.dart';
 import 'package:assignmenttrackerapp/services/database/core_service.dart';
-import 'package:assignmenttrackerapp/services/database/courses_service.dart';
+import 'package:assignmenttrackerapp/services/database/courses/courses_service.dart';
 import 'package:assignmenttrackerapp/themes/themes.dart';
 import 'package:assignmenttrackerapp/utils/pair.dart';
 import 'package:assignmenttrackerapp/views/widgets/day_picker_with_time_interval.dart';

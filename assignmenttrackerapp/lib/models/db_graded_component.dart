@@ -14,6 +14,12 @@ class DatabaseGradedComponent extends DatabaseObject {
         _gradePercentage = gradePercentage,
         _gradeLetter = gradeLetter;
 
+  DatabaseGradedComponent.fromRow(Map<String, Object?> row)
+      : _weightDecimal = row['weightDecimal'] as double?,
+        _gradePercentage = row['grade_percentage'] as double,
+        _gradeLetter = row['grade_letter'] as String,
+        super(id: row['id'] as int);
+
   double? get weightDecimal => _weightDecimal;
   double get gradePercentage => _gradePercentage;
   String get gradeLetter => _gradeLetter;

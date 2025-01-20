@@ -1,24 +1,16 @@
 import 'package:assignmenttrackerapp/constants/database_constants.dart';
-import 'package:assignmenttrackerapp/services/database/database_exceptions.dart';
+import 'package:assignmenttrackerapp/exceptions/database_exceptions.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 mixin DatabaseHandler {
   Database? _database;
-  Database getDatabase() {
+  Future<Database> fetchOrCreateDatabase() async {
     if (_database == null) {
-      throw NonExistentDatabaseException();
+      await openDB();
     }
     return _database!;
-  }
-
-  Future<void> checkDbIsOpen() async {
-    try {
-      await openDB();
-    } on ExistingDatabaseException {
-      // Pass as this function guarantees the database is open
-    }
   }
 
   Future<void> closeDB() async {

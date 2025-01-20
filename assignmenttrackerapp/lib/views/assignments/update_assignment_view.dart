@@ -1,6 +1,6 @@
 import 'package:assignmenttrackerapp/models/db_assignment.dart';
 import 'package:assignmenttrackerapp/services/database/assignments_service.dart';
-import 'package:assignmenttrackerapp/services/database/database_exceptions.dart';
+import 'package:assignmenttrackerapp/exceptions/database_exceptions.dart';
 import 'package:assignmenttrackerapp/views/widgets/standard_column.dart';
 import 'package:assignmenttrackerapp/views/widgets/standard_text_field.dart';
 import 'package:flutter/material.dart';

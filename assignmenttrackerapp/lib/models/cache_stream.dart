@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:assignmenttrackerapp/models/datastream_object.dart';
 import 'package:assignmenttrackerapp/services/database/core_service.dart';
-import 'package:assignmenttrackerapp/services/database/stream_filter.dart';
+import 'package:assignmenttrackerapp/services/database/abstracts/stream_filter.dart';
 
 class CacheStream<K extends DatastreamObject> {
   final List<K> _cachedObjects = [];

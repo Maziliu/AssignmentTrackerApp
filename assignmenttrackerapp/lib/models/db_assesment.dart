@@ -1,4 +1,4 @@
-import 'package:assignmenttrackerapp/enums/assesment_type.dart';
+import 'package:assignmenttrackerapp/enums/assessment_type.dart';
 import 'package:assignmenttrackerapp/models/datastream_object.dart';
 import 'package:assignmenttrackerapp/models/db_graded_component.dart';
 import 'package:assignmenttrackerapp/models/db_object.dart';
@@ -8,7 +8,7 @@ class DatabaseAssesment extends DatabaseObject implements DatastreamObject {
   final int _courseId, _profileId;
   final DatabaseGradedComponent _gradedComponent;
   final String _assesmentName;
-  final AssesmentType _type;
+  final AssessmentType _type;
   final bool _isComplete;
   final DatabaseTimeSlot _timeSlot;
 
@@ -18,7 +18,7 @@ class DatabaseAssesment extends DatabaseObject implements DatastreamObject {
       required int profileId,
       required DatabaseGradedComponent gradedComponent,
       required String assesmentName,
-      required AssesmentType type,
+      required AssessmentType type,
       required bool isComplete,
       required DatabaseTimeSlot timeSlot})
       : _courseId = courseId,
@@ -34,7 +34,7 @@ class DatabaseAssesment extends DatabaseObject implements DatastreamObject {
         _courseId = row['course_id'] as int,
         _gradedComponent = row['graded_component'] as DatabaseGradedComponent,
         _assesmentName = row['assesment_name'] as String,
-        _type = row['type'] as AssesmentType,
+        _type = row['type'] as AssessmentType,
         _isComplete = row['is_complete'] as bool,
         _timeSlot = row['time_slot'] as DatabaseTimeSlot,
         super(id: row['id'] as int);
@@ -42,7 +42,7 @@ class DatabaseAssesment extends DatabaseObject implements DatastreamObject {
   int get courseId => _courseId;
   DatabaseGradedComponent get gradedComponent => _gradedComponent;
   String get assesmentName => _assesmentName;
-  AssesmentType get type => _type;
+  AssessmentType get type => _type;
   bool get isComplete => _isComplete;
   DatabaseTimeSlot get timeSlot => _timeSlot;
 

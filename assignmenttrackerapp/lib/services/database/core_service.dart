@@ -1,13 +1,9 @@
 import 'package:assignmenttrackerapp/constants/database_constants.dart';
-import 'package:assignmenttrackerapp/models/cache_stream.dart';
-import 'package:assignmenttrackerapp/models/datastream_object.dart';
-import 'package:assignmenttrackerapp/services/database/assesment_service.dart';
+import 'package:assignmenttrackerapp/services/database/assesments/assesment_service.dart';
 import 'package:assignmenttrackerapp/models/db_user.dart';
-import 'package:assignmenttrackerapp/services/database/courses_service.dart';
-import 'package:assignmenttrackerapp/services/database/crud_service.dart';
-import 'package:assignmenttrackerapp/services/database/database_exceptions.dart';
-import 'package:assignmenttrackerapp/services/database/database_service.dart';
-import 'package:assignmenttrackerapp/services/database/datastream_service.dart';
+import 'package:assignmenttrackerapp/services/database/courses/courses_service.dart';
+import 'package:assignmenttrackerapp/exceptions/database_exceptions.dart';
+import 'package:assignmenttrackerapp/services/database/abstracts/database_service.dart';
 
 class CoreService extends DatabaseService {
   static DatabaseUser? _user;
@@ -40,7 +36,7 @@ class CoreService extends DatabaseService {
   //CRUD Functions
   Future<DatabaseUser> createUser({required String email}) async {
     await checkDbIsOpen();
-    final database = getDatabase();
+    final database = fetchOrCreateDatabase();
 
     final result = await database.query(
       userTableName,
@@ -67,7 +63,7 @@ class CoreService extends DatabaseService {
 
   Future<DatabaseUser> getUser({required String email}) async {
     await checkDbIsOpen();
-    final database = getDatabase();
+    final database = fetchOrCreateDatabase();
 
     final results = await database.query(
       userTableName,

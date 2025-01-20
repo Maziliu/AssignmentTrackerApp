@@ -1,6 +1,4 @@
-import 'package:assignmenttrackerapp/models/cache_stream.dart';
-import 'package:assignmenttrackerapp/models/datastream_object.dart';
-import 'package:assignmenttrackerapp/services/database/database_handler.dart';
+import 'package:assignmenttrackerapp/services/database/abstracts/database_handler.dart';
 
 abstract class DatabaseService<T> with DatabaseHandler {
   late final String _tableName;
@@ -12,13 +10,13 @@ abstract class DatabaseService<T> with DatabaseHandler {
   // CRUD Operations
   Future<int> insertRecord(Map<String, Object?> row) async {
     await checkDbIsOpen();
-    final database = getDatabase();
+    final database = fetchOrCreateDatabase();
     return await database.insert(tableName, row);
   }
 
   Future<Iterable> getRecordById(int id) async {
     await checkDbIsOpen();
-    final database = getDatabase();
+    final database = fetchOrCreateDatabase();
     return await database.query(
       tableName,
       limit: 1,
@@ -27,23 +25,45 @@ abstract class DatabaseService<T> with DatabaseHandler {
     );
   }
 
+  Future<List<T>> getRecordBySpecifications(
+      Map<String, Object?> specifications) async {
+    await checkDbIsOpen();
+    final database = fetchOrCreateDatabase();
+
+    String? whereString;
+    List<Object?>? whereArgs;
+
+    if (specifications.isNotEmpty) {
+      whereString = specifications.keys.map((key) => '$key = ?').join(' AND ');
+      whereArgs = specifications.values.toList();
+    }
+
+    final results = await database.query(
+      tableName,
+      where: whereString,
+      whereArgs: whereArgs,
+    );
+
+    return results.map((row) => mapRowToModel(row)).toList();
+  }
+
   Future<List<T>> getAllRecords() async {
     await checkDbIsOpen();
-    final database = getDatabase();
+    final database = fetchOrCreateDatabase();
     final results = await database.query(tableName);
     return results.map((row) => mapRowToModel(row)).toList();
   }
 
-  Future<int> updateRecord(int id, Map<String, Object?> row) async {
+  Future<int> updateRecordById(int id, Map<String, Object?> row) async {
     await checkDbIsOpen();
-    final database = getDatabase();
+    final database = fetchOrCreateDatabase();
     return await database
         .update(tableName, row, where: 'id = ?', whereArgs: [id]);
   }
 
-  Future<int> deleteRecord(int id) async {
+  Future<int> deleteRecordById(int id) async {
     await checkDbIsOpen();
-    final database = getDatabase();
+    final database = fetchOrCreateDatabase();
     return await database.delete(
       tableName,
       where: 'id = ?',
@@ -53,7 +73,7 @@ abstract class DatabaseService<T> with DatabaseHandler {
 
   Future<int> deleteAllRecords() async {
     await checkDbIsOpen();
-    final database = getDatabase();
+    final database = fetchOrCreateDatabase();
 
     return await database.delete(tableName);
   }
