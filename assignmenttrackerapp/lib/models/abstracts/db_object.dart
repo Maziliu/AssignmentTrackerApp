@@ -1,4 +1,4 @@
-abstract class DatabaseObject {
+abstract class DatabaseObject{
   final int _id;
 
   DatabaseObject({required int id}) : _id = id;

@@ -72,6 +72,7 @@ class UnableToUpdateCourseException implements Exception {}
 
 class UnableToInsertCourseException implements Exception {}
 
+
 //Assessment Table
 class UnableToFindAssessmentException implements Exception {}
 
@@ -89,3 +90,15 @@ class UnableToDeleteProfileException implements Exception {}
 class UnableToUpdateProfileException implements Exception {}
 
 class UnableToInsertProfileException implements Exception {}
+
+//User Table
+class UnableToFindUserException implements Exception {}
+
+class UnableToDeleteUserException implements Exception {}
+
+class UnableToUpdateUserException implements Exception {}
+
+class UnableToInsertUserException implements Exception {}
+
+//General
+class UserExistenceCheckFailed implements Exception {}

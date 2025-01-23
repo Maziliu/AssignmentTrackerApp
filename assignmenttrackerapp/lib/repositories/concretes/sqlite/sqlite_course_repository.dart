@@ -3,42 +3,49 @@ import 'package:assignmenttrackerapp/exceptions/database_exceptions.dart';
 import 'package:assignmenttrackerapp/models/db_course.dart';
 import 'package:assignmenttrackerapp/models/db_grade_scale.dart';
 import 'package:assignmenttrackerapp/models/db_graded_component.dart';
-import 'package:assignmenttrackerapp/repositories/abstracts/sqlite_base_repository.dart';
+import 'package:assignmenttrackerapp/repositories/abstracts/base_repository.dart';
 import 'package:assignmenttrackerapp/repositories/interfaces/course_repository.dart';
 import 'package:assignmenttrackerapp/repositories/interfaces/event_repository.dart';
 import 'package:assignmenttrackerapp/repositories/interfaces/grade_scale_repository.dart';
 import 'package:assignmenttrackerapp/repositories/interfaces/graded_component_repository.dart';
 import 'package:assignmenttrackerapp/repositories/interfaces/time_slot_repository.dart';
+import 'package:assignmenttrackerapp/repositories/interfaces/user_repository.dart';
 import 'package:sqflite/sqflite.dart';
 
-class SqliteCourseRepository extends SqliteBaseRepository
+class SqliteCourseRepository extends BaseRepository
     implements CourseRepository {
   final GradedComponentRepository _gradedComponentRepository;
   final GradeScaleRepository _gradeScaleRepository;
   final TimeSlotRepository _timeSlotRepository;
   final EventRepository _eventRepository;
+  final UserRepository _userRepository;
 
-  SqliteCourseRepository(
-      {required GradedComponentRepository gradedComponentRepository,
-      required GradeScaleRepository gradeScaleRepository,
-      required TimeSlotRepository timeSlotRepository,
-      required EventRepository eventRepository})
-      : _gradedComponentRepository = gradedComponentRepository,
-        _gradeScaleRepository = gradeScaleRepository,
-        _timeSlotRepository = timeSlotRepository,
-        _eventRepository = eventRepository;
+  SqliteCourseRepository({required GradedComponentRepository gradedComponentRepository, required GradeScaleRepository gradeScaleRepository, required TimeSlotRepository timeSlotRepository, required EventRepository eventRepository, required UserRepository userRepository}) : _gradedComponentRepository = gradedComponentRepository, _gradeScaleRepository = gradeScaleRepository, _timeSlotRepository = timeSlotRepository, _eventRepository = eventRepository, _userRepository = userRepository;
+
+  Future<void> _checkUserExistence({required int userId}) async {
+    try{
+      await _userRepository.findUserById(id: userId);
+    } on UserNotFoundException {
+      throw UserExistenceCheckFailed();
+    }
+  }
 
   @override
   Future<void> deleteCourseById({required int id}) async {
     try {
+      DatabaseCourse course = await findCourseById(id: id);
+      await _checkUserExistence(userId: course.userId);
       await deleteCourseById(id: id);
     } on UnableToDeleteDatabaseEntryException {
       throw UnableToDeleteCourseException();
+    } catch (_){
+      rethrow;
     }
   }
 
   @override
   Future<DatabaseCourse> findCourseById({required int id}) async {
+
     final Database database = await fetchOrCreateDatabase();
     final List<Map<String, Object?>> courseResult = await database
         .query(courseTableName, limit: 1, where: 'id = ?', whereArgs: [id]);
@@ -63,6 +70,8 @@ class SqliteCourseRepository extends SqliteBaseRepository
       required Map<String, Object?> timeSlotValues,
       required List<Map<String, Object?>>? additionalEventsValues}) async {
     
+    await _checkUserExistence(userId: courseValues['user_id'] as int);
+
     try{
       await insertDatabaseEntry(tableName: courseTableName, row: courseValues);
     } on UnableToInsertDatabaseEntryException {

@@ -1,11 +1,11 @@
 import 'package:assignmenttrackerapp/constants/database_constants.dart';
 import 'package:assignmenttrackerapp/exceptions/database_exceptions.dart';
 import 'package:assignmenttrackerapp/models/db_grade_scale.dart';
-import 'package:assignmenttrackerapp/repositories/abstracts/sqlite_base_repository.dart';
+import 'package:assignmenttrackerapp/repositories/abstracts/base_repository.dart';
 import 'package:assignmenttrackerapp/repositories/interfaces/grade_scale_repository.dart';
 import 'package:sqflite/sqflite.dart';
 
-class SqliteGradeScaleRepository extends SqliteBaseRepository
+class SqliteGradeScaleRepository extends BaseRepository
     implements GradeScaleRepository {
   @override
   Future<void> deleteGradeScaleById({required int id}) async {

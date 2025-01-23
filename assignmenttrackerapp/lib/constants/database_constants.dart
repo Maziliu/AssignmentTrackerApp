@@ -1,14 +1,17 @@
 import 'package:assignmenttrackerapp/enums/assessment_type.dart';
 import 'package:assignmenttrackerapp/enums/time_slot_type.dart';
+import 'package:assignmenttrackerapp/enums/user_type.dart';
 
 const databaseName = 'assignment_tracker_db';
 
 // SQL Tables
 const String userTableName = 'user';
-const String createUserTable = '''
+String createUserTable = '''
 CREATE TABLE IF NOT EXISTS "$userTableName" (
   "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-  "email" TEXT NOT NULL UNIQUE
+  "email" TEXT UNIQUE,
+  "type" TEXT NOT NULL CHECK ("type" IN (${UserType.allUserTypes})),
+  "username" TEXT NOT NULL
 );''';
 
 const String timeSlotTableName = 'time_slot';
@@ -48,26 +51,17 @@ CREATE TABLE IF NOT EXISTS "$gradeScaleTableName" (
   "d_min" INTEGER NOT NULL
 );''';
 
-const String profileTableName = 'profile';
-const String createProfileTable = '''
-CREATE TABLE IF NOT EXISTS "$profileTableName" (
-  "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-  "user_id" INTEGER,
-  "profile_name" TEXT NOT NULL,
-  FOREIGN KEY ("user_id") REFERENCES "$userTableName" ("id") ON DELETE CASCADE
-);''';
-
 const String courseTableName = 'course';
 const String createCourseTable = '''
 CREATE TABLE IF NOT EXISTS "$courseTableName" (
   "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-  "profile_id" INTEGER NOT NULL,
+  "user_id" INTEGER NOT NULL,
   "graded_component_id" INTEGER,
   "grade_scale_id" INTEGER,
   "course_name" TEXT NOT NULL,
   "course_code" TEXT NOT NULL,
   "schedule_bitmask" INTEGER NOT NULL,
-  FOREIGN KEY ("profile_id") REFERENCES "$profileTableName" ("id") ON DELETE CASCADE,
+  FOREIGN KEY ("user_id") REFERENCES "$userTableName" ("id") ON DELETE CASCADE,
   FOREIGN KEY ("graded_component_id") REFERENCES "$gradedComponentTableName" ("id") ON DELETE CASCADE,
   FOREIGN KEY ("grade_scale_id") REFERENCES "$gradeScaleTableName" ("id") ON DELETE CASCADE
 );''';
@@ -96,7 +90,6 @@ final allTableCreates = [
   // Keep in mind for future additions taht order matters
   createUserTable,
   createEventTable,
-  createProfileTable,
   createGradedComponentTable,
   createGradeScaleTable,
   createCourseTable,

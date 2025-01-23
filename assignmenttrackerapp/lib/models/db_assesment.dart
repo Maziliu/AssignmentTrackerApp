@@ -1,11 +1,11 @@
 import 'package:assignmenttrackerapp/enums/assessment_type.dart';
-import 'package:assignmenttrackerapp/models/datastream_object.dart';
+import 'package:assignmenttrackerapp/models/interfaces/datastreamable.dart';
 import 'package:assignmenttrackerapp/models/db_graded_component.dart';
-import 'package:assignmenttrackerapp/models/db_object.dart';
+import 'package:assignmenttrackerapp/models/abstracts/db_object.dart';
 import 'package:assignmenttrackerapp/models/db_time_slot.dart';
 
-class DatabaseAssesment extends DatabaseObject implements DatastreamObject {
-  final int _courseId, _profileId;
+class DatabaseAssesment extends DatabaseObject implements Datastreamable {
+  final int _courseId, _userId;
   final DatabaseGradedComponent _gradedComponent;
   final String _assesmentName;
   final AssessmentType _type;
@@ -15,14 +15,14 @@ class DatabaseAssesment extends DatabaseObject implements DatastreamObject {
   DatabaseAssesment(
       {required super.id,
       required int courseId,
-      required int profileId,
+      required int userId,
       required DatabaseGradedComponent gradedComponent,
       required String assesmentName,
       required AssessmentType type,
       required bool isComplete,
       required DatabaseTimeSlot timeSlot})
-      : _courseId = courseId,
-        _profileId = profileId,
+      : _userId = userId,
+        _courseId = courseId,
         _gradedComponent = gradedComponent,
         _assesmentName = assesmentName,
         _type = type,
@@ -30,7 +30,7 @@ class DatabaseAssesment extends DatabaseObject implements DatastreamObject {
         _timeSlot = timeSlot;
 
   DatabaseAssesment.fromRow(Map<String, Object?> row)
-      : _profileId = row['profile_id'] as int,
+      :_userId = row['user_id'] as int,
         _courseId = row['course_id'] as int,
         _gradedComponent = row['graded_component'] as DatabaseGradedComponent,
         _assesmentName = row['assesment_name'] as String,
@@ -45,7 +45,7 @@ class DatabaseAssesment extends DatabaseObject implements DatastreamObject {
   AssessmentType get type => _type;
   bool get isComplete => _isComplete;
   DatabaseTimeSlot get timeSlot => _timeSlot;
-
+  
   @override
-  int get profileId => _profileId;
+  int get ownerId => _userId;  
 }

@@ -1,6 +1,6 @@
-import 'package:assignmenttrackerapp/services/database/abstracts/database_handler.dart';
+import 'package:assignmenttrackerapp/repositories/concretes/sqlite/sqlite_database_access_handler.dart';
 
-abstract class DatabaseService<T> with DatabaseHandler {
+abstract class DatabaseService<T> with SqliteDatabaseAccessHandler {
   late final String _tableName;
 
   DatabaseService(String tableName) : _tableName = tableName;

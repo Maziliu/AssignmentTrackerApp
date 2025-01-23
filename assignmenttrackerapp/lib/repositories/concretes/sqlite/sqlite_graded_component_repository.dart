@@ -1,11 +1,11 @@
 import 'package:assignmenttrackerapp/constants/database_constants.dart';
 import 'package:assignmenttrackerapp/exceptions/database_exceptions.dart';
 import 'package:assignmenttrackerapp/models/db_graded_component.dart';
-import 'package:assignmenttrackerapp/repositories/abstracts/sqlite_base_repository.dart';
+import 'package:assignmenttrackerapp/repositories/abstracts/base_repository.dart';
 import 'package:assignmenttrackerapp/repositories/interfaces/graded_component_repository.dart';
 import 'package:sqflite/sqflite.dart';
 
-class SqliteGradedComponentRepository extends SqliteBaseRepository
+class SqliteGradedComponentRepository extends BaseRepository
     implements GradedComponentRepository {
   @override
   Future<void> deleteGradedComponentById({required int id}) async {

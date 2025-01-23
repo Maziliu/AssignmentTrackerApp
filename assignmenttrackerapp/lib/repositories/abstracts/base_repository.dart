@@ -1,12 +1,17 @@
 import 'package:assignmenttrackerapp/exceptions/database_exceptions.dart';
-import 'package:assignmenttrackerapp/models/db_object.dart';
-import 'package:assignmenttrackerapp/services/database/abstracts/database_handler.dart';
+import 'package:assignmenttrackerapp/models/abstracts/db_object.dart';
+import 'package:assignmenttrackerapp/repositories/concretes/sqlite/sqlite_database_access_handler.dart';
+import 'package:assignmenttrackerapp/repositories/interfaces/database_accesser.dart';
 import 'package:sqflite/sqflite.dart';
 
-abstract class SqliteBaseRepository with DatabaseHandler {
+abstract class BaseRepository{
+  final DatabaseAccesser _databaseAccessHandler;
+
+  BaseRepository({required DatabaseAccesser databaseAccessHandler}) : _databaseAccessHandler = databaseAccessHandler;
+
   Future<int> insertDatabaseEntry(
       {required String tableName, required Map<String, Object?> row}) async {
-    Database database = await fetchOrCreateDatabase();
+    Database database = await _databaseAccessHandler.fetchOrCreateDatabase();
 
     int insertionResultId = await database.insert(tableName, row);
 
@@ -19,7 +24,7 @@ abstract class SqliteBaseRepository with DatabaseHandler {
       {required String tableName,
       required int rowId,
       required Map<String, Object?> updatedValues}) async {
-    Database database = await fetchOrCreateDatabase();
+    Database database = await _databaseAccessHandler.fetchOrCreateDatabase();
 
     int rowsUpdated = await database
         .update(tableName, updatedValues, where: 'id = ?', whereArgs: [rowId]);
@@ -28,10 +33,14 @@ abstract class SqliteBaseRepository with DatabaseHandler {
 
   Future<void> deleteDatabaseEntryById(
       {required String tableName, required int rowId}) async {
-    Database database = await fetchOrCreateDatabase();
+    Database database = await _databaseAccessHandler.fetchOrCreateDatabase();
 
     int rowsDeleted =
         await database.delete(tableName, where: 'id = ?', whereArgs: [rowId]);
     if (rowsDeleted == 0) throw UnableToDeleteDatabaseEntryException();
+  }
+
+  Future<Database> getDatabaseInstance() async {
+    return _databaseAccessHandler.fetchOrCreateDatabase();
   }
 }

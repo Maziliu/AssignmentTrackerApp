@@ -1,4 +1,4 @@
-import 'package:assignmenttrackerapp/models/db_object.dart';
+import 'package:assignmenttrackerapp/models/abstracts/db_object.dart';
 
 class DatabaseGradedComponent extends DatabaseObject {
   final double? _weightDecimal;

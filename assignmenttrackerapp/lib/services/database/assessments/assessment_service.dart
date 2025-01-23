@@ -1,6 +1,6 @@
 import 'package:assignmenttrackerapp/constants/database_constants.dart';
 import 'package:assignmenttrackerapp/models/cache_stream.dart';
-import 'package:assignmenttrackerapp/models/datastream_object.dart';
+import 'package:assignmenttrackerapp/models/interfaces/datastreamable.dart';
 import 'package:assignmenttrackerapp/models/db_assesment.dart';
 import 'package:assignmenttrackerapp/services/database/abstracts/crud_service.dart';
 import 'package:assignmenttrackerapp/services/database/abstracts/database_service.dart';
@@ -8,15 +8,15 @@ import 'package:assignmenttrackerapp/services/database/abstracts/datastream_serv
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
-class AssesmentService extends DatabaseService
+class AssessmentService extends DatabaseService
     implements CrudService, DatastreamService {
-  static final AssesmentService _instance = AssesmentService._singleton();
+  static final AssessmentService _instance = AssessmentService._singleton();
   static final CacheStream<DatabaseAssesment> _cache =
       CacheStream<DatabaseAssesment>();
 
-  AssesmentService._singleton() : super(assesmentTableName);
+  AssessmentService._singleton() : super(assessmentTableName);
 
-  factory AssesmentService() => _instance;
+  factory AssessmentService() => _instance;
 
   @override
   DatabaseAssesment mapRowToModel(Map<String, Object?> row) {

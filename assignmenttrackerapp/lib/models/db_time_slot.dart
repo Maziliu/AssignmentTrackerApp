@@ -1,6 +1,6 @@
 import 'package:assignmenttrackerapp/enums/days_of_the_week.dart';
 import 'package:assignmenttrackerapp/enums/time_slot_type.dart';
-import 'package:assignmenttrackerapp/models/db_object.dart';
+import 'package:assignmenttrackerapp/models/abstracts/db_object.dart';
 
 class DatabaseTimeSlot extends DatabaseObject {
   final int _referenceId;

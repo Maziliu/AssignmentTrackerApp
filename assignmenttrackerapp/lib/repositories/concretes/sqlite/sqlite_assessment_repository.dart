@@ -3,13 +3,13 @@ import 'package:assignmenttrackerapp/exceptions/database_exceptions.dart';
 import 'package:assignmenttrackerapp/models/db_assesment.dart';
 import 'package:assignmenttrackerapp/models/db_graded_component.dart';
 import 'package:assignmenttrackerapp/models/db_time_slot.dart';
-import 'package:assignmenttrackerapp/repositories/abstracts/sqlite_base_repository.dart';
+import 'package:assignmenttrackerapp/repositories/abstracts/base_repository.dart';
 import 'package:assignmenttrackerapp/repositories/interfaces/assessment_repository.dart';
 import 'package:assignmenttrackerapp/repositories/interfaces/graded_component_repository.dart';
 import 'package:assignmenttrackerapp/repositories/interfaces/time_slot_repository.dart';
 import 'package:sqflite/sqflite.dart';
 
-class SqliteAssessmentRepository extends SqliteBaseRepository implements AssessmentRepository {
+class SqliteAssessmentRepository extends BaseRepository implements AssessmentRepository {
   final GradedComponentRepository _gradedComponentRepository;
   final TimeSlotRepository _timeSlotRepository;
 
@@ -27,7 +27,7 @@ class SqliteAssessmentRepository extends SqliteBaseRepository implements Assessm
   @override
   Future<DatabaseAssesment> findAssessmentById({required int id})async {
     
-    final Database database = await fetchOrCreateDatabase();
+    final Database database = await getDatabaseInstance();
     final List<Map<String, Object?>> result = await database.query(assessmentTableName, limit: 1, where: 'id = ?', whereArgs: [id]);
     
     if(result.isEmpty) throw UnableToFindAssessmentException();

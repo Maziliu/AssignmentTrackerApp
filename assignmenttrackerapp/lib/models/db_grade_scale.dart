@@ -1,4 +1,4 @@
-import 'package:assignmenttrackerapp/models/db_object.dart';
+import 'package:assignmenttrackerapp/models/abstracts/db_object.dart';
 
 class DatabaseGradeScale extends DatabaseObject {
   static final Map<String, String> gradeTranslationMap = {
