@@ -2,7 +2,7 @@ import 'package:assignmenttrackerapp/enums/days_of_the_week.dart';
 import 'package:assignmenttrackerapp/enums/time_slot_type.dart';
 import 'package:drift/drift.dart';
 
-class TimeslotTable extends Table {
+class Timeslots extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get referenceId => integer()();
   IntColumn get type => intEnum<TimeSlotType>()();

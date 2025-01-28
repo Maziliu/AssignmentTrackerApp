@@ -14,13 +14,13 @@ import 'package:path_provider/path_provider.dart';
 part 'app_database.g.dart';
 
 @DriftDatabase(tables: [
-  AssessmentTable,
-  CourseTable,
-  EventTable,
-  GradeScaleTable,
-  GradedComponentTable,
-  TimeslotTable,
-  UserTable
+  Assessments,
+  Courses,
+  Events,
+  GradeScales,
+  GradedComponents,
+  Timeslots,
+  Users
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());

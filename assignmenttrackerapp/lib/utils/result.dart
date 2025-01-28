@@ -1,3 +1,7 @@
+// Utility class that streamlines handling errors
+
+// Returns a [Result] from a function to indicate a success [Ok] or failure [Error]
+
 sealed class Result<K> {
   const Result();
 

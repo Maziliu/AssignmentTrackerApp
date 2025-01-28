@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 
-class GradedComponentTable extends Table {
+class GradedComponents extends Table {
   IntColumn get id => integer().autoIncrement()();
   RealColumn get weightDecimal => real()();
   RealColumn get gradePercentage => real()();
