@@ -5,9 +5,11 @@ import 'package:assignmenttrackerapp/models/db_user.dart';
 import 'package:assignmenttrackerapp/repositories/interfaces/user_repository.dart';
 import 'package:assignmenttrackerapp/utils/result.dart';
 import 'package:drift/drift.dart';
+part 'drift_users_dao.g.dart';
 
 @DriftAccessor(tables: [Users])
 class DriftUsersDAO extends DatabaseAccessor<AppDatabase>
+    with _$DriftUsersDAOMixin
     implements UserRepository {
   DriftUsersDAO(super.database);
 
@@ -59,7 +61,7 @@ class DriftUsersDAO extends DatabaseAccessor<AppDatabase>
 
       await db.update(db.users).write(companion);
 
-      return Result.ok(_fromCompanion(companion));
+      return findUserById(id: id);
     } on Exception {
       return Result.error(UnableToUpdateUserException());
     }
@@ -79,14 +81,6 @@ class DriftUsersDAO extends DatabaseAccessor<AppDatabase>
       id: user.id,
       email: user.email,
       username: user.username,
-    );
-  }
-
-  DatabaseUser _fromCompanion(UsersCompanion companion) {
-    return DatabaseUser(
-      id: companion.id.value,
-      email: companion.email.value,
-      username: companion.username.value,
     );
   }
 }

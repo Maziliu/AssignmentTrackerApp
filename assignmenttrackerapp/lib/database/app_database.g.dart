@@ -1460,6 +1460,14 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<int> userId = GeneratedColumn<int>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES users (id)'));
   static const VerificationMeta _eventNameMeta =
       const VerificationMeta('eventName');
   @override
@@ -1467,7 +1475,7 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
       'event_name', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [id, eventName];
+  List<GeneratedColumn> get $columns => [id, userId, eventName];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1480,6 +1488,12 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
     }
     if (data.containsKey('event_name')) {
       context.handle(_eventNameMeta,
@@ -1498,6 +1512,8 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
     return Event(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      userId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}user_id'])!,
       eventName: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}event_name'])!,
     );
@@ -1511,12 +1527,15 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
 
 class Event extends DataClass implements Insertable<Event> {
   final int id;
+  final int userId;
   final String eventName;
-  const Event({required this.id, required this.eventName});
+  const Event(
+      {required this.id, required this.userId, required this.eventName});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
+    map['user_id'] = Variable<int>(userId);
     map['event_name'] = Variable<String>(eventName);
     return map;
   }
@@ -1524,6 +1543,7 @@ class Event extends DataClass implements Insertable<Event> {
   EventsCompanion toCompanion(bool nullToAbsent) {
     return EventsCompanion(
       id: Value(id),
+      userId: Value(userId),
       eventName: Value(eventName),
     );
   }
@@ -1533,6 +1553,7 @@ class Event extends DataClass implements Insertable<Event> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Event(
       id: serializer.fromJson<int>(json['id']),
+      userId: serializer.fromJson<int>(json['userId']),
       eventName: serializer.fromJson<String>(json['eventName']),
     );
   }
@@ -1541,17 +1562,20 @@ class Event extends DataClass implements Insertable<Event> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'userId': serializer.toJson<int>(userId),
       'eventName': serializer.toJson<String>(eventName),
     };
   }
 
-  Event copyWith({int? id, String? eventName}) => Event(
+  Event copyWith({int? id, int? userId, String? eventName}) => Event(
         id: id ?? this.id,
+        userId: userId ?? this.userId,
         eventName: eventName ?? this.eventName,
       );
   Event copyWithCompanion(EventsCompanion data) {
     return Event(
       id: data.id.present ? data.id.value : this.id,
+      userId: data.userId.present ? data.userId.value : this.userId,
       eventName: data.eventName.present ? data.eventName.value : this.eventName,
     );
   }
@@ -1560,45 +1584,55 @@ class Event extends DataClass implements Insertable<Event> {
   String toString() {
     return (StringBuffer('Event(')
           ..write('id: $id, ')
+          ..write('userId: $userId, ')
           ..write('eventName: $eventName')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, eventName);
+  int get hashCode => Object.hash(id, userId, eventName);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Event &&
           other.id == this.id &&
+          other.userId == this.userId &&
           other.eventName == this.eventName);
 }
 
 class EventsCompanion extends UpdateCompanion<Event> {
   final Value<int> id;
+  final Value<int> userId;
   final Value<String> eventName;
   const EventsCompanion({
     this.id = const Value.absent(),
+    this.userId = const Value.absent(),
     this.eventName = const Value.absent(),
   });
   EventsCompanion.insert({
     this.id = const Value.absent(),
+    required int userId,
     required String eventName,
-  }) : eventName = Value(eventName);
+  })  : userId = Value(userId),
+        eventName = Value(eventName);
   static Insertable<Event> custom({
     Expression<int>? id,
+    Expression<int>? userId,
     Expression<String>? eventName,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (userId != null) 'user_id': userId,
       if (eventName != null) 'event_name': eventName,
     });
   }
 
-  EventsCompanion copyWith({Value<int>? id, Value<String>? eventName}) {
+  EventsCompanion copyWith(
+      {Value<int>? id, Value<int>? userId, Value<String>? eventName}) {
     return EventsCompanion(
       id: id ?? this.id,
+      userId: userId ?? this.userId,
       eventName: eventName ?? this.eventName,
     );
   }
@@ -1608,6 +1642,9 @@ class EventsCompanion extends UpdateCompanion<Event> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<int>(userId.value);
     }
     if (eventName.present) {
       map['event_name'] = Variable<String>(eventName.value);
@@ -1619,6 +1656,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
   String toString() {
     return (StringBuffer('EventsCompanion(')
           ..write('id: $id, ')
+          ..write('userId: $userId, ')
           ..write('eventName: $eventName')
           ..write(')'))
         .toString();
@@ -2068,6 +2106,20 @@ final class $$UsersTableReferences
     return ProcessedTableManager(
         manager.$state.copyWith(prefetchedData: cache));
   }
+
+  static MultiTypedResultKey<$EventsTable, List<Event>> _eventsRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.events,
+          aliasName: $_aliasNameGenerator(db.users.id, db.events.userId));
+
+  $$EventsTableProcessedTableManager get eventsRefs {
+    final manager = $$EventsTableTableManager($_db, $_db.events)
+        .filter((f) => f.userId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_eventsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
 }
 
 class $$UsersTableFilterComposer extends Composer<_$AppDatabase, $UsersTable> {
@@ -2100,6 +2152,27 @@ class $$UsersTableFilterComposer extends Composer<_$AppDatabase, $UsersTable> {
             $$CoursesTableFilterComposer(
               $db: $db,
               $table: $db.courses,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> eventsRefs(
+      Expression<bool> Function($$EventsTableFilterComposer f) f) {
+    final $$EventsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.events,
+        getReferencedColumn: (t) => t.userId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EventsTableFilterComposer(
+              $db: $db,
+              $table: $db.events,
               $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
               joinBuilder: joinBuilder,
               $removeJoinBuilderFromRootComposer:
@@ -2166,6 +2239,27 @@ class $$UsersTableAnnotationComposer
             ));
     return f(composer);
   }
+
+  Expression<T> eventsRefs<T extends Object>(
+      Expression<T> Function($$EventsTableAnnotationComposer a) f) {
+    final $$EventsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.events,
+        getReferencedColumn: (t) => t.userId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EventsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.events,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
 }
 
 class $$UsersTableTableManager extends RootTableManager<
@@ -2179,7 +2273,7 @@ class $$UsersTableTableManager extends RootTableManager<
     $$UsersTableUpdateCompanionBuilder,
     (User, $$UsersTableReferences),
     User,
-    PrefetchHooks Function({bool coursesRefs})> {
+    PrefetchHooks Function({bool coursesRefs, bool eventsRefs})> {
   $$UsersTableTableManager(_$AppDatabase db, $UsersTable table)
       : super(TableManagerState(
           db: db,
@@ -2214,10 +2308,13 @@ class $$UsersTableTableManager extends RootTableManager<
               .map((e) =>
                   (e.readTable(table), $$UsersTableReferences(db, table, e)))
               .toList(),
-          prefetchHooksCallback: ({coursesRefs = false}) {
+          prefetchHooksCallback: ({coursesRefs = false, eventsRefs = false}) {
             return PrefetchHooks(
               db: db,
-              explicitlyWatchedTables: [if (coursesRefs) db.courses],
+              explicitlyWatchedTables: [
+                if (coursesRefs) db.courses,
+                if (eventsRefs) db.events
+              ],
               addJoins: null,
               getPrefetchedDataCallback: (items) async {
                 return [
@@ -2228,6 +2325,17 @@ class $$UsersTableTableManager extends RootTableManager<
                             $$UsersTableReferences._coursesRefsTable(db),
                         managerFromTypedResult: (p0) =>
                             $$UsersTableReferences(db, table, p0).coursesRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.userId == item.id),
+                        typedResults: items),
+                  if (eventsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable:
+                            $$UsersTableReferences._eventsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$UsersTableReferences(db, table, p0).eventsRefs,
                         referencedItemsForCurrentItem: (item,
                                 referencedItems) =>
                             referencedItems.where((e) => e.userId == item.id),
@@ -2250,7 +2358,7 @@ typedef $$UsersTableProcessedTableManager = ProcessedTableManager<
     $$UsersTableUpdateCompanionBuilder,
     (User, $$UsersTableReferences),
     User,
-    PrefetchHooks Function({bool coursesRefs})>;
+    PrefetchHooks Function({bool coursesRefs, bool eventsRefs})>;
 typedef $$GradeScalesTableCreateCompanionBuilder = GradeScalesCompanion
     Function({
   Value<int> id,
@@ -3656,12 +3764,31 @@ typedef $$AssessmentsTableProcessedTableManager = ProcessedTableManager<
     PrefetchHooks Function({bool courseId, bool gradedComponentId})>;
 typedef $$EventsTableCreateCompanionBuilder = EventsCompanion Function({
   Value<int> id,
+  required int userId,
   required String eventName,
 });
 typedef $$EventsTableUpdateCompanionBuilder = EventsCompanion Function({
   Value<int> id,
+  Value<int> userId,
   Value<String> eventName,
 });
+
+final class $$EventsTableReferences
+    extends BaseReferences<_$AppDatabase, $EventsTable, Event> {
+  $$EventsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $UsersTable _userIdTable(_$AppDatabase db) =>
+      db.users.createAlias($_aliasNameGenerator(db.events.userId, db.users.id));
+
+  $$UsersTableProcessedTableManager get userId {
+    final manager = $$UsersTableTableManager($_db, $_db.users)
+        .filter((f) => f.id($_item.userId));
+    final item = $_typedResult.readTableOrNull(_userIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
 
 class $$EventsTableFilterComposer
     extends Composer<_$AppDatabase, $EventsTable> {
@@ -3677,6 +3804,26 @@ class $$EventsTableFilterComposer
 
   ColumnFilters<String> get eventName => $composableBuilder(
       column: $table.eventName, builder: (column) => ColumnFilters(column));
+
+  $$UsersTableFilterComposer get userId {
+    final $$UsersTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.userId,
+        referencedTable: $db.users,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$UsersTableFilterComposer(
+              $db: $db,
+              $table: $db.users,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 }
 
 class $$EventsTableOrderingComposer
@@ -3693,6 +3840,26 @@ class $$EventsTableOrderingComposer
 
   ColumnOrderings<String> get eventName => $composableBuilder(
       column: $table.eventName, builder: (column) => ColumnOrderings(column));
+
+  $$UsersTableOrderingComposer get userId {
+    final $$UsersTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.userId,
+        referencedTable: $db.users,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$UsersTableOrderingComposer(
+              $db: $db,
+              $table: $db.users,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 }
 
 class $$EventsTableAnnotationComposer
@@ -3709,6 +3876,26 @@ class $$EventsTableAnnotationComposer
 
   GeneratedColumn<String> get eventName =>
       $composableBuilder(column: $table.eventName, builder: (column) => column);
+
+  $$UsersTableAnnotationComposer get userId {
+    final $$UsersTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.userId,
+        referencedTable: $db.users,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$UsersTableAnnotationComposer(
+              $db: $db,
+              $table: $db.users,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
 }
 
 class $$EventsTableTableManager extends RootTableManager<
@@ -3720,9 +3907,9 @@ class $$EventsTableTableManager extends RootTableManager<
     $$EventsTableAnnotationComposer,
     $$EventsTableCreateCompanionBuilder,
     $$EventsTableUpdateCompanionBuilder,
-    (Event, BaseReferences<_$AppDatabase, $EventsTable, Event>),
+    (Event, $$EventsTableReferences),
     Event,
-    PrefetchHooks Function()> {
+    PrefetchHooks Function({bool userId})> {
   $$EventsTableTableManager(_$AppDatabase db, $EventsTable table)
       : super(TableManagerState(
           db: db,
@@ -3735,24 +3922,62 @@ class $$EventsTableTableManager extends RootTableManager<
               $$EventsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
+            Value<int> userId = const Value.absent(),
             Value<String> eventName = const Value.absent(),
           }) =>
               EventsCompanion(
             id: id,
+            userId: userId,
             eventName: eventName,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
+            required int userId,
             required String eventName,
           }) =>
               EventsCompanion.insert(
             id: id,
+            userId: userId,
             eventName: eventName,
           ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map((e) =>
+                  (e.readTable(table), $$EventsTableReferences(db, table, e)))
               .toList(),
-          prefetchHooksCallback: null,
+          prefetchHooksCallback: ({userId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (userId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.userId,
+                    referencedTable: $$EventsTableReferences._userIdTable(db),
+                    referencedColumn:
+                        $$EventsTableReferences._userIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
         ));
 }
 
@@ -3765,9 +3990,9 @@ typedef $$EventsTableProcessedTableManager = ProcessedTableManager<
     $$EventsTableAnnotationComposer,
     $$EventsTableCreateCompanionBuilder,
     $$EventsTableUpdateCompanionBuilder,
-    (Event, BaseReferences<_$AppDatabase, $EventsTable, Event>),
+    (Event, $$EventsTableReferences),
     Event,
-    PrefetchHooks Function()>;
+    PrefetchHooks Function({bool userId})>;
 typedef $$TimeslotsTableCreateCompanionBuilder = TimeslotsCompanion Function({
   Value<int> id,
   required int referenceId,

@@ -1,4 +1,5 @@
 import 'package:assignmenttrackerapp/database/app_database.dart';
+import 'package:assignmenttrackerapp/database/timeslot_table.dart';
 import 'package:assignmenttrackerapp/enums/days_of_the_week.dart';
 import 'package:assignmenttrackerapp/enums/time_slot_type.dart';
 import 'package:assignmenttrackerapp/exceptions/database_exceptions.dart';
@@ -7,7 +8,11 @@ import 'package:assignmenttrackerapp/repositories/interfaces/time_slot_repositor
 import 'package:assignmenttrackerapp/utils/result.dart';
 import 'package:drift/drift.dart';
 
+part 'drift_timeslots_dao.g.dart';
+
+@DriftAccessor(tables: [Timeslots])
 class DriftTimeslotsDao extends DatabaseAccessor<AppDatabase>
+    with _$DriftTimeslotsDaoMixin
     implements TimeSlotRepository {
   DriftTimeslotsDao(super.attachedDatabase);
 
@@ -78,7 +83,7 @@ class DriftTimeslotsDao extends DatabaseAccessor<AppDatabase>
 
       await update(db.timeslots).write(companion);
 
-      return Result.ok(_fromCompanion(companion));
+      return findTimeSlotById(id: id);
     } on Exception {
       return Result.error(UnableToUpdateTimeSlotException());
     }
@@ -106,17 +111,6 @@ class DriftTimeslotsDao extends DatabaseAccessor<AppDatabase>
       endingDay: timeslot.endingDay,
       startDate: timeslot.startDate,
       endDate: timeslot.endDate,
-    );
-  }
-
-  DatabaseTimeSlot _fromCompanion(TimeslotsCompanion companion) {
-    return DatabaseTimeSlot(
-      id: companion.id.value,
-      referenceId: companion.referenceId.value,
-      type: companion.type.value,
-      endingDay: companion.endingDay.value,
-      startDate: companion.startDate.value,
-      endDate: companion.endDate.value,
     );
   }
 }
