@@ -6,7 +6,7 @@ import 'package:assignmenttrackerapp/models/abstracts/db_object.dart';
 import 'package:assignmenttrackerapp/models/db_time_slot.dart';
 import 'package:assignmenttrackerapp/utils/schedule_helpers.dart';
 
-class DatabaseCourse extends DatabaseObject implements Datastreamable{
+class DatabaseCourse extends DatabaseObject implements Datastreamable {
   final int _scheduleBitMask, _userId;
   final DatabaseGradedComponent _gradedComponent;
   final DatabaseGradeScale _gradeScale;
@@ -52,11 +52,10 @@ class DatabaseCourse extends DatabaseObject implements Datastreamable{
   String get courseCode => _courseCode;
   DatabaseTimeSlot get timeSlot => _timeSlot;
   List<DatabaseEvent> get additionalCourseEvents => _additionalCourseEvents;
-  int get userId => userId;
 
   @override
   String toString() => courseCode;
-  
+
   @override
   int get ownerId => _userId;
 }
