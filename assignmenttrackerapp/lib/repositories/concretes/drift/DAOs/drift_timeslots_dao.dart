@@ -8,7 +8,7 @@ import 'package:assignmenttrackerapp/repositories/interfaces/time_slot_repositor
 import 'package:assignmenttrackerapp/utils/result.dart';
 import 'package:drift/drift.dart';
 
-part 'drift_timeslots_dao.g.dart';
+part '../../../../database/generated/drift_timeslots_dao.g.dart';
 
 @DriftAccessor(tables: [Timeslots])
 class DriftTimeslotsDao extends DatabaseAccessor<AppDatabase>
@@ -19,7 +19,7 @@ class DriftTimeslotsDao extends DatabaseAccessor<AppDatabase>
   @override
   Future<Result<void>> deleteTimeSlotById({required int id}) async {
     try {
-      await (delete(db.timeslots)..where((timeslot) => timeslot.id.equals(id)))
+      await (delete(timeslots)..where((timeslot) => timeslot.id.equals(id)))
           .go();
 
       return Result.ok(null);
@@ -31,7 +31,7 @@ class DriftTimeslotsDao extends DatabaseAccessor<AppDatabase>
   @override
   Future<Result<DatabaseTimeSlot>> findTimeSlotById({required int id}) async {
     try {
-      final Timeslot? timeslot = await (select(db.timeslots)
+      final Timeslot? timeslot = await (select(timeslots)
             ..where((timeslot) => timeslot.id.equals(id)))
           .getSingleOrNull();
 
@@ -49,12 +49,12 @@ class DriftTimeslotsDao extends DatabaseAccessor<AppDatabase>
   Future<Result<List<DatabaseTimeSlot>>> findTimeSlotsByReferenceId(
       {required int referenceId}) async {
     try {
-      final List<Timeslot> timeslots = await (select(db.timeslots)
+      final List<Timeslot> slots = await (select(timeslots)
             ..where((timeslot) => timeslot.referenceId.equals(referenceId)))
           .get();
 
       return Result.ok(
-          timeslots.map((timeslot) => _fromTimeslot(timeslot)).toList());
+          slots.map((timeslot) => _fromTimeslot(timeslot)).toList());
     } on Exception {
       return Result.error(UnableToFindTimeSlotException());
     }
@@ -66,7 +66,7 @@ class DriftTimeslotsDao extends DatabaseAccessor<AppDatabase>
     try {
       final TimeslotsCompanion companion = _createCompanion(values: values);
 
-      await into(db.timeslots).insert(companion);
+      await into(timeslots).insert(companion);
 
       return Result.ok(null);
     } on Exception {
@@ -81,7 +81,7 @@ class DriftTimeslotsDao extends DatabaseAccessor<AppDatabase>
       final TimeslotsCompanion companion =
           _createCompanion(id: id, values: updatedValues);
 
-      await update(db.timeslots).write(companion);
+      await update(timeslots).write(companion);
 
       return findTimeSlotById(id: id);
     } on Exception {

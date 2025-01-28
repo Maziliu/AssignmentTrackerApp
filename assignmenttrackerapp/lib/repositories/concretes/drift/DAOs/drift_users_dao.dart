@@ -5,7 +5,7 @@ import 'package:assignmenttrackerapp/models/db_user.dart';
 import 'package:assignmenttrackerapp/repositories/interfaces/user_repository.dart';
 import 'package:assignmenttrackerapp/utils/result.dart';
 import 'package:drift/drift.dart';
-part 'drift_users_dao.g.dart';
+part '../../../../database/generated/drift_users_dao.g.dart';
 
 @DriftAccessor(tables: [Users])
 class DriftUsersDAO extends DatabaseAccessor<AppDatabase>
@@ -16,7 +16,7 @@ class DriftUsersDAO extends DatabaseAccessor<AppDatabase>
   @override
   Future<Result<void>> deleteUserById({required int id}) async {
     try {
-      await (delete(db.users)..where((user) => user.id.equals(id))).go();
+      await (delete(users)..where((user) => user.id.equals(id))).go();
       return Result.ok(null);
     } on Exception {
       return Result.error(UnableToDeleteUserException());
@@ -26,7 +26,7 @@ class DriftUsersDAO extends DatabaseAccessor<AppDatabase>
   @override
   Future<Result<DatabaseUser>> findUserById({required int id}) async {
     try {
-      final user = await (select(db.users)..where((user) => user.id.equals(id)))
+      final user = await (select(users)..where((user) => user.id.equals(id)))
           .getSingleOrNull();
 
       if (user == null) {
@@ -45,7 +45,7 @@ class DriftUsersDAO extends DatabaseAccessor<AppDatabase>
     try {
       final companion = _createCompanion(values: values);
 
-      await into(db.users).insert(companion);
+      await into(users).insert(companion);
 
       return Result.ok(null);
     } on Exception {
@@ -59,7 +59,7 @@ class DriftUsersDAO extends DatabaseAccessor<AppDatabase>
     try {
       final companion = _createCompanion(values: updatedValues, id: id);
 
-      await db.update(db.users).write(companion);
+      await db.update(users).write(companion);
 
       return findUserById(id: id);
     } on Exception {

@@ -7,7 +7,7 @@ import 'package:assignmenttrackerapp/repositories/interfaces/event_repository.da
 import 'package:assignmenttrackerapp/repositories/interfaces/time_slot_repository.dart';
 import 'package:assignmenttrackerapp/utils/result.dart';
 import 'package:drift/drift.dart';
-part 'drift_events_dao.g.dart';
+part '../../../../database/generated/drift_events_dao.g.dart';
 
 @DriftAccessor(tables: [Events])
 class DriftEventsDao extends DatabaseAccessor<AppDatabase>
@@ -22,7 +22,7 @@ class DriftEventsDao extends DatabaseAccessor<AppDatabase>
   @override
   Future<Result<void>> deleteEventById({required int id}) async {
     try {
-      await (delete(db.events)..where((event) => event.id.equals(id))).go();
+      await (delete(events)..where((event) => event.id.equals(id))).go();
 
       return Result.ok(null);
     } on Exception {
@@ -33,7 +33,7 @@ class DriftEventsDao extends DatabaseAccessor<AppDatabase>
   @override
   Future<Result<DatabaseEvent>> findEventById({required int id}) async {
     try {
-      final Event? event = await (select(db.events)
+      final Event? event = await (select(events)
             ..where((event) => event.id.equals(id)))
           .getSingleOrNull();
 
@@ -62,7 +62,7 @@ class DriftEventsDao extends DatabaseAccessor<AppDatabase>
     try {
       final EventsCompanion companion = _createCompanion(values: eventValues);
 
-      await into(db.events).insert(companion);
+      await into(events).insert(companion);
 
       final List<Result> results =
           await Future.wait(timeSlotValuesList.map((timeslotValues) async {
@@ -91,7 +91,7 @@ class DriftEventsDao extends DatabaseAccessor<AppDatabase>
       final EventsCompanion companion =
           _createCompanion(id: eventId, values: updatedEventValues);
 
-      await update(db.events).write(companion);
+      await update(events).write(companion);
 
       if (timeSlotId != null) {
         final Result result = await _timeSlotRepository.updateTimeSlotById(
