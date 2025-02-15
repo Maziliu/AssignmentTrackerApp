@@ -4,8 +4,7 @@ import 'package:drift/drift.dart';
 
 class Timeslots extends Table {
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get referenceId => integer()();
-  IntColumn get type => intEnum<TimeSlotType>()();
+  IntColumn get eventId => integer()();
   IntColumn get endingDay => intEnum<DaysOfTheWeek>()();
   DateTimeColumn get startDate => dateTime().nullable()();
   DateTimeColumn get endDate => dateTime()();

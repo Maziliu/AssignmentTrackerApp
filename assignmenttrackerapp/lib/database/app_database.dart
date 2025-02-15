@@ -1,17 +1,17 @@
-import 'package:assignmenttrackerapp/database/assessment_table.dart';
-import 'package:assignmenttrackerapp/database/course_table.dart';
-import 'package:assignmenttrackerapp/database/event_table.dart';
-import 'package:assignmenttrackerapp/database/grade_scale_table.dart';
-import 'package:assignmenttrackerapp/database/graded_component_table.dart';
-import 'package:assignmenttrackerapp/database/timeslot_table.dart';
-import 'package:assignmenttrackerapp/database/user_table.dart';
+import 'package:assignmenttrackerapp/database/tables/assessment_table.dart';
+import 'package:assignmenttrackerapp/database/tables/course_table.dart';
+import 'package:assignmenttrackerapp/database/tables/event_table.dart';
+import 'package:assignmenttrackerapp/database/tables/grade_scale_table.dart';
+import 'package:assignmenttrackerapp/database/tables/graded_component_table.dart';
+import 'package:assignmenttrackerapp/database/tables/timeslot_table.dart';
+import 'package:assignmenttrackerapp/database/tables/user_table.dart';
 import 'package:assignmenttrackerapp/enums/assessment_type.dart';
 import 'package:assignmenttrackerapp/enums/days_of_the_week.dart';
 import 'package:assignmenttrackerapp/enums/time_slot_type.dart';
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-part 'generated/app_database.g.dart';
+part 'app_database.g.dart';
 
 @DriftDatabase(tables: [
   Assessments,

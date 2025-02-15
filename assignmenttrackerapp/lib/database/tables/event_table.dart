@@ -1,4 +1,4 @@
-import 'package:assignmenttrackerapp/database/user_table.dart';
+import 'package:assignmenttrackerapp/database/tables/user_table.dart';
 import 'package:drift/drift.dart';
 
 class Events extends Table {
