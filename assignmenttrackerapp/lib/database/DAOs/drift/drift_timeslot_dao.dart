@@ -22,9 +22,9 @@ class DriftTimeslotDao extends DatabaseAccessor<AppDatabase>
       (delete(timeslots)..where((timeslot) => timeslot.id.equals(timeslotId)))
           .go();
 
-  Future<int> insertTimeslot(TimeslotsCompanion companion) =>
+  Future<int> insertTimeslotByCompanion(TimeslotsCompanion companion) =>
       into(timeslots).insert(companion);
 
-  Future<bool> updateTimeslot(TimeslotsCompanion companion) =>
+  Future<bool> updateTimeslotByCompanion(TimeslotsCompanion companion) =>
       update(timeslots).replace(companion);
 }
