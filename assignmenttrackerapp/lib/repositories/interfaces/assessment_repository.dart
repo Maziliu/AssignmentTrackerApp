@@ -1,19 +1,11 @@
-import 'package:assignmenttrackerapp/models/db_assesment.dart';
+import 'package:assignmenttrackerapp/models/db_assessment.dart';
+import 'package:assignmenttrackerapp/utils/result.dart';
 
 abstract class AssessmentRepository {
-  Future<DatabaseAssesment> findAssessmentById({required int id});
-  Future<DatabaseAssesment> updateAssessmentById({
-    required int assessmentId,
-    required int? gradedComponentId,
-    required int? timeSlotId,
-    required Map<String, Object?> updatedAssessmentValues,
-    required Map<String, Object?>? updatedGradedComponentValues,
-    required Map<String, Object?>? updatedTimeSlotValues,
-  });
-  Future<void> deleteAssessmentById({required int id});
-  Future<void> insertAssessment({
-    required Map<String, Object?> assessmentValues,
-    required Map<String, Object?> gradedComponentValues,
-    required Map<String, Object?> timeSlotValues,
-  });
+  Future<Result<DatabaseAssessment>> getAssessmentById({required int id});
+  Future<Result<void>> createAssessment(
+      {required DatabaseAssessment assessment});
+  Future<Result<void>> updateAssessment(
+      {required DatabaseAssessment assessment});
+  Future<Result<void>> deleteAssessmentById({required int id});
 }

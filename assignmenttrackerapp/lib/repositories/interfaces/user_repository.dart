@@ -2,9 +2,8 @@ import 'package:assignmenttrackerapp/models/db_user.dart';
 import 'package:assignmenttrackerapp/utils/result.dart';
 
 abstract class UserRepository {
-  Future<Result<DatabaseUser>> findUserById({required int id});
-  Future<Result<DatabaseUser>> updateUserById(
-      {required int id, required Map<String, Object?> updatedValues});
+  Future<Result<DatabaseUser>> getUserById({required int id});
+  Future<Result<void>> createUser({required DatabaseUser user});
+  Future<Result<void>> updateUser({required DatabaseUser user});
   Future<Result<void>> deleteUserById({required int id});
-  Future<Result<void>> insertUser({required Map<String, Object?> values});
 }

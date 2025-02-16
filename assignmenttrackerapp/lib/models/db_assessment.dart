@@ -4,7 +4,7 @@ import 'package:assignmenttrackerapp/models/db_graded_component.dart';
 import 'package:assignmenttrackerapp/models/abstracts/db_object.dart';
 import 'package:assignmenttrackerapp/models/db_time_slot.dart';
 
-class DatabaseAssesment extends DatabaseObject implements Datastreamable {
+class DatabaseAssessment extends DatabaseObject implements Datastreamable {
   final int _courseId, _userId;
   final DatabaseGradedComponent _gradedComponent;
   final String _assesmentName;
@@ -12,7 +12,7 @@ class DatabaseAssesment extends DatabaseObject implements Datastreamable {
   final bool _isComplete;
   final DatabaseTimeSlot _timeSlot;
 
-  DatabaseAssesment(
+  DatabaseAssessment(
       {required super.id,
       required int courseId,
       required int userId,
@@ -29,8 +29,8 @@ class DatabaseAssesment extends DatabaseObject implements Datastreamable {
         _isComplete = isComplete,
         _timeSlot = timeSlot;
 
-  DatabaseAssesment.fromRow(Map<String, Object?> row)
-      :_userId = row['user_id'] as int,
+  DatabaseAssessment.fromRow(Map<String, Object?> row)
+      : _userId = row['user_id'] as int,
         _courseId = row['course_id'] as int,
         _gradedComponent = row['graded_component'] as DatabaseGradedComponent,
         _assesmentName = row['assesment_name'] as String,
@@ -45,7 +45,7 @@ class DatabaseAssesment extends DatabaseObject implements Datastreamable {
   AssessmentType get type => _type;
   bool get isComplete => _isComplete;
   DatabaseTimeSlot get timeSlot => _timeSlot;
-  
+
   @override
-  int get ownerId => _userId;  
+  int get ownerId => _userId;
 }
