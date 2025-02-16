@@ -9,6 +9,10 @@ class DriftCourseDao extends DatabaseAccessor<AppDatabase>
     with _$DriftCourseDaoMixin {
   DriftCourseDao(super.attachedDatabase);
 
+  Future<List<Course>> getAllCourses({required String cloudDBSyncId}) =>
+      (select(courses)..where((course) => course.userId.equals(cloudDBSyncId)))
+          .get();
+
   Future<Course?> getCourseById(int courseId) =>
       (select(courses)..where((course) => course.id.equals(courseId)))
           .getSingleOrNull();

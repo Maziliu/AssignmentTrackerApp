@@ -9,6 +9,10 @@ class DriftEventDao extends DatabaseAccessor<AppDatabase>
     with _$DriftEventDaoMixin {
   DriftEventDao(super.attachedDatabase);
 
+  Future<List<Event>> getAllEvents({required String cloudDBSyncId}) =>
+      (select(events)..where((event) => event.userId.equals(cloudDBSyncId)))
+          .get();
+
   Future<Event?> getEventById(int eventId) =>
       (select(events)..where((event) => event.id.equals(eventId)))
           .getSingleOrNull();

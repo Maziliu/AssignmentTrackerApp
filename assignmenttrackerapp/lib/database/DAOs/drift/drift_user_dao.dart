@@ -9,6 +9,8 @@ class DriftUserDao extends DatabaseAccessor<AppDatabase>
     with _$DriftUserDaoMixin {
   DriftUserDao(super.attachedDatabase);
 
+  Future<List<User>> getAllLocalUsers() => (select(users)).get();
+
   Future<User?> getUserById(int userId) =>
       (select(users)..where((user) => user.id.equals(userId)))
           .getSingleOrNull();

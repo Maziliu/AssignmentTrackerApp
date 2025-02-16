@@ -9,6 +9,13 @@ class DriftGradedComponentDao extends DatabaseAccessor<AppDatabase>
     with _$DriftGradedComponentDaoMixin {
   DriftGradedComponentDao(super.attachedDatabase);
 
+  Future<List<GradedComponent>> getAllGradedComponents(
+          {required String cloudDBSyncId}) =>
+      (select(gradedComponents)
+            ..where((gradedComponent) =>
+                gradedComponent.userId.equals(cloudDBSyncId)))
+          .get();
+
   Future<GradedComponent?> getGradedComponentById(int gradedComponentId) =>
       (select(gradedComponents)
             ..where((gradedComponent) =>

@@ -3,6 +3,7 @@ import 'package:drift/drift.dart';
 
 class Events extends Table {
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get userId => integer().references(Users, #id)();
+  TextColumn get userId =>
+      text().references(Users, #cloudDBSyncId, onDelete: KeyAction.cascade)();
   TextColumn get eventName => text()();
 }

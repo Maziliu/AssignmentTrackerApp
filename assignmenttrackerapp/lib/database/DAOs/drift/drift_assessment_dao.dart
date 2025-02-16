@@ -9,6 +9,11 @@ class DriftAssessmentDao extends DatabaseAccessor<AppDatabase>
     with _$DriftAssessmentDaoMixin {
   DriftAssessmentDao(super.attachedDatabase);
 
+  Future<List<Assessment>> getAllAssessments({required String cloudDBSyncId}) =>
+      (select(assessments)
+            ..where((assessment) => assessment.userId.equals(cloudDBSyncId)))
+          .get();
+
   Future<Assessment?> getAssessmentById(int assessmentId) =>
       (select(assessments)
             ..where((assessment) => assessment.id.equals(assessmentId)))

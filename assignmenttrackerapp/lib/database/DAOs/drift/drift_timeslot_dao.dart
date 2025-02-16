@@ -10,6 +10,11 @@ class DriftTimeslotDao extends DatabaseAccessor<AppDatabase>
     with _$DriftTimeslotDaoMixin {
   DriftTimeslotDao(super.attachedDatabase);
 
+  Future<List<Timeslot>> getAllTimeslots({required String cloudDBSyncId}) =>
+      (select(timeslots)
+            ..where((timeslot) => timeslot.userId.equals(cloudDBSyncId)))
+          .get();
+
   Future<Timeslot?> getTimeslotById(int timeslotId) =>
       (select(timeslots)..where((timeslot) => timeslot.id.equals(timeslotId)))
           .getSingleOrNull();
