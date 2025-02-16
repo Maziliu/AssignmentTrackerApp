@@ -1,7 +1,7 @@
 import 'package:assignmenttrackerapp/constants/routes.dart';
 import 'package:assignmenttrackerapp/enums/overflow_menu_options.dart';
 import 'package:assignmenttrackerapp/services/auth/auth_services.dart';
-import 'package:assignmenttrackerapp/models/db_user.dart';
+import 'package:assignmenttrackerapp/models/app_model_user.dart';
 import 'package:assignmenttrackerapp/services/database/core_service.dart';
 import 'package:assignmenttrackerapp/themes/themes.dart';
 import 'package:assignmenttrackerapp/utils/dialog_helpers.dart';
@@ -19,7 +19,7 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
   int _selectedTabIndex = 0;
   late final CoreService _coreService;
-  late final Future<DatabaseUser> _userFuture;
+  late final Future<AppModelUser> _userFuture;
 
   List<Widget> get mainScreens => [
         const Center(child: Text('Daily')),
@@ -76,7 +76,7 @@ class _DashboardViewState extends State<DashboardView> {
           ),
         ],
       ),
-      body: FutureBuilder<DatabaseUser>(
+      body: FutureBuilder<AppModelUser>(
         future: _userFuture,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {

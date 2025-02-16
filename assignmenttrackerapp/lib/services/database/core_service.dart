@@ -1,12 +1,12 @@
 import 'package:assignmenttrackerapp/constants/database_constants.dart';
 import 'package:assignmenttrackerapp/services/database/assessments/assessment_service.dart';
-import 'package:assignmenttrackerapp/models/db_user.dart';
+import 'package:assignmenttrackerapp/models/app_model_user.dart';
 import 'package:assignmenttrackerapp/services/database/courses/courses_service.dart';
 import 'package:assignmenttrackerapp/exceptions/database_exceptions.dart';
 import 'package:assignmenttrackerapp/services/database/abstracts/database_service.dart';
 
 class CoreService extends DatabaseService {
-  static DatabaseUser? _user;
+  static AppModelUser? _user;
   static final CoreService _instance = CoreService._singleton();
   final AssessmentService _assesmentService;
   final CoursesService _coursesService;
@@ -21,7 +21,7 @@ class CoreService extends DatabaseService {
   AssessmentService get assignmentsService => _assesmentService;
   CoursesService get coursesService => _coursesService;
 
-  static DatabaseUser getCurrentUser() {
+  static AppModelUser getCurrentUser() {
     if (_user == null) {
       throw UserNotFoundException();
     }
@@ -29,12 +29,12 @@ class CoreService extends DatabaseService {
   }
 
   @override
-  DatabaseUser mapRowToModel(Map<String, Object?> row) {
-    return DatabaseUser.fromRow(row);
+  AppModelUser mapRowToModel(Map<String, Object?> row) {
+    return AppModelUser.fromRow(row);
   }
 
   //CRUD Functions
-  Future<DatabaseUser> createUser({required String email}) async {
+  Future<AppModelUser> createUser({required String email}) async {
     await checkDbIsOpen();
     final database = fetchOrCreateDatabase();
 
@@ -58,10 +58,10 @@ class CoreService extends DatabaseService {
       throw UnableToCreateUserException();
     }
 
-    return DatabaseUser(id: userId, email: email);
+    return AppModelUser(id: userId, email: email);
   }
 
-  Future<DatabaseUser> getUser({required String email}) async {
+  Future<AppModelUser> getUser({required String email}) async {
     await checkDbIsOpen();
     final database = fetchOrCreateDatabase();
 
@@ -76,10 +76,10 @@ class CoreService extends DatabaseService {
       throw UserNotFoundException();
     }
 
-    return DatabaseUser.fromRow(results.first);
+    return AppModelUser.fromRow(results.first);
   }
 
-  Future<DatabaseUser> getOrCreateUser(
+  Future<AppModelUser> getOrCreateUser(
       {required String email, bool shouldSetCurrentUser = true}) async {
     try {
       final user = await getUser(email: email);

@@ -7,7 +7,6 @@ class Timeslots extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get userId =>
       text().references(Users, #cloudDBSyncId, onDelete: KeyAction.cascade)();
-  IntColumn get eventId => integer()();
   IntColumn get endingDay => intEnum<DaysOfTheWeek>()();
   DateTimeColumn get startDate => dateTime().nullable()();
   DateTimeColumn get endDate => dateTime()();

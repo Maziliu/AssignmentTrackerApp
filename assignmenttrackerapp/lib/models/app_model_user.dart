@@ -1,12 +1,12 @@
 import 'package:assignmenttrackerapp/database/app_database.dart';
 import 'package:assignmenttrackerapp/enums/user_type.dart';
-import 'package:assignmenttrackerapp/models/abstracts/db_object.dart';
+import 'package:assignmenttrackerapp/models/abstracts/app_model.dart';
 
-class DatabaseUser extends DatabaseObject {
+class AppModelUser extends AppModel {
   final String? _email;
   final String _username;
 
-  DatabaseUser(
+  AppModelUser(
       {required super.id, required String? email, required String username})
       : _email = email,
         _username = username;

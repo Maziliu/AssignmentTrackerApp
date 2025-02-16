@@ -8,6 +8,6 @@ mixin _$DriftCourseDaoMixin on DatabaseAccessor<AppDatabase> {
   $GradeScalesTable get gradeScales => attachedDatabase.gradeScales;
   $GradedComponentsTable get gradedComponents =>
       attachedDatabase.gradedComponents;
-  $EventsTable get events => attachedDatabase.events;
+  $TimeslotsTable get timeslots => attachedDatabase.timeslots;
   $CoursesTable get courses => attachedDatabase.courses;
 }

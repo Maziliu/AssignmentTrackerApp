@@ -1,12 +1,12 @@
-import 'package:assignmenttrackerapp/models/db_graded_component.dart';
+import 'package:assignmenttrackerapp/models/app_model_graded_component.dart';
 import 'package:assignmenttrackerapp/utils/result.dart';
 
 abstract class GradedComponentRepository {
-  Future<Result<DatabaseGradedComponent>> getGrDatabaseGradedComponentById(
+  Future<Result<AppModelGradedComponent>> getGrDatabaseGradedComponentById(
       {required int id});
   Future<Result<void>> createGrDatabaseGradedComponent(
-      {required DatabaseGradedComponent gradedComponent});
+      {required AppModelGradedComponent gradedComponent});
   Future<Result<void>> updateGrDatabaseGradedComponent(
-      {required DatabaseGradedComponent gradedComponent});
+      {required AppModelGradedComponent gradedComponent});
   Future<Result<void>> deleteGrDatabaseGradedComponentById({required int id});
 }

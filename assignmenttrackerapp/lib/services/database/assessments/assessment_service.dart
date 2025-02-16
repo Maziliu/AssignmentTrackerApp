@@ -1,7 +1,7 @@
 import 'package:assignmenttrackerapp/constants/database_constants.dart';
 import 'package:assignmenttrackerapp/models/cache_stream.dart';
 import 'package:assignmenttrackerapp/models/interfaces/datastreamable.dart';
-import 'package:assignmenttrackerapp/models/db_assessment.dart';
+import 'package:assignmenttrackerapp/models/app_model_assessment.dart';
 import 'package:assignmenttrackerapp/services/database/abstracts/crud_service.dart';
 import 'package:assignmenttrackerapp/services/database/abstracts/database_service.dart';
 import 'package:assignmenttrackerapp/services/database/abstracts/datastream_service.dart';
@@ -11,25 +11,25 @@ import 'package:sqflite/sqflite.dart';
 class AssessmentService extends DatabaseService
     implements CrudService, DatastreamService {
   static final AssessmentService _instance = AssessmentService._singleton();
-  static final CacheStream<DatabaseAssessment> _cache =
-      CacheStream<DatabaseAssessment>();
+  static final CacheStream<AppModelAssessment> _cache =
+      CacheStream<AppModelAssessment>();
 
   AssessmentService._singleton() : super(assessmentTableName);
 
   factory AssessmentService() => _instance;
 
   @override
-  DatabaseAssessment mapRowToModel(Map<String, Object?> row) {
-    return DatabaseAssessment.fromRow(row);
+  AppModelAssessment mapRowToModel(Map<String, Object?> row) {
+    return AppModelAssessment.fromRow(row);
   }
 
   //CRUD functions
   @override
-  Future<DatabaseAssessment> createObject(Map<String, Object?> row) async {
+  Future<AppModelAssessment> createObject(Map<String, Object?> row) async {
     int assesmentId = await insertRecord(row);
     row['id'] = assesmentId;
 
-    return DatabaseAssessment.fromRow(row);
+    return AppModelAssessment.fromRow(row);
   }
 
   @override
@@ -39,16 +39,16 @@ class AssessmentService extends DatabaseService
   }
 
   @override
-  Future<List<DatabaseAssessment>> retreiveObjectBySpecifications(
+  Future<List<AppModelAssessment>> retreiveObjectBySpecifications(
       Map<String, Object?> specifications) async {
     return await getRecordBySpecifications(specifications)
-        as List<DatabaseAssessment>;
+        as List<AppModelAssessment>;
   }
 
   @override
-  Future<DatabaseAssessment> updateObject(Map<String, Object?> row) async {
+  Future<AppModelAssessment> updateObject(Map<String, Object?> row) async {
     await updateRecordById(row['id'] as int, row);
-    return DatabaseAssessment.fromRow(row);
+    return AppModelAssessment.fromRow(row);
   }
 
   @override

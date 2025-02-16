@@ -19,10 +19,6 @@ class DriftTimeslotDao extends DatabaseAccessor<AppDatabase>
       (select(timeslots)..where((timeslot) => timeslot.id.equals(timeslotId)))
           .getSingleOrNull();
 
-  Future<List<Timeslot>> getAllTimeslotsForEventId(int eventId) =>
-      (select(timeslots)..where((timeslot) => timeslot.eventId.equals(eventId)))
-          .get();
-
   Future<int> deleteTimeslotById(int timeslotId) =>
       (delete(timeslots)..where((timeslot) => timeslot.id.equals(timeslotId)))
           .go();

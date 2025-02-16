@@ -1,4 +1,4 @@
-import 'package:assignmenttrackerapp/models/db_course.dart';
+import 'package:assignmenttrackerapp/models/app_model_course.dart';
 import 'package:assignmenttrackerapp/services/database/courses/courses_service.dart';
 import 'package:assignmenttrackerapp/views/courses/add_course_view.dart';
 import 'package:assignmenttrackerapp/views/widgets/standard_editable_item_widget.dart';
@@ -55,7 +55,7 @@ class _CoursesViewState extends State<CoursesView> {
               itemCount: courses.length,
               itemBuilder: (context, index) {
                 final course = courses[index];
-                return StandardEditableItemWidget<DatabaseCourse>(
+                return StandardEditableItemWidget<AppModelCourse>(
                   data: course,
                   titleBuilder: (course) => course.courseName,
                   subtitle1Builder: (course) => (course.courseEvent != null)

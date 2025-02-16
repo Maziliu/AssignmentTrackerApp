@@ -1,4 +1,4 @@
-import 'package:assignmenttrackerapp/models/db_course.dart';
+import 'package:assignmenttrackerapp/models/app_model_course.dart';
 import 'package:assignmenttrackerapp/services/auth/auth_services.dart';
 import 'package:assignmenttrackerapp/services/database/core_service.dart';
 import 'package:assignmenttrackerapp/services/database/courses/courses_service.dart';
@@ -16,7 +16,7 @@ class AddCourseView extends StatefulWidget {
 }
 
 class _AddCourseViewState extends State<AddCourseView> {
-  DatabaseCourse? _course;
+  AppModelCourse? _course;
 
   late final CoursesService _coursesService;
 

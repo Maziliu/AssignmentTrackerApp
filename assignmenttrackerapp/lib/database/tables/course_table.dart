@@ -8,7 +8,7 @@ class Courses extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get userId =>
       text().references(Users, #cloudDBSyncId, onDelete: KeyAction.cascade)();
-  IntColumn get gradedScaleId =>
+  IntColumn get gradeScaleId =>
       integer().references(GradeScales, #id, onDelete: KeyAction.cascade)();
   IntColumn get gradedComponentId => integer()
       .references(GradedComponents, #id, onDelete: KeyAction.cascade)();

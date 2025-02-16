@@ -1,5 +1,5 @@
-import 'package:assignmenttrackerapp/models/abstracts/db_object.dart';
+import 'package:assignmenttrackerapp/models/abstracts/app_model.dart';
 
-abstract class Datastreamable{
-  int get ownerId;
+abstract class Datastreamable {
+  String get ownerId;
 }

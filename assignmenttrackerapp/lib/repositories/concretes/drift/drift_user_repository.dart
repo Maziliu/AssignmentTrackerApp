@@ -1,6 +1,7 @@
 import 'package:assignmenttrackerapp/database/DAOs/drift/drift_user_dao.dart';
-import 'package:assignmenttrackerapp/models/abstracts/db_object.dart';
-import 'package:assignmenttrackerapp/models/db_user.dart';
+import 'package:assignmenttrackerapp/models/abstracts/app_model.dart';
+import 'package:assignmenttrackerapp/models/app_model_course.dart';
+import 'package:assignmenttrackerapp/models/app_model_user.dart';
 import 'package:assignmenttrackerapp/repositories/interfaces/drift_repository.dart';
 import 'package:assignmenttrackerapp/repositories/interfaces/user_repository.dart';
 import 'package:assignmenttrackerapp/utils/result.dart';
@@ -13,7 +14,7 @@ class DriftUserRepository implements UserRepository, DriftRepository {
       : _driftUserDao = driftUserDao;
 
   @override
-  Future<Result<void>> createUser({required DatabaseUser user}) {
+  Future<Result<void>> createUser({required AppModelUser user}) {
     // TODO: implement createUser
     throw UnimplementedError();
   }
@@ -25,25 +26,33 @@ class DriftUserRepository implements UserRepository, DriftRepository {
   }
 
   @override
-  DatabaseObject fromDriftDataClass(DataClass driftDataClass) {
-    // TODO: implement fromDriftDataClass
-    throw UnimplementedError();
+  AppModelCourse fromDriftDataClass(DataClass driftDataClass) {
+    return AppModelCourse(
+        id: id,
+        userId: userId,
+        scheduleBitMask: scheduleBitMask,
+        gradedComponent: gradedComponent,
+        gradeScale: gradeScale,
+        courseName: courseName,
+        courseCode: courseCode,
+        timeSlot: timeSlot,
+        additionalCourseEvents: additionalCourseEvents);
   }
 
   @override
-  Future<Result<DatabaseUser>> getUserById({required int id}) {
+  Future<Result<AppModelUser>> getUserById({required int id}) {
     // TODO: implement getUserById
     throw UnimplementedError();
   }
 
   @override
-  UpdateCompanion toDriftCompanion(DatabaseObject driftCompanion) {
+  UpdateCompanion toDriftCompanion(AppModel model) {
     // TODO: implement toDriftCompanion
     throw UnimplementedError();
   }
 
   @override
-  Future<Result<void>> updateUser({required DatabaseUser user}) {
+  Future<Result<void>> updateUser({required AppModelUser user}) {
     // TODO: implement updateUser
     throw UnimplementedError();
   }
