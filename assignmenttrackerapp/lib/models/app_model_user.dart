@@ -4,18 +4,18 @@ import 'package:assignmenttrackerapp/models/abstracts/app_model.dart';
 
 class AppModelUser extends AppModel {
   final String? _email;
-  final String _username;
+  final String _username, _cloudDBSyncId;
 
   AppModelUser(
-      {required super.id, required String? email, required String username})
+      {required super.id,
+      required String? email,
+      required String username,
+      required String cloudDBSyncId})
       : _email = email,
-        _username = username;
+        _username = username,
+        _cloudDBSyncId = cloudDBSyncId;
 
   String get email => _email!;
   String get username => _username;
-
-  @override
-  String toString() {
-    return 'ID: $id, EMAIL: $_email';
-  }
+  String get cloudDBSyncId => _cloudDBSyncId;
 }

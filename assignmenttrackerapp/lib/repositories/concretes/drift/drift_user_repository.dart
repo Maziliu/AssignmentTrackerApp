@@ -1,4 +1,8 @@
+import 'dart:ffi';
+
 import 'package:assignmenttrackerapp/database/DAOs/drift/drift_user_dao.dart';
+import 'package:assignmenttrackerapp/database/app_database.dart';
+import 'package:assignmenttrackerapp/exceptions/database_exceptions.dart';
 import 'package:assignmenttrackerapp/models/abstracts/app_model.dart';
 import 'package:assignmenttrackerapp/models/app_model_course.dart';
 import 'package:assignmenttrackerapp/models/app_model_user.dart';
@@ -14,46 +18,66 @@ class DriftUserRepository implements UserRepository, DriftRepository {
       : _driftUserDao = driftUserDao;
 
   @override
-  Future<Result<void>> createUser({required AppModelUser user}) {
-    // TODO: implement createUser
-    throw UnimplementedError();
+  Future<Result<void>> createUser({required AppModelUser user}) async {
+    try {
+      await _driftUserDao.insertUserByCompanion(toDriftCompanion(user));
+      return Result.ok(null);
+    } on Exception {
+      return Result.error(UnableToCreateUserException());
+    }
   }
 
   @override
-  Future<Result<void>> deleteUserById({required int id}) {
-    // TODO: implement deleteUserById
-    throw UnimplementedError();
+  Future<Result<void>> deleteUserById({required int id}) async {
+    try {
+      await _driftUserDao.deleteUserById(id);
+      return Result.ok(null);
+    } on Exception {
+      return Result.error(UnableToDeleteUserException());
+    }
   }
 
   @override
-  AppModelCourse fromDriftDataClass(DataClass driftDataClass) {
-    return AppModelCourse(
-        id: id,
-        userId: userId,
-        scheduleBitMask: scheduleBitMask,
-        gradedComponent: gradedComponent,
-        gradeScale: gradeScale,
-        courseName: courseName,
-        courseCode: courseCode,
-        timeSlot: timeSlot,
-        additionalCourseEvents: additionalCourseEvents);
+  AppModelUser fromDriftDataClass(DataClass driftDataClass) {
+    User user = driftDataClass as User;
+    return AppModelUser(
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      cloudDBSyncId: user.cloudDBSyncId,
+    );
   }
 
   @override
-  Future<Result<AppModelUser>> getUserById({required int id}) {
-    // TODO: implement getUserById
-    throw UnimplementedError();
+  Future<Result<AppModelUser>> getUserById({required int id}) async {
+    try {
+      User? user = await _driftUserDao.getUserById(id);
+      return (user == null)
+          ? Result.error(UnableToFindUserException())
+          : Result.ok(fromDriftDataClass(user));
+    } on Exception {
+      return Result.error(UnableToFindUserException());
+    }
   }
 
   @override
-  UpdateCompanion toDriftCompanion(AppModel model) {
-    // TODO: implement toDriftCompanion
-    throw UnimplementedError();
+  UsersCompanion toDriftCompanion(AppModel model) {
+    User user = model as User;
+    return UsersCompanion(
+      id: Value(user.id),
+      cloudDBSyncId: Value(user.cloudDBSyncId),
+      username: Value(user.username),
+      email: Value(user.email),
+    );
   }
 
   @override
-  Future<Result<void>> updateUser({required AppModelUser user}) {
-    // TODO: implement updateUser
-    throw UnimplementedError();
+  Future<Result<void>> updateUser({required AppModelUser user}) async {
+    try {
+      await _driftUserDao.updateUserByCompanion(toDriftCompanion(user));
+      return Result.ok(null);
+    } on Exception {
+      return Result.error(UnableToUpdateUserException());
+    }
   }
 }
