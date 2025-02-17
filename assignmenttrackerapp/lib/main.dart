@@ -4,6 +4,7 @@ import 'package:assignmenttrackerapp/presentation/views/auth/register/register_v
 import 'package:assignmenttrackerapp/presentation/views/auth/verify_email_view.dart';
 import 'package:assignmenttrackerapp/presentation/views/common/splash_screen.dart';
 import 'package:assignmenttrackerapp/presentation/views/dashboard/dashboard_view.dart';
+import 'package:assignmenttrackerapp/presentation/views/dashboard/dashboard_view_model.dart';
 import 'package:assignmenttrackerapp/services/auth/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -15,8 +16,8 @@ import 'package:assignmenttrackerapp/common/themes/themes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  setupDependencies();
   await AuthServices.firebase().initialize();
+  setupDependencies();
   runApp(const AppEntryPoint());
 }
 
@@ -28,6 +29,9 @@ class AppEntryPoint extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => GetIt.instance<AuthViewModel>()),
+        ChangeNotifierProvider(
+          create: (_) => GetIt.instance<DashboardViewModel>(),
+        ),
       ],
       child: MaterialApp(
         title: 'Assignment Tracker',
