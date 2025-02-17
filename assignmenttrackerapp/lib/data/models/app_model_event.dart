@@ -1,6 +1,5 @@
 import 'package:assignmenttrackerapp/data/models/interfaces/datastreamable.dart';
 import 'package:assignmenttrackerapp/data/models/abstracts/app_model.dart';
-import 'package:assignmenttrackerapp/data/models/app_model_time_slot.dart';
 
 class AppModelEvent extends AppModel implements Datastreamable {
   final String _userId, _eventName;

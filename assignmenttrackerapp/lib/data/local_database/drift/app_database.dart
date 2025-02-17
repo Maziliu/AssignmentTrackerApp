@@ -5,9 +5,8 @@ import 'package:assignmenttrackerapp/data/local_database/drift/tables/grade_scal
 import 'package:assignmenttrackerapp/data/local_database/drift/tables/graded_component_table.dart';
 import 'package:assignmenttrackerapp/data/local_database/drift/tables/timeslot_table.dart';
 import 'package:assignmenttrackerapp/data/local_database/drift/tables/user_table.dart';
-import 'package:assignmenttrackerapp/core/enums/assessment_type.dart';
-import 'package:assignmenttrackerapp/core/enums/days_of_the_week.dart';
-import 'package:assignmenttrackerapp/core/enums/time_slot_type.dart';
+import 'package:assignmenttrackerapp/common/enums/assessment_type.dart';
+import 'package:assignmenttrackerapp/common/enums/days_of_the_week.dart';
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';

@@ -1,4 +1,4 @@
-import 'package:assignmenttrackerapp/core/services/auth/auth_user.dart';
+import 'package:assignmenttrackerapp/services/auth/auth_user.dart';
 
 abstract class AuthStrategy {
   AuthUser? get currentUser;

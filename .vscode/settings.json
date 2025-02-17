@@ -1,5 +1,5 @@
 {
-  "cmake.sourceDirectory": "D:/Repos/AssignmentTrackerApp/assignmenttrackerapp/windows",
+  "cmake.sourceDirectory": "D:/Repos/AssignmentTrackerApp/assignmenttrackerapp/android",
   "java.configuration.updateBuildConfiguration": "interactive",
   "cmake.ignoreCMakeListsMissing": true
 }

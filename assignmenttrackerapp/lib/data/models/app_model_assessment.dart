@@ -1,10 +1,6 @@
-import 'package:assignmenttrackerapp/data/local_database/drift/app_database.dart';
-import 'package:assignmenttrackerapp/core/enums/assessment_type.dart';
-import 'package:assignmenttrackerapp/data/models/app_model_event.dart';
+import 'package:assignmenttrackerapp/common/enums/assessment_type.dart';
 import 'package:assignmenttrackerapp/data/models/interfaces/datastreamable.dart';
-import 'package:assignmenttrackerapp/data/models/app_model_graded_component.dart';
 import 'package:assignmenttrackerapp/data/models/abstracts/app_model.dart';
-import 'package:assignmenttrackerapp/data/models/app_model_time_slot.dart';
 
 class AppModelAssessment extends AppModel implements Datastreamable {
   final String _userId, _assessmentName;

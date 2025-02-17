@@ -1,4 +1,4 @@
-import 'package:assignmenttrackerapp/core/utils/snackbar_helpers.dart';
+import 'package:assignmenttrackerapp/common/utils/snackbar_helpers.dart';
 import 'package:flutter/material.dart';
 
 class StandardEditableItemWidget<K> extends StatelessWidget {

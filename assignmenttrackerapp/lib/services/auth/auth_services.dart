@@ -1,6 +1,6 @@
-import 'package:assignmenttrackerapp/core/services/auth/auth_strategy.dart';
-import 'package:assignmenttrackerapp/core/services/auth/auth_user.dart';
-import 'package:assignmenttrackerapp/core/services/auth/firebase_auth_strategy.dart';
+import 'package:assignmenttrackerapp/services/auth/auth_strategy.dart';
+import 'package:assignmenttrackerapp/services/auth/auth_user.dart';
+import 'package:assignmenttrackerapp/services/auth/firebase_auth_strategy.dart';
 
 class AuthServices implements AuthStrategy {
   final AuthStrategy _authStrategy;

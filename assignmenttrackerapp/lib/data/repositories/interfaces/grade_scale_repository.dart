@@ -1,5 +1,5 @@
 import 'package:assignmenttrackerapp/data/models/app_model_grade_scale.dart';
-import 'package:assignmenttrackerapp/core/utils/result.dart';
+import 'package:assignmenttrackerapp/common/utils/result.dart';
 
 abstract class GradeScaleRepository {
   Future<Result<AppModelGradeScale>> getGradeScaleById({required int id});

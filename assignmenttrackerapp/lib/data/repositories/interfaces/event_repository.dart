@@ -1,5 +1,5 @@
 import 'package:assignmenttrackerapp/data/models/app_model_event.dart';
-import 'package:assignmenttrackerapp/core/utils/result.dart';
+import 'package:assignmenttrackerapp/common/utils/result.dart';
 
 abstract class EventRepository {
   Future<Result<AppModelEvent>> getEventById({required int id});

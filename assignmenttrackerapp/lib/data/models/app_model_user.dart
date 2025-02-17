@@ -1,5 +1,3 @@
-import 'package:assignmenttrackerapp/data/local_database/drift/app_database.dart';
-import 'package:assignmenttrackerapp/core/enums/user_type.dart';
 import 'package:assignmenttrackerapp/data/models/abstracts/app_model.dart';
 
 class AppModelUser extends AppModel {

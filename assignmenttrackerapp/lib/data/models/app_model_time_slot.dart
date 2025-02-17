@@ -1,5 +1,4 @@
-import 'package:assignmenttrackerapp/core/enums/days_of_the_week.dart';
-import 'package:assignmenttrackerapp/core/enums/time_slot_type.dart';
+import 'package:assignmenttrackerapp/common/enums/days_of_the_week.dart';
 import 'package:assignmenttrackerapp/data/models/abstracts/app_model.dart';
 
 class AppModelTimeSlot extends AppModel {

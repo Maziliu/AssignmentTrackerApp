@@ -1,7 +1,7 @@
 import 'package:assignmenttrackerapp/firebase_options.dart';
-import 'package:assignmenttrackerapp/core/services/auth/auth_exceptions.dart';
-import 'package:assignmenttrackerapp/core/services/auth/auth_strategy.dart';
-import 'package:assignmenttrackerapp/core/services/auth/auth_user.dart';
+import 'package:assignmenttrackerapp/services/auth/auth_exceptions.dart';
+import 'package:assignmenttrackerapp/services/auth/auth_strategy.dart';
+import 'package:assignmenttrackerapp/services/auth/auth_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 

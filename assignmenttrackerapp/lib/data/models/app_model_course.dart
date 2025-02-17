@@ -1,11 +1,5 @@
-import 'package:assignmenttrackerapp/data/models/app_model_assessment.dart';
 import 'package:assignmenttrackerapp/data/models/interfaces/datastreamable.dart';
-import 'package:assignmenttrackerapp/data/models/app_model_event.dart';
-import 'package:assignmenttrackerapp/data/models/app_model_grade_scale.dart';
-import 'package:assignmenttrackerapp/data/models/app_model_graded_component.dart';
 import 'package:assignmenttrackerapp/data/models/abstracts/app_model.dart';
-import 'package:assignmenttrackerapp/data/models/app_model_time_slot.dart';
-import 'package:assignmenttrackerapp/core/utils/schedule_helpers.dart';
 
 class AppModelCourse extends AppModel implements Datastreamable {
   final String _userId, _courseName, _courseCode;

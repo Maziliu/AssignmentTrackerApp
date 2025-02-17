@@ -1,5 +1,5 @@
 import 'package:assignmenttrackerapp/data/models/app_model_course.dart';
-import 'package:assignmenttrackerapp/core/utils/result.dart';
+import 'package:assignmenttrackerapp/common/utils/result.dart';
 
 abstract class CourseRepository {
   Future<Result<AppModelCourse>> getCourseById({required int id});

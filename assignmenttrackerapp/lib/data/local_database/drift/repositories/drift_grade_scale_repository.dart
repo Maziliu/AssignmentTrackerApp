@@ -1,11 +1,11 @@
 import 'package:assignmenttrackerapp/data/local_database/drift/dao/drift_grade_scale_dao.dart';
 import 'package:assignmenttrackerapp/data/local_database/drift/app_database.dart';
-import 'package:assignmenttrackerapp/core/exceptions/database_exceptions.dart';
+import 'package:assignmenttrackerapp/common/exceptions/database_exceptions.dart';
 import 'package:assignmenttrackerapp/data/models/abstracts/app_model.dart';
 import 'package:assignmenttrackerapp/data/models/app_model_grade_scale.dart';
 import 'package:assignmenttrackerapp/data/local_database/drift/repositories/drift_repository.dart';
 import 'package:assignmenttrackerapp/data/repositories/interfaces/grade_scale_repository.dart';
-import 'package:assignmenttrackerapp/core/utils/result.dart';
+import 'package:assignmenttrackerapp/common/utils/result.dart';
 import 'package:drift/drift.dart';
 
 class DriftGradeScaleRepository

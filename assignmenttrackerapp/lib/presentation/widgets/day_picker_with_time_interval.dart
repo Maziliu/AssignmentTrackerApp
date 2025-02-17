@@ -1,5 +1,5 @@
-import 'package:assignmenttrackerapp/core/enums/days_of_the_week.dart';
-import 'package:assignmenttrackerapp/core/utils/pair.dart';
+import 'package:assignmenttrackerapp/common/enums/days_of_the_week.dart';
+import 'package:assignmenttrackerapp/common/utils/pair.dart';
 import 'package:flutter/material.dart';
 
 class DayPickerWithTimeInterval extends StatefulWidget {

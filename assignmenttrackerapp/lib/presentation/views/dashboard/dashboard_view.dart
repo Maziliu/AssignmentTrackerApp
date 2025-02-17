@@ -1,130 +1,64 @@
-import 'package:assignmenttrackerapp/presentation/routes/routes.dart';
-import 'package:assignmenttrackerapp/core/enums/overflow_menu_options.dart';
-import 'package:assignmenttrackerapp/core/services/auth/auth_services.dart';
-import 'package:assignmenttrackerapp/data/models/app_model_user.dart';
-import 'package:assignmenttrackerapp/services/database/core_service.dart';
-import 'package:assignmenttrackerapp/core/themes/themes.dart';
-import 'package:assignmenttrackerapp/core/utils/dialog_helpers.dart';
-import 'package:assignmenttrackerapp/presentation/views/assignments/assignments_view.dart';
-import 'package:assignmenttrackerapp/presentation/views/courses/courses_view.dart';
+import 'package:assignmenttrackerapp/presentation/views/dashboard/dashboard_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:assignmenttrackerapp/common/enums/overflow_menu_options.dart';
+import 'package:assignmenttrackerapp/common/themes/themes.dart';
 
-class DashboardView extends StatefulWidget {
+class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
 
   @override
-  State<DashboardView> createState() => _DashboardViewState();
-}
-
-class _DashboardViewState extends State<DashboardView> {
-  int _selectedTabIndex = 0;
-  late final CoreService _coreService;
-  late final Future<AppModelUser> _userFuture;
-
-  List<Widget> get mainScreens => [
-        const Center(child: Text('Daily')),
-        AssignmentsView(assignmentsService: _coreService.assignmentsService),
-        const Center(child: Text('Exams')),
-        CoursesView(coursesService: _coreService.coursesService),
-      ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedTabIndex = index;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _coreService = CoreService();
-    _coreService.checkDbIsOpen();
-    _userFuture = _coreService.getOrCreateUser(
-      email: AuthServices.firebase().currentUser!.email!,
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(mainScreens[_selectedTabIndex].toString()),
-        actions: [
-          PopupMenuButton<OverflowMenuOptions>(
-            onSelected: (value) async {
-              switch (value) {
-                case OverflowMenuOptions.logout:
-                  final shouldLogout =
-                      await showLogoutConfirmationDialog(context);
-                  if (shouldLogout) {
-                    await AuthServices.firebase().logout();
-                    if (context.mounted) {
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                        loginRoute,
-                        (route) => false,
-                      );
+    return ChangeNotifierProvider(
+      create: (_) => DashboardViewModel(),
+      child: Consumer<DashboardViewModel>(
+        builder: (context, viewModel, child) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(viewModel.selectedTitle),
+              actions: [
+                PopupMenuButton<OverflowMenuOptions>(
+                  onSelected: (value) {
+                    if (value == OverflowMenuOptions.logout) {
+                      viewModel.logout(context);
                     }
-                  }
-              }
-            },
-            itemBuilder: (context) => const [
-              PopupMenuItem<OverflowMenuOptions>(
-                value: OverflowMenuOptions.logout,
-                child: Text("Logout"),
-              ),
-            ],
-          ),
-        ],
-      ),
-      body: FutureBuilder<AppModelUser>(
-        future: _userFuture,
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    'Error: ${snapshot.error}',
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                );
-              }
-              return mainScreens[_selectedTabIndex];
-            case ConnectionState.waiting:
-            case ConnectionState.active:
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            default:
-              return const Center(
-                child: Text('Unexpected state.'),
-              );
-          }
+                  },
+                  itemBuilder: (context) => const [
+                    PopupMenuItem(
+                      value: OverflowMenuOptions.logout,
+                      child: Text("Logout"),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            body: viewModel.selectedScreen,
+            bottomNavigationBar: BottomNavigationBar(
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.calendar_today),
+                  label: 'Daily Schedule',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.assessment),
+                  label: 'Assignments',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.school),
+                  label: 'Exams',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.book),
+                  label: 'Courses',
+                ),
+              ],
+              currentIndex: viewModel.selectedTabIndex,
+              selectedItemColor: assignmentTrackerTheme.colorScheme.primary,
+              unselectedItemColor: assignmentTrackerTheme.colorScheme.secondary,
+              onTap: viewModel.selectTab,
+            ),
+          );
         },
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Daily Schedule',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.assessment),
-            label: 'Assignments',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'Exams',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: 'Courses',
-          ),
-        ],
-        currentIndex: _selectedTabIndex,
-        selectedItemColor: assignmentTrackerTheme.colorScheme.primary,
-        unselectedItemColor: assignmentTrackerTheme.colorScheme.secondary,
-        onTap: _onItemTapped,
       ),
     );
   }

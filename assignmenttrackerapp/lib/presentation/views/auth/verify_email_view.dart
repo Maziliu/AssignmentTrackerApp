@@ -1,7 +1,7 @@
 import 'package:assignmenttrackerapp/presentation/routes/routes.dart';
-import 'package:assignmenttrackerapp/core/services/auth/auth_exceptions.dart';
-import 'package:assignmenttrackerapp/core/services/auth/auth_services.dart';
-import 'package:assignmenttrackerapp/core/utils/snackbar_helpers.dart';
+import 'package:assignmenttrackerapp/services/auth/auth_exceptions.dart';
+import 'package:assignmenttrackerapp/services/auth/auth_services.dart';
+import 'package:assignmenttrackerapp/common/utils/snackbar_helpers.dart';
 import 'package:flutter/material.dart';
 
 class VerifyEmailView extends StatefulWidget {

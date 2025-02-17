@@ -2,7 +2,7 @@ import 'package:assignmenttrackerapp/data/local_database/drift/tables/course_tab
 import 'package:assignmenttrackerapp/data/local_database/drift/tables/event_table.dart';
 import 'package:assignmenttrackerapp/data/local_database/drift/tables/graded_component_table.dart';
 import 'package:assignmenttrackerapp/data/local_database/drift/tables/user_table.dart';
-import 'package:assignmenttrackerapp/core/enums/assessment_type.dart';
+import 'package:assignmenttrackerapp/common/enums/assessment_type.dart';
 import 'package:drift/drift.dart';
 
 class Assessments extends Table {

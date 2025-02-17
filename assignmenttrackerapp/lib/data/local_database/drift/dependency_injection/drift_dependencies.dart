@@ -13,40 +13,50 @@ import 'package:assignmenttrackerapp/data/local_database/drift/repositories/drif
 import 'package:assignmenttrackerapp/data/local_database/drift/repositories/drift_graded_component_repository.dart';
 import 'package:assignmenttrackerapp/data/local_database/drift/repositories/drift_timeslot_repository.dart';
 import 'package:assignmenttrackerapp/data/local_database/drift/repositories/drift_user_repository.dart';
+import 'package:assignmenttrackerapp/data/repositories/interfaces/assessment_repository.dart';
+import 'package:assignmenttrackerapp/data/repositories/interfaces/course_repository.dart';
+import 'package:assignmenttrackerapp/data/repositories/interfaces/event_repository.dart';
+import 'package:assignmenttrackerapp/data/repositories/interfaces/grade_scale_repository.dart';
+import 'package:assignmenttrackerapp/data/repositories/interfaces/graded_component_repository.dart';
+import 'package:assignmenttrackerapp/data/repositories/interfaces/time_slot_repository.dart';
+import 'package:assignmenttrackerapp/data/repositories/interfaces/user_repository.dart';
 import 'package:get_it/get_it.dart';
 
-void setupDriftDependencies({required GetIt getIt}) {
-  getIt.registerSingleton<AppDatabase>(AppDatabase());
+void setupDriftDependencies({required GetIt injector}) {
+  injector.registerSingleton<AppDatabase>(AppDatabase());
 
   //DAOS
-  getIt.registerLazySingleton<DriftAssessmentDao>(
-      () => DriftAssessmentDao(getIt<AppDatabase>()));
-  getIt.registerLazySingleton<DriftCourseDao>(
-      () => DriftCourseDao(getIt<AppDatabase>()));
-  getIt.registerLazySingleton<DriftEventDao>(
-      () => DriftEventDao(getIt<AppDatabase>()));
-  getIt.registerLazySingleton<DriftGradeScaleDao>(
-      () => DriftGradeScaleDao(getIt<AppDatabase>()));
-  getIt.registerLazySingleton<DriftGradedComponentDao>(
-      () => DriftGradedComponentDao(getIt<AppDatabase>()));
-  getIt.registerLazySingleton<DriftTimeslotDao>(
-      () => DriftTimeslotDao(getIt<AppDatabase>()));
-  getIt.registerLazySingleton<DriftUserDao>(
-      () => DriftUserDao(getIt<AppDatabase>()));
+  injector.registerLazySingleton<DriftAssessmentDao>(
+      () => DriftAssessmentDao(injector<AppDatabase>()));
+  injector.registerLazySingleton<DriftCourseDao>(
+      () => DriftCourseDao(injector<AppDatabase>()));
+  injector.registerLazySingleton<DriftEventDao>(
+      () => DriftEventDao(injector<AppDatabase>()));
+  injector.registerLazySingleton<DriftGradeScaleDao>(
+      () => DriftGradeScaleDao(injector<AppDatabase>()));
+  injector.registerLazySingleton<DriftGradedComponentDao>(
+      () => DriftGradedComponentDao(injector<AppDatabase>()));
+  injector.registerLazySingleton<DriftTimeslotDao>(
+      () => DriftTimeslotDao(injector<AppDatabase>()));
+  injector.registerLazySingleton<DriftUserDao>(
+      () => DriftUserDao(injector<AppDatabase>()));
 
   //Repos
-  getIt.registerLazySingleton(() => DriftGradedComponentRepository(
-      driftGradedComponentDao: getIt<DriftGradedComponentDao>()));
-  getIt.registerLazySingleton(() => DriftAssessmentRepository(
-      driftAssessmentDao: getIt<DriftAssessmentDao>()));
-  getIt.registerLazySingleton(
-      () => DriftCourseRepository(driftCourseDao: getIt<DriftCourseDao>()));
-  getIt.registerLazySingleton(() =>
-      DriftTimeslotRepository(driftTimeslotDao: getIt<DriftTimeslotDao>()));
-  getIt.registerLazySingleton(() => DriftGradeScaleRepository(
-      driftGradeScaleDao: getIt<DriftGradeScaleDao>()));
-  getIt.registerLazySingleton(
-      () => DriftUserRepository(driftUserDao: getIt<DriftUserDao>()));
-  getIt.registerLazySingleton(
-      () => DriftEventRepository(driftEventDao: getIt<DriftEventDao>()));
+  injector.registerLazySingleton<GradedComponentRepository>(() =>
+      DriftGradedComponentRepository(
+          driftGradedComponentDao: injector<DriftGradedComponentDao>()));
+  injector.registerLazySingleton<AssessmentRepository>(() =>
+      DriftAssessmentRepository(
+          driftAssessmentDao: injector<DriftAssessmentDao>()));
+  injector.registerLazySingleton<CourseRepository>(
+      () => DriftCourseRepository(driftCourseDao: injector<DriftCourseDao>()));
+  injector.registerLazySingleton<TimeSlotRepository>(() =>
+      DriftTimeslotRepository(driftTimeslotDao: injector<DriftTimeslotDao>()));
+  injector.registerLazySingleton<GradeScaleRepository>(() =>
+      DriftGradeScaleRepository(
+          driftGradeScaleDao: injector<DriftGradeScaleDao>()));
+  injector.registerLazySingleton<UserRepository>(
+      () => DriftUserRepository(driftUserDao: injector<DriftUserDao>()));
+  injector.registerLazySingleton<EventRepository>(
+      () => DriftEventRepository(driftEventDao: injector<DriftEventDao>()));
 }

@@ -1,5 +1,5 @@
 import 'package:assignmenttrackerapp/data/models/app_model_graded_component.dart';
-import 'package:assignmenttrackerapp/core/utils/result.dart';
+import 'package:assignmenttrackerapp/common/utils/result.dart';
 
 abstract class GradedComponentRepository {
   Future<Result<AppModelGradedComponent>> getGrDatabaseGradedComponentById(
