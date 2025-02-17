@@ -8,6 +8,6 @@ final GetIt injector = GetIt.instance;
 void setupDependencies() {
   injector.registerLazySingleton<AuthServices>(() => AuthServices.firebase());
 
-  setupViewModelDependencies(injector: injector);
   setupDriftDependencies(injector: injector);
+  setupViewModelDependencies(injector: injector);
 }

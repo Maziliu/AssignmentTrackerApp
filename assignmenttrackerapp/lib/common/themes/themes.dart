@@ -7,9 +7,9 @@ final ThemeData assignmentTrackerTheme = ThemeData(
   ),
   useMaterial3: true,
   textTheme: TextTheme(
-    headlineLarge: TextStyle(color: Color(0xFF00CFFD)),
+    headlineLarge: TextStyle(color: Color(0xFFA479D9)),
     headlineSmall: TextStyle(color: Color(0xFFBB86FC)),
-    bodyLarge: TextStyle(color: Colors.white),
+    bodyLarge: TextStyle(color: Color(0xFFBB86FC)),
     bodySmall: TextStyle(color: Color(0xFFA0A0B0)),
   ),
   appBarTheme: AppBarTheme(
@@ -19,7 +19,7 @@ final ThemeData assignmentTrackerTheme = ThemeData(
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      backgroundColor: Color(0xFF00CFFD),
+      backgroundColor: Color(0xFFA479D9),
       foregroundColor: Color(0xFF1E1E2F),
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       shape: RoundedRectangleBorder(
@@ -30,13 +30,13 @@ final ThemeData assignmentTrackerTheme = ThemeData(
   inputDecorationTheme: InputDecorationTheme(
     filled: true,
     fillColor: Color(0xFF2A2A3C),
-    labelStyle: TextStyle(color: Color(0xFF00CFFD)),
+    labelStyle: TextStyle(color: Color(0xFFA479D9)),
     enabledBorder: OutlineInputBorder(
       borderSide: BorderSide(color: Color(0xFFBB86FC)),
       borderRadius: BorderRadius.circular(8),
     ),
     focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Color(0xFF00CFFD), width: 2),
+      borderSide: BorderSide(color: Color(0xFFA479D9), width: 2),
       borderRadius: BorderRadius.circular(8),
     ),
   ),

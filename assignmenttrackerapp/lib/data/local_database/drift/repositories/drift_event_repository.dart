@@ -100,16 +100,18 @@ class DriftEventRepository implements EventRepository, DriftRepository {
       {required int userId}) async {
     try {
       DateTime now = DateTime.now();
+
       List<Timeslot> timeslots = await _driftTimeslotDao.getAllTimeslotsBefore(
           userId: userId,
           date: DateTime(now.year, now.month, now.day + 14, 23, 59, 59, 999));
-      List<Event?> events = await Future.wait(timeslots.map((timeslot) async {
-        return await _driftEventDao.getEventByTimeslotId(timeslot.id);
-      }));
 
-      List<Event> nonNullEvents = events.whereType<Event>().toList();
+      List<Event> events = (await Future.wait(timeslots.map((timeslot) async =>
+              await _driftEventDao.getEventsByTimeslotId(timeslot.id))))
+          .expand((event) => event)
+          .toList();
+
       return Result.ok(
-          nonNullEvents.map((event) => fromDriftDataClass(event)).toList());
+          events.map((event) => fromDriftDataClass(event)).toList());
     } on Exception {
       return Result.error(UnableToFindEventException());
     }
@@ -120,16 +122,18 @@ class DriftEventRepository implements EventRepository, DriftRepository {
       {required int userId}) async {
     try {
       DateTime now = DateTime.now();
+
       List<Timeslot> timeslots = await _driftTimeslotDao.getAllTimeslotsBefore(
           userId: userId,
           date: DateTime(now.year, now.month, now.day, 23, 59, 59, 999));
-      List<Event?> events = await Future.wait(timeslots.map((timeslot) async {
-        return await _driftEventDao.getEventByTimeslotId(timeslot.id);
-      }));
 
-      List<Event> nonNullEvents = events.whereType<Event>().toList();
+      List<Event> events = (await Future.wait(timeslots.map((timeslot) async =>
+              await _driftEventDao.getEventsByTimeslotId(timeslot.id))))
+          .expand((event) => event)
+          .toList();
+
       return Result.ok(
-          nonNullEvents.map((event) => fromDriftDataClass(event)).toList());
+          events.map((event) => fromDriftDataClass(event)).toList());
     } on Exception {
       return Result.error(UnableToFindEventException());
     }

@@ -25,7 +25,7 @@ class DriftEventDao extends DatabaseAccessor<AppDatabase>
   Future<bool> updateEventByCompanion(EventsCompanion companion) =>
       update(events).replace(companion);
 
-  Future<Event?> getEventByTimeslotId(int timeslotId) =>
+  Future<List<Event>> getEventsByTimeslotId(int timeslotId) =>
       (select(events)..where((event) => event.timeslotId.equals(timeslotId)))
-          .getSingleOrNull();
+          .get();
 }
