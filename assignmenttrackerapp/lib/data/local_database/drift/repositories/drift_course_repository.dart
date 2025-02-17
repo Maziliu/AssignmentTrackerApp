@@ -65,7 +65,7 @@ class DriftCourseRepository implements CourseRepository, DriftRepository {
   CoursesCompanion toDriftCompanion(AppModel model) {
     AppModelCourse course = model as AppModelCourse;
     return CoursesCompanion(
-      id: Value(course.id),
+      id: (course.id == null) ? Value.absent() : Value(course.id!),
       userId: Value(course.ownerId),
       courseName: Value(course.courseName),
       courseCode: Value(course.courseCode),

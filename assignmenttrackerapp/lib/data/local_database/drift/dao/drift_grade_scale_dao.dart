@@ -9,9 +9,9 @@ class DriftGradeScaleDao extends DatabaseAccessor<AppDatabase>
     with _$DriftGradeScaleDaoMixin {
   DriftGradeScaleDao(super.attachedDatabase);
 
-  Future<List<GradeScale>> getAllGradeScales({required String cloudDBSyncId}) =>
+  Future<List<GradeScale>> getAllGradeScales({required int userId}) =>
       (select(gradeScales)
-            ..where((gradeScale) => gradeScale.userId.equals(cloudDBSyncId)))
+            ..where((gradeScale) => gradeScale.userId.equals(userId)))
           .get();
 
   Future<GradeScale?> getGradeScaleById(int gradeScaleId) =>

@@ -2,6 +2,7 @@ import 'package:assignmenttrackerapp/services/auth/auth_user.dart';
 
 abstract class AuthStrategy {
   AuthUser? get currentUser;
+  String? get uid;
   Future<void> initialize();
   Future<AuthUser> login({
     required String email,
@@ -13,4 +14,5 @@ abstract class AuthStrategy {
   });
   Future<void> logout();
   Future<void> sendVerificationEmail();
+  Stream<AuthUser?> get authStateChanges;
 }

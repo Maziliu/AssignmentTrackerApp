@@ -59,9 +59,9 @@ class DriftUserRepository implements UserRepository, DriftRepository {
 
   @override
   UsersCompanion toDriftCompanion(AppModel model) {
-    User user = model as User;
+    AppModelUser user = model as AppModelUser;
     return UsersCompanion(
-      id: Value(user.id),
+      id: (user.id == null) ? Value.absent() : Value(user.id!),
       cloudDBSyncId: Value(user.cloudDBSyncId),
       username: Value(user.username),
       email: Value(user.email),
@@ -75,6 +75,19 @@ class DriftUserRepository implements UserRepository, DriftRepository {
       return Result.ok(null);
     } on Exception {
       return Result.error(UnableToUpdateUserException());
+    }
+  }
+
+  @override
+  Future<Result<int>> getUserByCloudSyncId(
+      {required String? cloudSyncId}) async {
+    try {
+      User? user = await _driftUserDao.getUserByCloudSyncId(cloudSyncId);
+      return (user == null)
+          ? Result.error(UnableToFindUserException())
+          : Result.ok(user.id);
+    } on Exception {
+      return Result.error(UnableToFindUserException());
     }
   }
 }

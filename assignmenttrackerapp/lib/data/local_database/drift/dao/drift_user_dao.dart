@@ -23,4 +23,12 @@ class DriftUserDao extends DatabaseAccessor<AppDatabase>
 
   Future<bool> updateUserByCompanion(UsersCompanion companion) =>
       update(users).replace(companion);
+
+  Future<User?> getUserByCloudSyncId(String? cloudSyncId) async {
+    if (cloudSyncId == null) return null;
+
+    return await (select(users)
+          ..where((user) => user.cloudDBSyncId.equals(cloudSyncId)))
+        .getSingleOrNull();
+  }
 }

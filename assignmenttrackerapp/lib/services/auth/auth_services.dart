@@ -29,4 +29,10 @@ class AuthServices implements AuthStrategy {
 
   @override
   Future<void> sendVerificationEmail() => _authStrategy.sendVerificationEmail();
+
+  @override
+  String? get uid => currentUser?.uid;
+
+  @override
+  Stream<AuthUser?> get authStateChanges => _authStrategy.authStateChanges;
 }

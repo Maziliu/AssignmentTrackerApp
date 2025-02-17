@@ -108,4 +108,19 @@ class FirebaseAuthStrategy implements AuthStrategy {
       throw UserNotFoundAuthException();
     }
   }
+
+  @override
+  String? get uid => currentUser?.uid;
+
+  @override
+  Stream<AuthUser?> get authStateChanges {
+    return FirebaseAuth.instance.authStateChanges().map((user) {
+      return (user != null)
+          ? AuthUser(
+              uid: user.uid,
+              email: user.email,
+              isEmailVerified: user.emailVerified)
+          : null;
+    });
+  }
 }

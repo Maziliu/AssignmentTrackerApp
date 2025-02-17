@@ -10,9 +10,8 @@ class DriftTimeslotDao extends DatabaseAccessor<AppDatabase>
     with _$DriftTimeslotDaoMixin {
   DriftTimeslotDao(super.attachedDatabase);
 
-  Future<List<Timeslot>> getAllTimeslots({required String cloudDBSyncId}) =>
-      (select(timeslots)
-            ..where((timeslot) => timeslot.userId.equals(cloudDBSyncId)))
+  Future<List<Timeslot>> getAllTimeslots({required int userId}) =>
+      (select(timeslots)..where((timeslot) => timeslot.userId.equals(userId)))
           .get();
 
   Future<Timeslot?> getTimeslotById(int timeslotId) =>
@@ -28,4 +27,18 @@ class DriftTimeslotDao extends DatabaseAccessor<AppDatabase>
 
   Future<bool> updateTimeslotByCompanion(TimeslotsCompanion companion) =>
       update(timeslots).replace(companion);
+
+  Future<List<Timeslot>> getAllTimeslotsBefore({
+    required int userId,
+    required DateTime date,
+  }) {
+    final now = DateTime.now();
+    final startOfToday = DateTime(now.year, now.month, now.day, 0, 0, 0);
+
+    return (select(timeslots)
+          ..where((timeslot) =>
+              timeslot.endDate.isBetweenValues(startOfToday, date))
+          ..where((timeslot) => timeslot.userId.equals(userId)))
+        .get();
+  }
 }

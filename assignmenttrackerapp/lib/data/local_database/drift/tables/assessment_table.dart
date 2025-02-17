@@ -7,8 +7,8 @@ import 'package:drift/drift.dart';
 
 class Assessments extends Table {
   IntColumn get id => integer().autoIncrement()();
-  TextColumn get userId =>
-      text().references(Users, #cloudDBSyncId, onDelete: KeyAction.cascade)();
+  IntColumn get userId =>
+      integer().references(Users, #id, onDelete: KeyAction.cascade)();
   IntColumn get courseId =>
       integer().references(Courses, #id, onDelete: KeyAction.cascade)();
   IntColumn get gradedComponentId => integer()

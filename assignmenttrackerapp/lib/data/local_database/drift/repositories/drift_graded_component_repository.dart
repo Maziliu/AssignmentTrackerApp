@@ -69,7 +69,9 @@ class DriftGradedComponentRepository
   GradedComponentsCompanion toDriftCompanion(AppModel model) {
     AppModelGradedComponent gradedComponent = model as AppModelGradedComponent;
     return GradedComponentsCompanion(
-      id: Value(gradedComponent.id),
+      id: (gradedComponent.id == null)
+          ? Value.absent()
+          : Value(gradedComponent.id!),
       userId: Value(gradedComponent.ownerId),
       weightDecimal: Value(gradedComponent.weightDecimal ?? 0),
       gradeLetter: Value(gradedComponent.gradeLetter),

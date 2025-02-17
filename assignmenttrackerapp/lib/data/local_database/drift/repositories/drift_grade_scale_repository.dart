@@ -63,7 +63,7 @@ class DriftGradeScaleRepository
   GradeScalesCompanion toDriftCompanion(AppModel model) {
     AppModelGradeScale gradeScale = model as AppModelGradeScale;
     return GradeScalesCompanion(
-        id: Value(gradeScale.id),
+        id: (gradeScale.id == null) ? Value.absent() : Value(gradeScale.id!),
         userId: Value(gradeScale.ownerId),
         thresholdsJson: Value(gradeScale.thresholdsJson));
   }

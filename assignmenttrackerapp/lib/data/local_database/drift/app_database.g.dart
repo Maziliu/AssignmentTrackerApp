@@ -286,12 +286,12 @@ class $GradeScalesTable extends GradeScales
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
   static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
-  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+  late final GeneratedColumn<int> userId = GeneratedColumn<int>(
       'user_id', aliasedName, false,
-      type: DriftSqlType.string,
+      type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES users (cloud_d_b_sync_id) ON DELETE CASCADE'));
+          'REFERENCES users (id) ON DELETE CASCADE'));
   static const VerificationMeta _thresholdsJsonMeta =
       const VerificationMeta('thresholdsJson');
   @override
@@ -339,7 +339,7 @@ class $GradeScalesTable extends GradeScales
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       userId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}user_id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}user_id'])!,
       thresholdsJson: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}thresholds_json'])!,
     );
@@ -353,7 +353,7 @@ class $GradeScalesTable extends GradeScales
 
 class GradeScale extends DataClass implements Insertable<GradeScale> {
   final int id;
-  final String userId;
+  final int userId;
   final String thresholdsJson;
   const GradeScale(
       {required this.id, required this.userId, required this.thresholdsJson});
@@ -361,7 +361,7 @@ class GradeScale extends DataClass implements Insertable<GradeScale> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['user_id'] = Variable<String>(userId);
+    map['user_id'] = Variable<int>(userId);
     map['thresholds_json'] = Variable<String>(thresholdsJson);
     return map;
   }
@@ -379,7 +379,7 @@ class GradeScale extends DataClass implements Insertable<GradeScale> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return GradeScale(
       id: serializer.fromJson<int>(json['id']),
-      userId: serializer.fromJson<String>(json['userId']),
+      userId: serializer.fromJson<int>(json['userId']),
       thresholdsJson: serializer.fromJson<String>(json['thresholdsJson']),
     );
   }
@@ -388,12 +388,12 @@ class GradeScale extends DataClass implements Insertable<GradeScale> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'userId': serializer.toJson<String>(userId),
+      'userId': serializer.toJson<int>(userId),
       'thresholdsJson': serializer.toJson<String>(thresholdsJson),
     };
   }
 
-  GradeScale copyWith({int? id, String? userId, String? thresholdsJson}) =>
+  GradeScale copyWith({int? id, int? userId, String? thresholdsJson}) =>
       GradeScale(
         id: id ?? this.id,
         userId: userId ?? this.userId,
@@ -432,7 +432,7 @@ class GradeScale extends DataClass implements Insertable<GradeScale> {
 
 class GradeScalesCompanion extends UpdateCompanion<GradeScale> {
   final Value<int> id;
-  final Value<String> userId;
+  final Value<int> userId;
   final Value<String> thresholdsJson;
   const GradeScalesCompanion({
     this.id = const Value.absent(),
@@ -441,13 +441,13 @@ class GradeScalesCompanion extends UpdateCompanion<GradeScale> {
   });
   GradeScalesCompanion.insert({
     this.id = const Value.absent(),
-    required String userId,
+    required int userId,
     required String thresholdsJson,
   })  : userId = Value(userId),
         thresholdsJson = Value(thresholdsJson);
   static Insertable<GradeScale> custom({
     Expression<int>? id,
-    Expression<String>? userId,
+    Expression<int>? userId,
     Expression<String>? thresholdsJson,
   }) {
     return RawValuesInsertable({
@@ -458,7 +458,7 @@ class GradeScalesCompanion extends UpdateCompanion<GradeScale> {
   }
 
   GradeScalesCompanion copyWith(
-      {Value<int>? id, Value<String>? userId, Value<String>? thresholdsJson}) {
+      {Value<int>? id, Value<int>? userId, Value<String>? thresholdsJson}) {
     return GradeScalesCompanion(
       id: id ?? this.id,
       userId: userId ?? this.userId,
@@ -473,7 +473,7 @@ class GradeScalesCompanion extends UpdateCompanion<GradeScale> {
       map['id'] = Variable<int>(id.value);
     }
     if (userId.present) {
-      map['user_id'] = Variable<String>(userId.value);
+      map['user_id'] = Variable<int>(userId.value);
     }
     if (thresholdsJson.present) {
       map['thresholds_json'] = Variable<String>(thresholdsJson.value);
@@ -509,12 +509,12 @@ class $GradedComponentsTable extends GradedComponents
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
   static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
-  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+  late final GeneratedColumn<int> userId = GeneratedColumn<int>(
       'user_id', aliasedName, false,
-      type: DriftSqlType.string,
+      type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES users (cloud_d_b_sync_id) ON DELETE CASCADE'));
+          'REFERENCES users (id) ON DELETE CASCADE'));
   static const VerificationMeta _weightDecimalMeta =
       const VerificationMeta('weightDecimal');
   @override
@@ -591,7 +591,7 @@ class $GradedComponentsTable extends GradedComponents
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       userId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}user_id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}user_id'])!,
       weightDecimal: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}weight_decimal'])!,
       gradePercentage: attachedDatabase.typeMapping.read(
@@ -609,7 +609,7 @@ class $GradedComponentsTable extends GradedComponents
 
 class GradedComponent extends DataClass implements Insertable<GradedComponent> {
   final int id;
-  final String userId;
+  final int userId;
   final double weightDecimal;
   final double gradePercentage;
   final String gradeLetter;
@@ -623,7 +623,7 @@ class GradedComponent extends DataClass implements Insertable<GradedComponent> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['user_id'] = Variable<String>(userId);
+    map['user_id'] = Variable<int>(userId);
     map['weight_decimal'] = Variable<double>(weightDecimal);
     map['grade_percentage'] = Variable<double>(gradePercentage);
     map['grade_letter'] = Variable<String>(gradeLetter);
@@ -645,7 +645,7 @@ class GradedComponent extends DataClass implements Insertable<GradedComponent> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return GradedComponent(
       id: serializer.fromJson<int>(json['id']),
-      userId: serializer.fromJson<String>(json['userId']),
+      userId: serializer.fromJson<int>(json['userId']),
       weightDecimal: serializer.fromJson<double>(json['weightDecimal']),
       gradePercentage: serializer.fromJson<double>(json['gradePercentage']),
       gradeLetter: serializer.fromJson<String>(json['gradeLetter']),
@@ -656,7 +656,7 @@ class GradedComponent extends DataClass implements Insertable<GradedComponent> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'userId': serializer.toJson<String>(userId),
+      'userId': serializer.toJson<int>(userId),
       'weightDecimal': serializer.toJson<double>(weightDecimal),
       'gradePercentage': serializer.toJson<double>(gradePercentage),
       'gradeLetter': serializer.toJson<String>(gradeLetter),
@@ -665,7 +665,7 @@ class GradedComponent extends DataClass implements Insertable<GradedComponent> {
 
   GradedComponent copyWith(
           {int? id,
-          String? userId,
+          int? userId,
           double? weightDecimal,
           double? gradePercentage,
           String? gradeLetter}) =>
@@ -719,7 +719,7 @@ class GradedComponent extends DataClass implements Insertable<GradedComponent> {
 
 class GradedComponentsCompanion extends UpdateCompanion<GradedComponent> {
   final Value<int> id;
-  final Value<String> userId;
+  final Value<int> userId;
   final Value<double> weightDecimal;
   final Value<double> gradePercentage;
   final Value<String> gradeLetter;
@@ -732,7 +732,7 @@ class GradedComponentsCompanion extends UpdateCompanion<GradedComponent> {
   });
   GradedComponentsCompanion.insert({
     this.id = const Value.absent(),
-    required String userId,
+    required int userId,
     required double weightDecimal,
     required double gradePercentage,
     required String gradeLetter,
@@ -742,7 +742,7 @@ class GradedComponentsCompanion extends UpdateCompanion<GradedComponent> {
         gradeLetter = Value(gradeLetter);
   static Insertable<GradedComponent> custom({
     Expression<int>? id,
-    Expression<String>? userId,
+    Expression<int>? userId,
     Expression<double>? weightDecimal,
     Expression<double>? gradePercentage,
     Expression<String>? gradeLetter,
@@ -758,7 +758,7 @@ class GradedComponentsCompanion extends UpdateCompanion<GradedComponent> {
 
   GradedComponentsCompanion copyWith(
       {Value<int>? id,
-      Value<String>? userId,
+      Value<int>? userId,
       Value<double>? weightDecimal,
       Value<double>? gradePercentage,
       Value<String>? gradeLetter}) {
@@ -778,7 +778,7 @@ class GradedComponentsCompanion extends UpdateCompanion<GradedComponent> {
       map['id'] = Variable<int>(id.value);
     }
     if (userId.present) {
-      map['user_id'] = Variable<String>(userId.value);
+      map['user_id'] = Variable<int>(userId.value);
     }
     if (weightDecimal.present) {
       map['weight_decimal'] = Variable<double>(weightDecimal.value);
@@ -822,12 +822,12 @@ class $TimeslotsTable extends Timeslots
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
   static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
-  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+  late final GeneratedColumn<int> userId = GeneratedColumn<int>(
       'user_id', aliasedName, false,
-      type: DriftSqlType.string,
+      type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES users (cloud_d_b_sync_id) ON DELETE CASCADE'));
+          'REFERENCES users (id) ON DELETE CASCADE'));
   static const VerificationMeta _endingDayMeta =
       const VerificationMeta('endingDay');
   @override
@@ -892,7 +892,7 @@ class $TimeslotsTable extends Timeslots
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       userId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}user_id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}user_id'])!,
       endingDay: $TimeslotsTable.$converterendingDay.fromSql(attachedDatabase
           .typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}ending_day'])!),
@@ -914,7 +914,7 @@ class $TimeslotsTable extends Timeslots
 
 class Timeslot extends DataClass implements Insertable<Timeslot> {
   final int id;
-  final String userId;
+  final int userId;
   final DaysOfTheWeek endingDay;
   final DateTime? startDate;
   final DateTime endDate;
@@ -928,7 +928,7 @@ class Timeslot extends DataClass implements Insertable<Timeslot> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['user_id'] = Variable<String>(userId);
+    map['user_id'] = Variable<int>(userId);
     {
       map['ending_day'] =
           Variable<int>($TimeslotsTable.$converterendingDay.toSql(endingDay));
@@ -957,7 +957,7 @@ class Timeslot extends DataClass implements Insertable<Timeslot> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Timeslot(
       id: serializer.fromJson<int>(json['id']),
-      userId: serializer.fromJson<String>(json['userId']),
+      userId: serializer.fromJson<int>(json['userId']),
       endingDay: $TimeslotsTable.$converterendingDay
           .fromJson(serializer.fromJson<int>(json['endingDay'])),
       startDate: serializer.fromJson<DateTime?>(json['startDate']),
@@ -969,7 +969,7 @@ class Timeslot extends DataClass implements Insertable<Timeslot> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'userId': serializer.toJson<String>(userId),
+      'userId': serializer.toJson<int>(userId),
       'endingDay': serializer
           .toJson<int>($TimeslotsTable.$converterendingDay.toJson(endingDay)),
       'startDate': serializer.toJson<DateTime?>(startDate),
@@ -979,7 +979,7 @@ class Timeslot extends DataClass implements Insertable<Timeslot> {
 
   Timeslot copyWith(
           {int? id,
-          String? userId,
+          int? userId,
           DaysOfTheWeek? endingDay,
           Value<DateTime?> startDate = const Value.absent(),
           DateTime? endDate}) =>
@@ -1027,7 +1027,7 @@ class Timeslot extends DataClass implements Insertable<Timeslot> {
 
 class TimeslotsCompanion extends UpdateCompanion<Timeslot> {
   final Value<int> id;
-  final Value<String> userId;
+  final Value<int> userId;
   final Value<DaysOfTheWeek> endingDay;
   final Value<DateTime?> startDate;
   final Value<DateTime> endDate;
@@ -1040,7 +1040,7 @@ class TimeslotsCompanion extends UpdateCompanion<Timeslot> {
   });
   TimeslotsCompanion.insert({
     this.id = const Value.absent(),
-    required String userId,
+    required int userId,
     required DaysOfTheWeek endingDay,
     this.startDate = const Value.absent(),
     required DateTime endDate,
@@ -1049,7 +1049,7 @@ class TimeslotsCompanion extends UpdateCompanion<Timeslot> {
         endDate = Value(endDate);
   static Insertable<Timeslot> custom({
     Expression<int>? id,
-    Expression<String>? userId,
+    Expression<int>? userId,
     Expression<int>? endingDay,
     Expression<DateTime>? startDate,
     Expression<DateTime>? endDate,
@@ -1065,7 +1065,7 @@ class TimeslotsCompanion extends UpdateCompanion<Timeslot> {
 
   TimeslotsCompanion copyWith(
       {Value<int>? id,
-      Value<String>? userId,
+      Value<int>? userId,
       Value<DaysOfTheWeek>? endingDay,
       Value<DateTime?>? startDate,
       Value<DateTime>? endDate}) {
@@ -1085,7 +1085,7 @@ class TimeslotsCompanion extends UpdateCompanion<Timeslot> {
       map['id'] = Variable<int>(id.value);
     }
     if (userId.present) {
-      map['user_id'] = Variable<String>(userId.value);
+      map['user_id'] = Variable<int>(userId.value);
     }
     if (endingDay.present) {
       map['ending_day'] = Variable<int>(
@@ -1129,12 +1129,12 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
   static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
-  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+  late final GeneratedColumn<int> userId = GeneratedColumn<int>(
       'user_id', aliasedName, false,
-      type: DriftSqlType.string,
+      type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES users (cloud_d_b_sync_id) ON DELETE CASCADE'));
+          'REFERENCES users (id) ON DELETE CASCADE'));
   static const VerificationMeta _timeslotIdMeta =
       const VerificationMeta('timeslotId');
   @override
@@ -1197,7 +1197,7 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       userId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}user_id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}user_id'])!,
       timeslotId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}timeslot_id'])!,
       eventName: attachedDatabase.typeMapping
@@ -1213,7 +1213,7 @@ class $EventsTable extends Events with TableInfo<$EventsTable, Event> {
 
 class Event extends DataClass implements Insertable<Event> {
   final int id;
-  final String userId;
+  final int userId;
   final int timeslotId;
   final String eventName;
   const Event(
@@ -1225,7 +1225,7 @@ class Event extends DataClass implements Insertable<Event> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['user_id'] = Variable<String>(userId);
+    map['user_id'] = Variable<int>(userId);
     map['timeslot_id'] = Variable<int>(timeslotId);
     map['event_name'] = Variable<String>(eventName);
     return map;
@@ -1245,7 +1245,7 @@ class Event extends DataClass implements Insertable<Event> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Event(
       id: serializer.fromJson<int>(json['id']),
-      userId: serializer.fromJson<String>(json['userId']),
+      userId: serializer.fromJson<int>(json['userId']),
       timeslotId: serializer.fromJson<int>(json['timeslotId']),
       eventName: serializer.fromJson<String>(json['eventName']),
     );
@@ -1255,14 +1255,13 @@ class Event extends DataClass implements Insertable<Event> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'userId': serializer.toJson<String>(userId),
+      'userId': serializer.toJson<int>(userId),
       'timeslotId': serializer.toJson<int>(timeslotId),
       'eventName': serializer.toJson<String>(eventName),
     };
   }
 
-  Event copyWith(
-          {int? id, String? userId, int? timeslotId, String? eventName}) =>
+  Event copyWith({int? id, int? userId, int? timeslotId, String? eventName}) =>
       Event(
         id: id ?? this.id,
         userId: userId ?? this.userId,
@@ -1304,7 +1303,7 @@ class Event extends DataClass implements Insertable<Event> {
 
 class EventsCompanion extends UpdateCompanion<Event> {
   final Value<int> id;
-  final Value<String> userId;
+  final Value<int> userId;
   final Value<int> timeslotId;
   final Value<String> eventName;
   const EventsCompanion({
@@ -1315,7 +1314,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
   });
   EventsCompanion.insert({
     this.id = const Value.absent(),
-    required String userId,
+    required int userId,
     required int timeslotId,
     required String eventName,
   })  : userId = Value(userId),
@@ -1323,7 +1322,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
         eventName = Value(eventName);
   static Insertable<Event> custom({
     Expression<int>? id,
-    Expression<String>? userId,
+    Expression<int>? userId,
     Expression<int>? timeslotId,
     Expression<String>? eventName,
   }) {
@@ -1337,7 +1336,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
 
   EventsCompanion copyWith(
       {Value<int>? id,
-      Value<String>? userId,
+      Value<int>? userId,
       Value<int>? timeslotId,
       Value<String>? eventName}) {
     return EventsCompanion(
@@ -1355,7 +1354,7 @@ class EventsCompanion extends UpdateCompanion<Event> {
       map['id'] = Variable<int>(id.value);
     }
     if (userId.present) {
-      map['user_id'] = Variable<String>(userId.value);
+      map['user_id'] = Variable<int>(userId.value);
     }
     if (timeslotId.present) {
       map['timeslot_id'] = Variable<int>(timeslotId.value);
@@ -1394,12 +1393,12 @@ class $CoursesTable extends Courses with TableInfo<$CoursesTable, Course> {
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
   static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
-  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+  late final GeneratedColumn<int> userId = GeneratedColumn<int>(
       'user_id', aliasedName, false,
-      type: DriftSqlType.string,
+      type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES users (cloud_d_b_sync_id) ON DELETE CASCADE'));
+          'REFERENCES users (id) ON DELETE CASCADE'));
   static const VerificationMeta _gradeScaleIdMeta =
       const VerificationMeta('gradeScaleId');
   @override
@@ -1533,7 +1532,7 @@ class $CoursesTable extends Courses with TableInfo<$CoursesTable, Course> {
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       userId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}user_id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}user_id'])!,
       gradeScaleId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}grade_scale_id'])!,
       gradedComponentId: attachedDatabase.typeMapping.read(
@@ -1557,7 +1556,7 @@ class $CoursesTable extends Courses with TableInfo<$CoursesTable, Course> {
 
 class Course extends DataClass implements Insertable<Course> {
   final int id;
-  final String userId;
+  final int userId;
   final int gradeScaleId;
   final int gradedComponentId;
   final int eventId;
@@ -1577,7 +1576,7 @@ class Course extends DataClass implements Insertable<Course> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['user_id'] = Variable<String>(userId);
+    map['user_id'] = Variable<int>(userId);
     map['grade_scale_id'] = Variable<int>(gradeScaleId);
     map['graded_component_id'] = Variable<int>(gradedComponentId);
     map['event_id'] = Variable<int>(eventId);
@@ -1605,7 +1604,7 @@ class Course extends DataClass implements Insertable<Course> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Course(
       id: serializer.fromJson<int>(json['id']),
-      userId: serializer.fromJson<String>(json['userId']),
+      userId: serializer.fromJson<int>(json['userId']),
       gradeScaleId: serializer.fromJson<int>(json['gradeScaleId']),
       gradedComponentId: serializer.fromJson<int>(json['gradedComponentId']),
       eventId: serializer.fromJson<int>(json['eventId']),
@@ -1619,7 +1618,7 @@ class Course extends DataClass implements Insertable<Course> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'userId': serializer.toJson<String>(userId),
+      'userId': serializer.toJson<int>(userId),
       'gradeScaleId': serializer.toJson<int>(gradeScaleId),
       'gradedComponentId': serializer.toJson<int>(gradedComponentId),
       'eventId': serializer.toJson<int>(eventId),
@@ -1631,7 +1630,7 @@ class Course extends DataClass implements Insertable<Course> {
 
   Course copyWith(
           {int? id,
-          String? userId,
+          int? userId,
           int? gradeScaleId,
           int? gradedComponentId,
           int? eventId,
@@ -1703,7 +1702,7 @@ class Course extends DataClass implements Insertable<Course> {
 
 class CoursesCompanion extends UpdateCompanion<Course> {
   final Value<int> id;
-  final Value<String> userId;
+  final Value<int> userId;
   final Value<int> gradeScaleId;
   final Value<int> gradedComponentId;
   final Value<int> eventId;
@@ -1722,7 +1721,7 @@ class CoursesCompanion extends UpdateCompanion<Course> {
   });
   CoursesCompanion.insert({
     this.id = const Value.absent(),
-    required String userId,
+    required int userId,
     required int gradeScaleId,
     required int gradedComponentId,
     required int eventId,
@@ -1738,7 +1737,7 @@ class CoursesCompanion extends UpdateCompanion<Course> {
         scheduleBitMask = Value(scheduleBitMask);
   static Insertable<Course> custom({
     Expression<int>? id,
-    Expression<String>? userId,
+    Expression<int>? userId,
     Expression<int>? gradeScaleId,
     Expression<int>? gradedComponentId,
     Expression<int>? eventId,
@@ -1760,7 +1759,7 @@ class CoursesCompanion extends UpdateCompanion<Course> {
 
   CoursesCompanion copyWith(
       {Value<int>? id,
-      Value<String>? userId,
+      Value<int>? userId,
       Value<int>? gradeScaleId,
       Value<int>? gradedComponentId,
       Value<int>? eventId,
@@ -1786,7 +1785,7 @@ class CoursesCompanion extends UpdateCompanion<Course> {
       map['id'] = Variable<int>(id.value);
     }
     if (userId.present) {
-      map['user_id'] = Variable<String>(userId.value);
+      map['user_id'] = Variable<int>(userId.value);
     }
     if (gradeScaleId.present) {
       map['grade_scale_id'] = Variable<int>(gradeScaleId.value);
@@ -1842,12 +1841,12 @@ class $AssessmentsTable extends Assessments
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
   static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
-  late final GeneratedColumn<String> userId = GeneratedColumn<String>(
+  late final GeneratedColumn<int> userId = GeneratedColumn<int>(
       'user_id', aliasedName, false,
-      type: DriftSqlType.string,
+      type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES users (cloud_d_b_sync_id) ON DELETE CASCADE'));
+          'REFERENCES users (id) ON DELETE CASCADE'));
   static const VerificationMeta _courseIdMeta =
       const VerificationMeta('courseId');
   @override
@@ -1975,7 +1974,7 @@ class $AssessmentsTable extends Assessments
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       userId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}user_id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}user_id'])!,
       courseId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}course_id'])!,
       gradedComponentId: attachedDatabase.typeMapping.read(
@@ -2003,7 +2002,7 @@ class $AssessmentsTable extends Assessments
 
 class Assessment extends DataClass implements Insertable<Assessment> {
   final int id;
-  final String userId;
+  final int userId;
   final int courseId;
   final int gradedComponentId;
   final int eventId;
@@ -2023,7 +2022,7 @@ class Assessment extends DataClass implements Insertable<Assessment> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['user_id'] = Variable<String>(userId);
+    map['user_id'] = Variable<int>(userId);
     map['course_id'] = Variable<int>(courseId);
     map['graded_component_id'] = Variable<int>(gradedComponentId);
     map['event_id'] = Variable<int>(eventId);
@@ -2053,7 +2052,7 @@ class Assessment extends DataClass implements Insertable<Assessment> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Assessment(
       id: serializer.fromJson<int>(json['id']),
-      userId: serializer.fromJson<String>(json['userId']),
+      userId: serializer.fromJson<int>(json['userId']),
       courseId: serializer.fromJson<int>(json['courseId']),
       gradedComponentId: serializer.fromJson<int>(json['gradedComponentId']),
       eventId: serializer.fromJson<int>(json['eventId']),
@@ -2068,7 +2067,7 @@ class Assessment extends DataClass implements Insertable<Assessment> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'userId': serializer.toJson<String>(userId),
+      'userId': serializer.toJson<int>(userId),
       'courseId': serializer.toJson<int>(courseId),
       'gradedComponentId': serializer.toJson<int>(gradedComponentId),
       'eventId': serializer.toJson<int>(eventId),
@@ -2081,7 +2080,7 @@ class Assessment extends DataClass implements Insertable<Assessment> {
 
   Assessment copyWith(
           {int? id,
-          String? userId,
+          int? userId,
           int? courseId,
           int? gradedComponentId,
           int? eventId,
@@ -2150,7 +2149,7 @@ class Assessment extends DataClass implements Insertable<Assessment> {
 
 class AssessmentsCompanion extends UpdateCompanion<Assessment> {
   final Value<int> id;
-  final Value<String> userId;
+  final Value<int> userId;
   final Value<int> courseId;
   final Value<int> gradedComponentId;
   final Value<int> eventId;
@@ -2169,7 +2168,7 @@ class AssessmentsCompanion extends UpdateCompanion<Assessment> {
   });
   AssessmentsCompanion.insert({
     this.id = const Value.absent(),
-    required String userId,
+    required int userId,
     required int courseId,
     required int gradedComponentId,
     required int eventId,
@@ -2185,7 +2184,7 @@ class AssessmentsCompanion extends UpdateCompanion<Assessment> {
         isComplete = Value(isComplete);
   static Insertable<Assessment> custom({
     Expression<int>? id,
-    Expression<String>? userId,
+    Expression<int>? userId,
     Expression<int>? courseId,
     Expression<int>? gradedComponentId,
     Expression<int>? eventId,
@@ -2207,7 +2206,7 @@ class AssessmentsCompanion extends UpdateCompanion<Assessment> {
 
   AssessmentsCompanion copyWith(
       {Value<int>? id,
-      Value<String>? userId,
+      Value<int>? userId,
       Value<int>? courseId,
       Value<int>? gradedComponentId,
       Value<int>? eventId,
@@ -2233,7 +2232,7 @@ class AssessmentsCompanion extends UpdateCompanion<Assessment> {
       map['id'] = Variable<int>(id.value);
     }
     if (userId.present) {
-      map['user_id'] = Variable<String>(userId.value);
+      map['user_id'] = Variable<int>(userId.value);
     }
     if (courseId.present) {
       map['course_id'] = Variable<int>(courseId.value);
@@ -2413,14 +2412,13 @@ final class $$UsersTableReferences
   $$UsersTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static MultiTypedResultKey<$GradeScalesTable, List<GradeScale>>
-      _gradeScalesRefsTable(_$AppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.gradeScales,
-              aliasName: $_aliasNameGenerator(
-                  db.users.cloudDBSyncId, db.gradeScales.userId));
+      _gradeScalesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+          db.gradeScales,
+          aliasName: $_aliasNameGenerator(db.users.id, db.gradeScales.userId));
 
   $$GradeScalesTableProcessedTableManager get gradeScalesRefs {
     final manager = $$GradeScalesTableTableManager($_db, $_db.gradeScales)
-        .filter((f) => f.userId.cloudDBSyncId($_item.cloudDBSyncId));
+        .filter((f) => f.userId.id($_item.id));
 
     final cache = $_typedResult.readTableOrNull(_gradeScalesRefsTable($_db));
     return ProcessedTableManager(
@@ -2431,12 +2429,12 @@ final class $$UsersTableReferences
       _gradedComponentsRefsTable(_$AppDatabase db) =>
           MultiTypedResultKey.fromTable(db.gradedComponents,
               aliasName: $_aliasNameGenerator(
-                  db.users.cloudDBSyncId, db.gradedComponents.userId));
+                  db.users.id, db.gradedComponents.userId));
 
   $$GradedComponentsTableProcessedTableManager get gradedComponentsRefs {
     final manager =
         $$GradedComponentsTableTableManager($_db, $_db.gradedComponents)
-            .filter((f) => f.userId.cloudDBSyncId($_item.cloudDBSyncId));
+            .filter((f) => f.userId.id($_item.id));
 
     final cache =
         $_typedResult.readTableOrNull(_gradedComponentsRefsTable($_db));
@@ -2445,14 +2443,13 @@ final class $$UsersTableReferences
   }
 
   static MultiTypedResultKey<$TimeslotsTable, List<Timeslot>>
-      _timeslotsRefsTable(_$AppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.timeslots,
-              aliasName: $_aliasNameGenerator(
-                  db.users.cloudDBSyncId, db.timeslots.userId));
+      _timeslotsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+          db.timeslots,
+          aliasName: $_aliasNameGenerator(db.users.id, db.timeslots.userId));
 
   $$TimeslotsTableProcessedTableManager get timeslotsRefs {
     final manager = $$TimeslotsTableTableManager($_db, $_db.timeslots)
-        .filter((f) => f.userId.cloudDBSyncId($_item.cloudDBSyncId));
+        .filter((f) => f.userId.id($_item.id));
 
     final cache = $_typedResult.readTableOrNull(_timeslotsRefsTable($_db));
     return ProcessedTableManager(
@@ -2462,12 +2459,11 @@ final class $$UsersTableReferences
   static MultiTypedResultKey<$EventsTable, List<Event>> _eventsRefsTable(
           _$AppDatabase db) =>
       MultiTypedResultKey.fromTable(db.events,
-          aliasName:
-              $_aliasNameGenerator(db.users.cloudDBSyncId, db.events.userId));
+          aliasName: $_aliasNameGenerator(db.users.id, db.events.userId));
 
   $$EventsTableProcessedTableManager get eventsRefs {
     final manager = $$EventsTableTableManager($_db, $_db.events)
-        .filter((f) => f.userId.cloudDBSyncId($_item.cloudDBSyncId));
+        .filter((f) => f.userId.id($_item.id));
 
     final cache = $_typedResult.readTableOrNull(_eventsRefsTable($_db));
     return ProcessedTableManager(
@@ -2477,12 +2473,11 @@ final class $$UsersTableReferences
   static MultiTypedResultKey<$CoursesTable, List<Course>> _coursesRefsTable(
           _$AppDatabase db) =>
       MultiTypedResultKey.fromTable(db.courses,
-          aliasName:
-              $_aliasNameGenerator(db.users.cloudDBSyncId, db.courses.userId));
+          aliasName: $_aliasNameGenerator(db.users.id, db.courses.userId));
 
   $$CoursesTableProcessedTableManager get coursesRefs {
     final manager = $$CoursesTableTableManager($_db, $_db.courses)
-        .filter((f) => f.userId.cloudDBSyncId($_item.cloudDBSyncId));
+        .filter((f) => f.userId.id($_item.id));
 
     final cache = $_typedResult.readTableOrNull(_coursesRefsTable($_db));
     return ProcessedTableManager(
@@ -2490,14 +2485,13 @@ final class $$UsersTableReferences
   }
 
   static MultiTypedResultKey<$AssessmentsTable, List<Assessment>>
-      _assessmentsRefsTable(_$AppDatabase db) =>
-          MultiTypedResultKey.fromTable(db.assessments,
-              aliasName: $_aliasNameGenerator(
-                  db.users.cloudDBSyncId, db.assessments.userId));
+      _assessmentsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+          db.assessments,
+          aliasName: $_aliasNameGenerator(db.users.id, db.assessments.userId));
 
   $$AssessmentsTableProcessedTableManager get assessmentsRefs {
     final manager = $$AssessmentsTableTableManager($_db, $_db.assessments)
-        .filter((f) => f.userId.cloudDBSyncId($_item.cloudDBSyncId));
+        .filter((f) => f.userId.id($_item.id));
 
     final cache = $_typedResult.readTableOrNull(_assessmentsRefsTable($_db));
     return ProcessedTableManager(
@@ -2529,7 +2523,7 @@ class $$UsersTableFilterComposer extends Composer<_$AppDatabase, $UsersTable> {
       Expression<bool> Function($$GradeScalesTableFilterComposer f) f) {
     final $$GradeScalesTableFilterComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.cloudDBSyncId,
+        getCurrentColumn: (t) => t.id,
         referencedTable: $db.gradeScales,
         getReferencedColumn: (t) => t.userId,
         builder: (joinBuilder,
@@ -2550,7 +2544,7 @@ class $$UsersTableFilterComposer extends Composer<_$AppDatabase, $UsersTable> {
       Expression<bool> Function($$GradedComponentsTableFilterComposer f) f) {
     final $$GradedComponentsTableFilterComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.cloudDBSyncId,
+        getCurrentColumn: (t) => t.id,
         referencedTable: $db.gradedComponents,
         getReferencedColumn: (t) => t.userId,
         builder: (joinBuilder,
@@ -2571,7 +2565,7 @@ class $$UsersTableFilterComposer extends Composer<_$AppDatabase, $UsersTable> {
       Expression<bool> Function($$TimeslotsTableFilterComposer f) f) {
     final $$TimeslotsTableFilterComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.cloudDBSyncId,
+        getCurrentColumn: (t) => t.id,
         referencedTable: $db.timeslots,
         getReferencedColumn: (t) => t.userId,
         builder: (joinBuilder,
@@ -2592,7 +2586,7 @@ class $$UsersTableFilterComposer extends Composer<_$AppDatabase, $UsersTable> {
       Expression<bool> Function($$EventsTableFilterComposer f) f) {
     final $$EventsTableFilterComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.cloudDBSyncId,
+        getCurrentColumn: (t) => t.id,
         referencedTable: $db.events,
         getReferencedColumn: (t) => t.userId,
         builder: (joinBuilder,
@@ -2613,7 +2607,7 @@ class $$UsersTableFilterComposer extends Composer<_$AppDatabase, $UsersTable> {
       Expression<bool> Function($$CoursesTableFilterComposer f) f) {
     final $$CoursesTableFilterComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.cloudDBSyncId,
+        getCurrentColumn: (t) => t.id,
         referencedTable: $db.courses,
         getReferencedColumn: (t) => t.userId,
         builder: (joinBuilder,
@@ -2634,7 +2628,7 @@ class $$UsersTableFilterComposer extends Composer<_$AppDatabase, $UsersTable> {
       Expression<bool> Function($$AssessmentsTableFilterComposer f) f) {
     final $$AssessmentsTableFilterComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.cloudDBSyncId,
+        getCurrentColumn: (t) => t.id,
         referencedTable: $db.assessments,
         getReferencedColumn: (t) => t.userId,
         builder: (joinBuilder,
@@ -2700,7 +2694,7 @@ class $$UsersTableAnnotationComposer
       Expression<T> Function($$GradeScalesTableAnnotationComposer a) f) {
     final $$GradeScalesTableAnnotationComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.cloudDBSyncId,
+        getCurrentColumn: (t) => t.id,
         referencedTable: $db.gradeScales,
         getReferencedColumn: (t) => t.userId,
         builder: (joinBuilder,
@@ -2721,7 +2715,7 @@ class $$UsersTableAnnotationComposer
       Expression<T> Function($$GradedComponentsTableAnnotationComposer a) f) {
     final $$GradedComponentsTableAnnotationComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.cloudDBSyncId,
+        getCurrentColumn: (t) => t.id,
         referencedTable: $db.gradedComponents,
         getReferencedColumn: (t) => t.userId,
         builder: (joinBuilder,
@@ -2742,7 +2736,7 @@ class $$UsersTableAnnotationComposer
       Expression<T> Function($$TimeslotsTableAnnotationComposer a) f) {
     final $$TimeslotsTableAnnotationComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.cloudDBSyncId,
+        getCurrentColumn: (t) => t.id,
         referencedTable: $db.timeslots,
         getReferencedColumn: (t) => t.userId,
         builder: (joinBuilder,
@@ -2763,7 +2757,7 @@ class $$UsersTableAnnotationComposer
       Expression<T> Function($$EventsTableAnnotationComposer a) f) {
     final $$EventsTableAnnotationComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.cloudDBSyncId,
+        getCurrentColumn: (t) => t.id,
         referencedTable: $db.events,
         getReferencedColumn: (t) => t.userId,
         builder: (joinBuilder,
@@ -2784,7 +2778,7 @@ class $$UsersTableAnnotationComposer
       Expression<T> Function($$CoursesTableAnnotationComposer a) f) {
     final $$CoursesTableAnnotationComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.cloudDBSyncId,
+        getCurrentColumn: (t) => t.id,
         referencedTable: $db.courses,
         getReferencedColumn: (t) => t.userId,
         builder: (joinBuilder,
@@ -2805,7 +2799,7 @@ class $$UsersTableAnnotationComposer
       Expression<T> Function($$AssessmentsTableAnnotationComposer a) f) {
     final $$AssessmentsTableAnnotationComposer composer = $composerBuilder(
         composer: this,
-        getCurrentColumn: (t) => t.cloudDBSyncId,
+        getCurrentColumn: (t) => t.id,
         referencedTable: $db.assessments,
         getReferencedColumn: (t) => t.userId,
         builder: (joinBuilder,
@@ -2907,9 +2901,9 @@ class $$UsersTableTableManager extends RootTableManager<
                         managerFromTypedResult: (p0) =>
                             $$UsersTableReferences(db, table, p0)
                                 .gradeScalesRefs,
-                        referencedItemsForCurrentItem:
-                            (item, referencedItems) => referencedItems
-                                .where((e) => e.userId == item.cloudDBSyncId),
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.userId == item.id),
                         typedResults: items),
                   if (gradedComponentsRefs)
                     await $_getPrefetchedData(
@@ -2919,9 +2913,9 @@ class $$UsersTableTableManager extends RootTableManager<
                         managerFromTypedResult: (p0) =>
                             $$UsersTableReferences(db, table, p0)
                                 .gradedComponentsRefs,
-                        referencedItemsForCurrentItem:
-                            (item, referencedItems) => referencedItems
-                                .where((e) => e.userId == item.cloudDBSyncId),
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.userId == item.id),
                         typedResults: items),
                   if (timeslotsRefs)
                     await $_getPrefetchedData(
@@ -2930,9 +2924,9 @@ class $$UsersTableTableManager extends RootTableManager<
                             $$UsersTableReferences._timeslotsRefsTable(db),
                         managerFromTypedResult: (p0) =>
                             $$UsersTableReferences(db, table, p0).timeslotsRefs,
-                        referencedItemsForCurrentItem:
-                            (item, referencedItems) => referencedItems
-                                .where((e) => e.userId == item.cloudDBSyncId),
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.userId == item.id),
                         typedResults: items),
                   if (eventsRefs)
                     await $_getPrefetchedData(
@@ -2941,9 +2935,9 @@ class $$UsersTableTableManager extends RootTableManager<
                             $$UsersTableReferences._eventsRefsTable(db),
                         managerFromTypedResult: (p0) =>
                             $$UsersTableReferences(db, table, p0).eventsRefs,
-                        referencedItemsForCurrentItem:
-                            (item, referencedItems) => referencedItems
-                                .where((e) => e.userId == item.cloudDBSyncId),
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.userId == item.id),
                         typedResults: items),
                   if (coursesRefs)
                     await $_getPrefetchedData(
@@ -2952,9 +2946,9 @@ class $$UsersTableTableManager extends RootTableManager<
                             $$UsersTableReferences._coursesRefsTable(db),
                         managerFromTypedResult: (p0) =>
                             $$UsersTableReferences(db, table, p0).coursesRefs,
-                        referencedItemsForCurrentItem:
-                            (item, referencedItems) => referencedItems
-                                .where((e) => e.userId == item.cloudDBSyncId),
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.userId == item.id),
                         typedResults: items),
                   if (assessmentsRefs)
                     await $_getPrefetchedData(
@@ -2964,9 +2958,9 @@ class $$UsersTableTableManager extends RootTableManager<
                         managerFromTypedResult: (p0) =>
                             $$UsersTableReferences(db, table, p0)
                                 .assessmentsRefs,
-                        referencedItemsForCurrentItem:
-                            (item, referencedItems) => referencedItems
-                                .where((e) => e.userId == item.cloudDBSyncId),
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.userId == item.id),
                         typedResults: items)
                 ];
               },
@@ -2996,13 +2990,13 @@ typedef $$UsersTableProcessedTableManager = ProcessedTableManager<
 typedef $$GradeScalesTableCreateCompanionBuilder = GradeScalesCompanion
     Function({
   Value<int> id,
-  required String userId,
+  required int userId,
   required String thresholdsJson,
 });
 typedef $$GradeScalesTableUpdateCompanionBuilder = GradeScalesCompanion
     Function({
   Value<int> id,
-  Value<String> userId,
+  Value<int> userId,
   Value<String> thresholdsJson,
 });
 
@@ -3010,12 +3004,12 @@ final class $$GradeScalesTableReferences
     extends BaseReferences<_$AppDatabase, $GradeScalesTable, GradeScale> {
   $$GradeScalesTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $UsersTable _userIdTable(_$AppDatabase db) => db.users.createAlias(
-      $_aliasNameGenerator(db.gradeScales.userId, db.users.cloudDBSyncId));
+  static $UsersTable _userIdTable(_$AppDatabase db) => db.users
+      .createAlias($_aliasNameGenerator(db.gradeScales.userId, db.users.id));
 
   $$UsersTableProcessedTableManager get userId {
     final manager = $$UsersTableTableManager($_db, $_db.users)
-        .filter((f) => f.cloudDBSyncId($_item.userId));
+        .filter((f) => f.id($_item.userId));
     final item = $_typedResult.readTableOrNull(_userIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -3059,7 +3053,7 @@ class $$GradeScalesTableFilterComposer
         composer: this,
         getCurrentColumn: (t) => t.userId,
         referencedTable: $db.users,
-        getReferencedColumn: (t) => t.cloudDBSyncId,
+        getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -3117,7 +3111,7 @@ class $$GradeScalesTableOrderingComposer
         composer: this,
         getCurrentColumn: (t) => t.userId,
         referencedTable: $db.users,
-        getReferencedColumn: (t) => t.cloudDBSyncId,
+        getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -3153,7 +3147,7 @@ class $$GradeScalesTableAnnotationComposer
         composer: this,
         getCurrentColumn: (t) => t.userId,
         referencedTable: $db.users,
-        getReferencedColumn: (t) => t.cloudDBSyncId,
+        getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -3214,7 +3208,7 @@ class $$GradeScalesTableTableManager extends RootTableManager<
               $$GradeScalesTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            Value<String> userId = const Value.absent(),
+            Value<int> userId = const Value.absent(),
             Value<String> thresholdsJson = const Value.absent(),
           }) =>
               GradeScalesCompanion(
@@ -3224,7 +3218,7 @@ class $$GradeScalesTableTableManager extends RootTableManager<
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            required String userId,
+            required int userId,
             required String thresholdsJson,
           }) =>
               GradeScalesCompanion.insert(
@@ -3261,9 +3255,8 @@ class $$GradeScalesTableTableManager extends RootTableManager<
                     currentColumn: table.userId,
                     referencedTable:
                         $$GradeScalesTableReferences._userIdTable(db),
-                    referencedColumn: $$GradeScalesTableReferences
-                        ._userIdTable(db)
-                        .cloudDBSyncId,
+                    referencedColumn:
+                        $$GradeScalesTableReferences._userIdTable(db).id,
                   ) as T;
                 }
 
@@ -3305,7 +3298,7 @@ typedef $$GradeScalesTableProcessedTableManager = ProcessedTableManager<
 typedef $$GradedComponentsTableCreateCompanionBuilder
     = GradedComponentsCompanion Function({
   Value<int> id,
-  required String userId,
+  required int userId,
   required double weightDecimal,
   required double gradePercentage,
   required String gradeLetter,
@@ -3313,7 +3306,7 @@ typedef $$GradedComponentsTableCreateCompanionBuilder
 typedef $$GradedComponentsTableUpdateCompanionBuilder
     = GradedComponentsCompanion Function({
   Value<int> id,
-  Value<String> userId,
+  Value<int> userId,
   Value<double> weightDecimal,
   Value<double> gradePercentage,
   Value<String> gradeLetter,
@@ -3325,11 +3318,11 @@ final class $$GradedComponentsTableReferences extends BaseReferences<
       super.$_db, super.$_table, super.$_typedResult);
 
   static $UsersTable _userIdTable(_$AppDatabase db) => db.users.createAlias(
-      $_aliasNameGenerator(db.gradedComponents.userId, db.users.cloudDBSyncId));
+      $_aliasNameGenerator(db.gradedComponents.userId, db.users.id));
 
   $$UsersTableProcessedTableManager get userId {
     final manager = $$UsersTableTableManager($_db, $_db.users)
-        .filter((f) => f.cloudDBSyncId($_item.userId));
+        .filter((f) => f.id($_item.userId));
     final item = $_typedResult.readTableOrNull(_userIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -3394,7 +3387,7 @@ class $$GradedComponentsTableFilterComposer
         composer: this,
         getCurrentColumn: (t) => t.userId,
         referencedTable: $db.users,
-        getReferencedColumn: (t) => t.cloudDBSyncId,
+        getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -3480,7 +3473,7 @@ class $$GradedComponentsTableOrderingComposer
         composer: this,
         getCurrentColumn: (t) => t.userId,
         referencedTable: $db.users,
-        getReferencedColumn: (t) => t.cloudDBSyncId,
+        getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -3522,7 +3515,7 @@ class $$GradedComponentsTableAnnotationComposer
         composer: this,
         getCurrentColumn: (t) => t.userId,
         referencedTable: $db.users,
-        getReferencedColumn: (t) => t.cloudDBSyncId,
+        getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -3606,7 +3599,7 @@ class $$GradedComponentsTableTableManager extends RootTableManager<
               $$GradedComponentsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            Value<String> userId = const Value.absent(),
+            Value<int> userId = const Value.absent(),
             Value<double> weightDecimal = const Value.absent(),
             Value<double> gradePercentage = const Value.absent(),
             Value<String> gradeLetter = const Value.absent(),
@@ -3620,7 +3613,7 @@ class $$GradedComponentsTableTableManager extends RootTableManager<
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            required String userId,
+            required int userId,
             required double weightDecimal,
             required double gradePercentage,
             required String gradeLetter,
@@ -3665,9 +3658,8 @@ class $$GradedComponentsTableTableManager extends RootTableManager<
                     currentColumn: table.userId,
                     referencedTable:
                         $$GradedComponentsTableReferences._userIdTable(db),
-                    referencedColumn: $$GradedComponentsTableReferences
-                        ._userIdTable(db)
-                        .cloudDBSyncId,
+                    referencedColumn:
+                        $$GradedComponentsTableReferences._userIdTable(db).id,
                   ) as T;
                 }
 
@@ -3721,14 +3713,14 @@ typedef $$GradedComponentsTableProcessedTableManager = ProcessedTableManager<
         {bool userId, bool coursesRefs, bool assessmentsRefs})>;
 typedef $$TimeslotsTableCreateCompanionBuilder = TimeslotsCompanion Function({
   Value<int> id,
-  required String userId,
+  required int userId,
   required DaysOfTheWeek endingDay,
   Value<DateTime?> startDate,
   required DateTime endDate,
 });
 typedef $$TimeslotsTableUpdateCompanionBuilder = TimeslotsCompanion Function({
   Value<int> id,
-  Value<String> userId,
+  Value<int> userId,
   Value<DaysOfTheWeek> endingDay,
   Value<DateTime?> startDate,
   Value<DateTime> endDate,
@@ -3738,12 +3730,12 @@ final class $$TimeslotsTableReferences
     extends BaseReferences<_$AppDatabase, $TimeslotsTable, Timeslot> {
   $$TimeslotsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $UsersTable _userIdTable(_$AppDatabase db) => db.users.createAlias(
-      $_aliasNameGenerator(db.timeslots.userId, db.users.cloudDBSyncId));
+  static $UsersTable _userIdTable(_$AppDatabase db) => db.users
+      .createAlias($_aliasNameGenerator(db.timeslots.userId, db.users.id));
 
   $$UsersTableProcessedTableManager get userId {
     final manager = $$UsersTableTableManager($_db, $_db.users)
-        .filter((f) => f.cloudDBSyncId($_item.userId));
+        .filter((f) => f.id($_item.userId));
     final item = $_typedResult.readTableOrNull(_userIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -3794,7 +3786,7 @@ class $$TimeslotsTableFilterComposer
         composer: this,
         getCurrentColumn: (t) => t.userId,
         referencedTable: $db.users,
-        getReferencedColumn: (t) => t.cloudDBSyncId,
+        getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -3857,7 +3849,7 @@ class $$TimeslotsTableOrderingComposer
         composer: this,
         getCurrentColumn: (t) => t.userId,
         referencedTable: $db.users,
-        getReferencedColumn: (t) => t.cloudDBSyncId,
+        getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -3899,7 +3891,7 @@ class $$TimeslotsTableAnnotationComposer
         composer: this,
         getCurrentColumn: (t) => t.userId,
         referencedTable: $db.users,
-        getReferencedColumn: (t) => t.cloudDBSyncId,
+        getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -3960,7 +3952,7 @@ class $$TimeslotsTableTableManager extends RootTableManager<
               $$TimeslotsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            Value<String> userId = const Value.absent(),
+            Value<int> userId = const Value.absent(),
             Value<DaysOfTheWeek> endingDay = const Value.absent(),
             Value<DateTime?> startDate = const Value.absent(),
             Value<DateTime> endDate = const Value.absent(),
@@ -3974,7 +3966,7 @@ class $$TimeslotsTableTableManager extends RootTableManager<
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            required String userId,
+            required int userId,
             required DaysOfTheWeek endingDay,
             Value<DateTime?> startDate = const Value.absent(),
             required DateTime endDate,
@@ -4015,9 +4007,8 @@ class $$TimeslotsTableTableManager extends RootTableManager<
                     currentColumn: table.userId,
                     referencedTable:
                         $$TimeslotsTableReferences._userIdTable(db),
-                    referencedColumn: $$TimeslotsTableReferences
-                        ._userIdTable(db)
-                        .cloudDBSyncId,
+                    referencedColumn:
+                        $$TimeslotsTableReferences._userIdTable(db).id,
                   ) as T;
                 }
 
@@ -4058,13 +4049,13 @@ typedef $$TimeslotsTableProcessedTableManager = ProcessedTableManager<
     PrefetchHooks Function({bool userId, bool eventsRefs})>;
 typedef $$EventsTableCreateCompanionBuilder = EventsCompanion Function({
   Value<int> id,
-  required String userId,
+  required int userId,
   required int timeslotId,
   required String eventName,
 });
 typedef $$EventsTableUpdateCompanionBuilder = EventsCompanion Function({
   Value<int> id,
-  Value<String> userId,
+  Value<int> userId,
   Value<int> timeslotId,
   Value<String> eventName,
 });
@@ -4073,12 +4064,12 @@ final class $$EventsTableReferences
     extends BaseReferences<_$AppDatabase, $EventsTable, Event> {
   $$EventsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $UsersTable _userIdTable(_$AppDatabase db) => db.users.createAlias(
-      $_aliasNameGenerator(db.events.userId, db.users.cloudDBSyncId));
+  static $UsersTable _userIdTable(_$AppDatabase db) =>
+      db.users.createAlias($_aliasNameGenerator(db.events.userId, db.users.id));
 
   $$UsersTableProcessedTableManager get userId {
     final manager = $$UsersTableTableManager($_db, $_db.users)
-        .filter((f) => f.cloudDBSyncId($_item.userId));
+        .filter((f) => f.id($_item.userId));
     final item = $_typedResult.readTableOrNull(_userIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -4147,7 +4138,7 @@ class $$EventsTableFilterComposer
         composer: this,
         getCurrentColumn: (t) => t.userId,
         referencedTable: $db.users,
-        getReferencedColumn: (t) => t.cloudDBSyncId,
+        getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -4245,7 +4236,7 @@ class $$EventsTableOrderingComposer
         composer: this,
         getCurrentColumn: (t) => t.userId,
         referencedTable: $db.users,
-        getReferencedColumn: (t) => t.cloudDBSyncId,
+        getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -4301,7 +4292,7 @@ class $$EventsTableAnnotationComposer
         composer: this,
         getCurrentColumn: (t) => t.userId,
         referencedTable: $db.users,
-        getReferencedColumn: (t) => t.cloudDBSyncId,
+        getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -4407,7 +4398,7 @@ class $$EventsTableTableManager extends RootTableManager<
               $$EventsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            Value<String> userId = const Value.absent(),
+            Value<int> userId = const Value.absent(),
             Value<int> timeslotId = const Value.absent(),
             Value<String> eventName = const Value.absent(),
           }) =>
@@ -4419,7 +4410,7 @@ class $$EventsTableTableManager extends RootTableManager<
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            required String userId,
+            required int userId,
             required int timeslotId,
             required String eventName,
           }) =>
@@ -4463,7 +4454,7 @@ class $$EventsTableTableManager extends RootTableManager<
                     currentColumn: table.userId,
                     referencedTable: $$EventsTableReferences._userIdTable(db),
                     referencedColumn:
-                        $$EventsTableReferences._userIdTable(db).cloudDBSyncId,
+                        $$EventsTableReferences._userIdTable(db).id,
                   ) as T;
                 }
                 if (timeslotId) {
@@ -4529,7 +4520,7 @@ typedef $$EventsTableProcessedTableManager = ProcessedTableManager<
         bool assessmentsRefs})>;
 typedef $$CoursesTableCreateCompanionBuilder = CoursesCompanion Function({
   Value<int> id,
-  required String userId,
+  required int userId,
   required int gradeScaleId,
   required int gradedComponentId,
   required int eventId,
@@ -4539,7 +4530,7 @@ typedef $$CoursesTableCreateCompanionBuilder = CoursesCompanion Function({
 });
 typedef $$CoursesTableUpdateCompanionBuilder = CoursesCompanion Function({
   Value<int> id,
-  Value<String> userId,
+  Value<int> userId,
   Value<int> gradeScaleId,
   Value<int> gradedComponentId,
   Value<int> eventId,
@@ -4552,12 +4543,12 @@ final class $$CoursesTableReferences
     extends BaseReferences<_$AppDatabase, $CoursesTable, Course> {
   $$CoursesTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $UsersTable _userIdTable(_$AppDatabase db) => db.users.createAlias(
-      $_aliasNameGenerator(db.courses.userId, db.users.cloudDBSyncId));
+  static $UsersTable _userIdTable(_$AppDatabase db) => db.users
+      .createAlias($_aliasNameGenerator(db.courses.userId, db.users.id));
 
   $$UsersTableProcessedTableManager get userId {
     final manager = $$UsersTableTableManager($_db, $_db.users)
-        .filter((f) => f.cloudDBSyncId($_item.userId));
+        .filter((f) => f.id($_item.userId));
     final item = $_typedResult.readTableOrNull(_userIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -4646,7 +4637,7 @@ class $$CoursesTableFilterComposer
         composer: this,
         getCurrentColumn: (t) => t.userId,
         referencedTable: $db.users,
-        getReferencedColumn: (t) => t.cloudDBSyncId,
+        getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -4770,7 +4761,7 @@ class $$CoursesTableOrderingComposer
         composer: this,
         getCurrentColumn: (t) => t.userId,
         referencedTable: $db.users,
-        getReferencedColumn: (t) => t.cloudDBSyncId,
+        getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -4872,7 +4863,7 @@ class $$CoursesTableAnnotationComposer
         composer: this,
         getCurrentColumn: (t) => t.userId,
         referencedTable: $db.users,
-        getReferencedColumn: (t) => t.cloudDBSyncId,
+        getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -4998,7 +4989,7 @@ class $$CoursesTableTableManager extends RootTableManager<
               $$CoursesTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            Value<String> userId = const Value.absent(),
+            Value<int> userId = const Value.absent(),
             Value<int> gradeScaleId = const Value.absent(),
             Value<int> gradedComponentId = const Value.absent(),
             Value<int> eventId = const Value.absent(),
@@ -5018,7 +5009,7 @@ class $$CoursesTableTableManager extends RootTableManager<
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            required String userId,
+            required int userId,
             required int gradeScaleId,
             required int gradedComponentId,
             required int eventId,
@@ -5068,7 +5059,7 @@ class $$CoursesTableTableManager extends RootTableManager<
                     currentColumn: table.userId,
                     referencedTable: $$CoursesTableReferences._userIdTable(db),
                     referencedColumn:
-                        $$CoursesTableReferences._userIdTable(db).cloudDBSyncId,
+                        $$CoursesTableReferences._userIdTable(db).id,
                   ) as T;
                 }
                 if (gradeScaleId) {
@@ -5144,7 +5135,7 @@ typedef $$CoursesTableProcessedTableManager = ProcessedTableManager<
 typedef $$AssessmentsTableCreateCompanionBuilder = AssessmentsCompanion
     Function({
   Value<int> id,
-  required String userId,
+  required int userId,
   required int courseId,
   required int gradedComponentId,
   required int eventId,
@@ -5155,7 +5146,7 @@ typedef $$AssessmentsTableCreateCompanionBuilder = AssessmentsCompanion
 typedef $$AssessmentsTableUpdateCompanionBuilder = AssessmentsCompanion
     Function({
   Value<int> id,
-  Value<String> userId,
+  Value<int> userId,
   Value<int> courseId,
   Value<int> gradedComponentId,
   Value<int> eventId,
@@ -5168,12 +5159,12 @@ final class $$AssessmentsTableReferences
     extends BaseReferences<_$AppDatabase, $AssessmentsTable, Assessment> {
   $$AssessmentsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $UsersTable _userIdTable(_$AppDatabase db) => db.users.createAlias(
-      $_aliasNameGenerator(db.assessments.userId, db.users.cloudDBSyncId));
+  static $UsersTable _userIdTable(_$AppDatabase db) => db.users
+      .createAlias($_aliasNameGenerator(db.assessments.userId, db.users.id));
 
   $$UsersTableProcessedTableManager get userId {
     final manager = $$UsersTableTableManager($_db, $_db.users)
-        .filter((f) => f.cloudDBSyncId($_item.userId));
+        .filter((f) => f.id($_item.userId));
     final item = $_typedResult.readTableOrNull(_userIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -5249,7 +5240,7 @@ class $$AssessmentsTableFilterComposer
         composer: this,
         getCurrentColumn: (t) => t.userId,
         referencedTable: $db.users,
-        getReferencedColumn: (t) => t.cloudDBSyncId,
+        getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -5352,7 +5343,7 @@ class $$AssessmentsTableOrderingComposer
         composer: this,
         getCurrentColumn: (t) => t.userId,
         referencedTable: $db.users,
-        getReferencedColumn: (t) => t.cloudDBSyncId,
+        getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -5454,7 +5445,7 @@ class $$AssessmentsTableAnnotationComposer
         composer: this,
         getCurrentColumn: (t) => t.userId,
         referencedTable: $db.users,
-        getReferencedColumn: (t) => t.cloudDBSyncId,
+        getReferencedColumn: (t) => t.id,
         builder: (joinBuilder,
                 {$addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer}) =>
@@ -5555,7 +5546,7 @@ class $$AssessmentsTableTableManager extends RootTableManager<
               $$AssessmentsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            Value<String> userId = const Value.absent(),
+            Value<int> userId = const Value.absent(),
             Value<int> courseId = const Value.absent(),
             Value<int> gradedComponentId = const Value.absent(),
             Value<int> eventId = const Value.absent(),
@@ -5575,7 +5566,7 @@ class $$AssessmentsTableTableManager extends RootTableManager<
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
-            required String userId,
+            required int userId,
             required int courseId,
             required int gradedComponentId,
             required int eventId,
@@ -5626,9 +5617,8 @@ class $$AssessmentsTableTableManager extends RootTableManager<
                     currentColumn: table.userId,
                     referencedTable:
                         $$AssessmentsTableReferences._userIdTable(db),
-                    referencedColumn: $$AssessmentsTableReferences
-                        ._userIdTable(db)
-                        .cloudDBSyncId,
+                    referencedColumn:
+                        $$AssessmentsTableReferences._userIdTable(db).id,
                   ) as T;
                 }
                 if (courseId) {

@@ -1,4 +1,3 @@
-
 abstract class Datastreamable {
-  String get ownerId;
+  int get ownerId;
 }

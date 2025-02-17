@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:assignmenttrackerapp/services/auth/auth_services.dart';
 
 class DashboardViewModel extends ChangeNotifier {
-  final AuthServices _authService = GetIt.instance<AuthServices>();
+  final AuthServices _authService;
 
   int _selectedTabIndex = 0;
   int get selectedTabIndex => _selectedTabIndex;
@@ -22,6 +21,9 @@ class DashboardViewModel extends ChangeNotifier {
     const Center(child: Text('Exams')),
     const Center(child: Text('Courses')),
   ];
+
+  DashboardViewModel({required AuthServices authService})
+      : _authService = authService;
   Widget get selectedScreen => _screens[_selectedTabIndex];
 
   void selectTab(int index) {

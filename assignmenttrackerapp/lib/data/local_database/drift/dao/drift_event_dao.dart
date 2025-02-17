@@ -9,9 +9,8 @@ class DriftEventDao extends DatabaseAccessor<AppDatabase>
     with _$DriftEventDaoMixin {
   DriftEventDao(super.attachedDatabase);
 
-  Future<List<Event>> getAllEvents({required String cloudDBSyncId}) =>
-      (select(events)..where((event) => event.userId.equals(cloudDBSyncId)))
-          .get();
+  Future<List<Event>> getAllEvents({required int userId}) =>
+      (select(events)..where((event) => event.userId.equals(userId))).get();
 
   Future<Event?> getEventById(int eventId) =>
       (select(events)..where((event) => event.id.equals(eventId)))
@@ -25,4 +24,8 @@ class DriftEventDao extends DatabaseAccessor<AppDatabase>
 
   Future<bool> updateEventByCompanion(EventsCompanion companion) =>
       update(events).replace(companion);
+
+  Future<Event?> getEventByTimeslotId(int timeslotId) =>
+      (select(events)..where((event) => event.timeslotId.equals(timeslotId)))
+          .getSingleOrNull();
 }

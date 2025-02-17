@@ -69,7 +69,7 @@ class DriftAssessmentRepository
   AssessmentsCompanion toDriftCompanion(AppModel model) {
     AppModelAssessment assessment = model as AppModelAssessment;
     return AssessmentsCompanion(
-      id: Value(assessment.id),
+      id: (assessment.id == null) ? Value.absent() : Value(assessment.id!),
       userId: Value(assessment.ownerId),
       courseId: Value(assessment.courseId),
       gradedComponentId: Value(assessment.gradedComponentId),

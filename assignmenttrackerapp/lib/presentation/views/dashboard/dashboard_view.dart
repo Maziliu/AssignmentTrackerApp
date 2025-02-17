@@ -1,3 +1,4 @@
+import 'package:assignmenttrackerapp/dependency_injection_container.dart';
 import 'package:assignmenttrackerapp/presentation/views/dashboard/dashboard_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +11,7 @@ class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => DashboardViewModel(),
+      create: (_) => injector<DashboardViewModel>(),
       child: Consumer<DashboardViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(

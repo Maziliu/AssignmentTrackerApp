@@ -5,16 +5,23 @@ import 'package:flutter/material.dart';
 class AuthUser {
   final bool _isEmailVerified;
   final String? _email;
-
-  const AuthUser({required bool isEmailVerified, required String? email})
-      : _isEmailVerified = isEmailVerified,
-        _email = email;
+  final String _uid;
 
   factory AuthUser.fromFirebase(User user) => AuthUser(
         email: user.email,
         isEmailVerified: user.emailVerified,
+        uid: user.uid,
       );
+
+  const AuthUser(
+      {required bool isEmailVerified,
+      required String? email,
+      required String uid})
+      : _isEmailVerified = isEmailVerified,
+        _email = email,
+        _uid = uid;
 
   bool get isEmailVerified => _isEmailVerified;
   String? get email => _email;
+  String get uid => _uid;
 }

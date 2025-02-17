@@ -63,7 +63,7 @@ class DriftTimeslotRepository implements TimeSlotRepository, DriftRepository {
   TimeslotsCompanion toDriftCompanion(AppModel model) {
     AppModelTimeSlot timeSlot = model as AppModelTimeSlot;
     return TimeslotsCompanion(
-        id: Value(timeSlot.id),
+        id: (timeSlot.id == null) ? Value.absent() : Value(timeSlot.id!),
         userId: Value(timeSlot.ownerId),
         endingDay: Value(timeSlot.endingDayOfTheWeek),
         startDate: Value(timeSlot.startDate),
