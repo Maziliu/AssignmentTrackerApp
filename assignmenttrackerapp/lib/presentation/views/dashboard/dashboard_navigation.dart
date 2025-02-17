@@ -1,4 +1,5 @@
 import 'package:assignmenttrackerapp/presentation/views/dashboard/dashboard_view_model.dart';
+import 'package:assignmenttrackerapp/presentation/views/schedule/schedule_view.dart';
 import 'package:flutter/material.dart';
 
 class DashboardNavigation extends StatelessWidget {
@@ -12,7 +13,7 @@ class DashboardNavigation extends StatelessWidget {
   ];
 
   static const List<Widget> _screens = [
-    Center(child: Text('Dailies')),
+    ScheduleView(),
     Center(child: Text('Assignments')),
     Center(child: Text('Exams')),
     Center(child: Text('Courses')),

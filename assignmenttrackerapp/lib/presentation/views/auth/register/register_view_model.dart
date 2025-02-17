@@ -27,34 +27,32 @@ class RegisterViewModel extends ChangeNotifier {
       }
     } on WeakPasswordAuthException {
       if (context.mounted) {
-        showErrorMessage(
-            context, 'Password must be at least 6 characters long.');
+        showErrorMessage('Password must be at least 6 characters long.');
       }
     } on EmailAlreadyInUseAuthException {
       if (context.mounted) {
-        showErrorMessage(context, 'The email is already in use.');
+        showErrorMessage('The email is already in use.');
       }
     } on InvalidEmailAuthException {
-      if (context.mounted) showErrorMessage(context, 'Invalid email format.');
+      if (context.mounted) showErrorMessage('Invalid email format.');
     } on OperationNotAllowedAuthException {
       if (context.mounted) {
-        showErrorMessage(context, 'Email/password accounts are not enabled.');
+        showErrorMessage('Email/password accounts are not enabled.');
       }
     } on UserDisabledAuthException {
       if (context.mounted) {
-        showErrorMessage(context, 'This account has been disabled.');
+        showErrorMessage('This account has been disabled.');
       }
     } on TooManyRequestsAuthException {
       if (context.mounted) {
-        showErrorMessage(context, 'Too many requests. Try again later.');
+        showErrorMessage('Too many requests. Try again later.');
       }
     } on NetworkRequestFailedAuthException {
       if (context.mounted) {
-        showErrorMessage(
-            context, 'Network error. Please check your connection.');
+        showErrorMessage('Network error. Please check your connection.');
       }
     } on GenericAuthException {
-      if (context.mounted) showErrorMessage(context, 'Registration Failed.');
+      if (context.mounted) showErrorMessage('Registration Failed.');
     } finally {
       _isLoading = false;
       notifyListeners();

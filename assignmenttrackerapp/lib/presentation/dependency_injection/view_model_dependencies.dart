@@ -9,7 +9,7 @@ import 'package:assignmenttrackerapp/services/auth/auth_services.dart';
 import 'package:get_it/get_it.dart';
 
 void setupViewModelDependencies({required GetIt injector}) {
-  injector.registerFactory<AuthViewModel>(
+  injector.registerLazySingleton<AuthViewModel>(
     () => AuthViewModel(
       authService: injector<AuthServices>(),
       userRepository: injector<UserRepository>(),

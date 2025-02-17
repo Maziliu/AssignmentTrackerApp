@@ -16,20 +16,19 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
     try {
       await AuthServices.firebase().sendVerificationEmail();
       if (mounted) {
-        showSuccessMessage(context, 'Verification email sent.');
+        showSuccessMessage('Verification email sent.');
       }
     } on TooManyRequestsAuthException {
       if (mounted) {
-        showErrorMessage(context, 'Too many requests. Please try again later.');
+        showErrorMessage('Too many requests. Please try again later.');
       }
     } on NetworkRequestFailedAuthException {
       if (mounted) {
-        showErrorMessage(
-            context, 'Network error. Please check your connection.');
+        showErrorMessage('Network error. Please check your connection.');
       }
     } on GenericAuthException {
       if (mounted) {
-        showErrorMessage(context, 'An error occurred. Please try again.');
+        showErrorMessage('An error occurred. Please try again.');
       }
     }
   }

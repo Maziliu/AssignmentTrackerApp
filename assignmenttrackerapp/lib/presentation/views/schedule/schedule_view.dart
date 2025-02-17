@@ -1,4 +1,5 @@
 import 'package:assignmenttrackerapp/dependency_injection_container.dart';
+import 'package:assignmenttrackerapp/presentation/views/auth/auth_view_model.dart';
 import 'package:assignmenttrackerapp/presentation/views/schedule/schedule_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +11,13 @@ class ScheduleView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => injector<ScheduleViewModel>(),
+      create: (context) {
+        final authViewModel =
+            Provider.of<AuthViewModel>(context, listen: false);
+        final scheduleViewModel = injector<ScheduleViewModel>();
+        scheduleViewModel.loadEvents(authViewModel.userId);
+        return scheduleViewModel;
+      },
       child: Consumer<ScheduleViewModel>(
         builder: (context, viewModel, child) {
           if (viewModel.isLoading) {

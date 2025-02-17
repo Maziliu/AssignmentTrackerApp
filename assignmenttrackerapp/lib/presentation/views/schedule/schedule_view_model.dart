@@ -1,10 +1,8 @@
+import 'package:assignmenttrackerapp/data/repositories/interfaces/event_repository.dart';
 import 'package:assignmenttrackerapp/presentation/views/auth/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:assignmenttrackerapp/data/models/app_model_event.dart';
-import 'package:assignmenttrackerapp/data/repositories/interfaces/event_repository.dart';
 import 'package:assignmenttrackerapp/common/utils/result.dart';
-import 'package:path/path.dart';
-import 'package:provider/provider.dart';
 
 class ScheduleViewModel extends ChangeNotifier {
   final EventRepository _eventRepository;
@@ -16,25 +14,22 @@ class ScheduleViewModel extends ChangeNotifier {
   List<AppModelEvent> get events => _events;
 
   ScheduleViewModel({required EventRepository eventRepository})
-      : _eventRepository = eventRepository {
-    _fetchEventsForNext14Days();
-  }
+      : _eventRepository = eventRepository;
 
-  Future<void> _fetchEventsForNext14Days() async {
+  Future<void> loadEvents(int? userId) async {
     _isLoading = true;
     notifyListeners();
 
-    final Result<List<AppModelEvent>> result =
-        await _eventRepository.getAllEventsForNext14DaysByUserId(
-            userId: Provider.of<AuthViewModel>(context as BuildContext,
-                    listen: false)
-                .userId!);
+    if (userId != null) {
+      final result = await _eventRepository.getAllEventsForNext14DaysByUserId(
+          userId: userId);
 
-    switch (result) {
-      case Ok():
-        _events = result.value;
-      case Error():
-        _events = [];
+      switch (result) {
+        case Ok<List<AppModelEvent>>():
+          _events = result.value;
+        case Error<List<AppModelEvent>>():
+          _events = [];
+      }
     }
 
     _isLoading = false;

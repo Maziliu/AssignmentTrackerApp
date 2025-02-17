@@ -48,11 +48,11 @@ class StandardEditableItemWidget<K> extends StatelessWidget {
     try {
       await onUpdate();
       if (context.mounted) {
-        showSuccessMessage(context, 'Item updated successfully');
+        showSuccessMessage('Item updated successfully');
       }
     } catch (e) {
       if (context.mounted) {
-        showErrorMessage(context, 'Failed to update item: $e');
+        showErrorMessage('Failed to update item: $e');
       }
     }
   }
@@ -80,11 +80,11 @@ class StandardEditableItemWidget<K> extends StatelessWidget {
       try {
         await onDelete();
         if (context.mounted) {
-          showSuccessMessage(context, 'Task deleted successfully');
+          showSuccessMessage('Task deleted successfully');
         }
       } catch (e) {
         if (context.mounted) {
-          showErrorMessage(context, 'Failed to delete item: $e');
+          showErrorMessage('Failed to delete item: $e');
         }
       }
     }

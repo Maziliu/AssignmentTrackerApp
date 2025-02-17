@@ -1,3 +1,5 @@
+import 'package:assignmenttrackerapp/common/constants/global_scaffold_key.dart';
+import 'package:assignmenttrackerapp/data/repositories/interfaces/event_repository.dart';
 import 'package:assignmenttrackerapp/presentation/views/auth/auth_view_model.dart';
 import 'package:assignmenttrackerapp/presentation/views/auth/login/login_view.dart';
 import 'package:assignmenttrackerapp/presentation/views/auth/register/register_view.dart';
@@ -5,6 +7,7 @@ import 'package:assignmenttrackerapp/presentation/views/auth/verify_email_view.d
 import 'package:assignmenttrackerapp/presentation/views/common/splash_screen.dart';
 import 'package:assignmenttrackerapp/presentation/views/dashboard/dashboard_view.dart';
 import 'package:assignmenttrackerapp/presentation/views/dashboard/dashboard_view_model.dart';
+import 'package:assignmenttrackerapp/presentation/views/schedule/schedule_view_model.dart';
 import 'package:assignmenttrackerapp/services/auth/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -28,12 +31,18 @@ class AppEntryPoint extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => GetIt.instance<AuthViewModel>()),
+        ChangeNotifierProvider(
+          create: (_) => GetIt.instance<AuthViewModel>(),
+        ),
         ChangeNotifierProvider(
           create: (_) => GetIt.instance<DashboardViewModel>(),
         ),
+        ChangeNotifierProvider<ScheduleViewModel>(
+          create: (_) => GetIt.instance<ScheduleViewModel>(),
+        ),
       ],
       child: MaterialApp(
+        scaffoldMessengerKey: scaffoldMessengerKey,
         title: 'Assignment Tracker',
         theme: assignmentTrackerTheme,
         initialRoute: '/',

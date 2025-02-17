@@ -36,13 +36,13 @@ class LoginViewModel extends ChangeNotifier {
         }
       }
     } on UserNotFoundAuthException {
-      if (context.mounted) showErrorMessage(context, "User not found");
+      if (context.mounted) showErrorMessage("User not found");
     } on InvalidCredentialsAuthException {
       if (context.mounted) {
-        showErrorMessage(context, "Invalid Email or Password");
+        showErrorMessage("Invalid Email or Password");
       }
     } on GenericAuthException {
-      if (context.mounted) showErrorMessage(context, "Authentication Error");
+      if (context.mounted) showErrorMessage("Authentication Error");
     } finally {
       _isLoggingIn = false;
       _isLoading = false;
