@@ -12,4 +12,6 @@ abstract class EventRepository {
       {required int userId});
   Future<Result<List<AppModelEvent>>> getAllEventsForNext14DaysByUserId(
       {required int userId});
+  Future<Result<Map<int, List<AppModelEvent>>>> getAllEventsByTimeslotIds(
+      {required List<int> timeslotIds});
 }

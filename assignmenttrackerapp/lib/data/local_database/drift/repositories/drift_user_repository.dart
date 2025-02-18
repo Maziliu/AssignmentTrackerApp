@@ -50,10 +50,10 @@ class DriftUserRepository implements UserRepository, DriftRepository {
     try {
       User? user = await _driftUserDao.getUserById(id);
       return (user == null)
-          ? Result.error(UnableToFindUserException())
+          ? Result.error(FailedToRetrieveUserException())
           : Result.ok(fromDriftDataClass(user));
     } on Exception {
-      return Result.error(UnableToFindUserException());
+      return Result.error(FailedToRetrieveUserException());
     }
   }
 
@@ -84,10 +84,10 @@ class DriftUserRepository implements UserRepository, DriftRepository {
     try {
       User? user = await _driftUserDao.getUserByCloudSyncId(cloudSyncId);
       return (user == null)
-          ? Result.error(UnableToFindUserException())
+          ? Result.error(FailedToRetrieveUserException())
           : Result.ok(user.id);
     } on Exception {
-      return Result.error(UnableToFindUserException());
+      return Result.error(FailedToRetrieveUserException());
     }
   }
 }

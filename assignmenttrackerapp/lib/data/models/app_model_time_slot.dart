@@ -24,4 +24,13 @@ class AppModelTimeSlot extends AppModel {
   int get ownerId => _userId;
 
   bool get isDeadline => _startDate == null;
+
+  @override
+  String toString() {
+    if (isDeadline) {
+      return _endDate.toString();
+    }
+
+    return "${_startDate.toString()} - ${_endDate.toString()}";
+  }
 }

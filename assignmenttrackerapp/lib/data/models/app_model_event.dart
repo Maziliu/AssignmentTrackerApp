@@ -19,4 +19,9 @@ class AppModelEvent extends AppModel implements Datastreamable {
 
   @override
   int get ownerId => _userId;
+
+  @override
+  String toString() {
+    return _eventName;
+  }
 }

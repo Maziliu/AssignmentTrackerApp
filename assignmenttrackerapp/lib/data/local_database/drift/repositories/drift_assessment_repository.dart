@@ -58,10 +58,10 @@ class DriftAssessmentRepository
     try {
       Assessment? assessment = await _driftAssessmentDao.getAssessmentById(id);
       return (assessment == null)
-          ? Result.error(UnableToFindAssessmentException())
+          ? Result.error(FailedToRetrieveAssessmentException())
           : Result.ok(fromDriftDataClass(assessment));
     } on Exception {
-      return Result.error(UnableToFindAssessmentException());
+      return Result.error(FailedToRetrieveAssessmentException());
     }
   }
 

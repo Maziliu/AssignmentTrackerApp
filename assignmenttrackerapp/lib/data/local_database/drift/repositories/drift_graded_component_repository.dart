@@ -58,10 +58,10 @@ class DriftGradedComponentRepository
       GradedComponent? gradedComponent =
           await _driftGradedComponentDao.getGradedComponentById(id);
       return (gradedComponent == null)
-          ? Result.error(UnableToFindGradedComponentException())
+          ? Result.error(FailedToRetrieveGradedComponentException())
           : Result.ok(fromDriftDataClass(gradedComponent));
     } on Exception {
-      return Result.error(UnableToFindGradedComponentException());
+      return Result.error(FailedToRetrieveGradedComponentException());
     }
   }
 

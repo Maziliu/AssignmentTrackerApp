@@ -6,4 +6,6 @@ abstract class TimeSlotRepository {
   Future<Result<void>> createTimeSlot({required AppModelTimeSlot timeSlot});
   Future<Result<void>> updateTimeSlot({required AppModelTimeSlot timeSlot});
   Future<Result<void>> deleteTimeSlotById({required int id});
+  Future<Result<List<AppModelTimeSlot>>> getAllTimeslotsBefore(
+      {required int userId, required DateTime date});
 }

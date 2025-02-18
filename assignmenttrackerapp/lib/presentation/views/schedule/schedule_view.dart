@@ -1,8 +1,7 @@
-import 'package:assignmenttrackerapp/common/utils/snackbar_helpers.dart';
+import 'package:assignmenttrackerapp/data/models/app_model_time_slot.dart';
 import 'package:assignmenttrackerapp/dependency_injection_container.dart';
 import 'package:assignmenttrackerapp/presentation/views/auth/auth_view_model.dart';
 import 'package:assignmenttrackerapp/presentation/views/schedule/schedule_view_model.dart';
-import 'package:assignmenttrackerapp/presentation/widgets/standard_editable_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:assignmenttrackerapp/data/models/app_model_event.dart';
@@ -18,8 +17,8 @@ class ScheduleView extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
 
-        return ChangeNotifierProvider.value(
-          value: injector<ScheduleViewModel>(),
+        return ChangeNotifierProvider(
+          create: (context) => injector<ScheduleViewModel>(),
           child: Scaffold(
             body: Consumer<ScheduleViewModel>(
               builder: (context, viewModel, child) {
@@ -32,25 +31,23 @@ class ScheduleView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Today's Schedule",
-                          style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold)),
-                      if (viewModel.events.isEmpty)
-                        const Text("No events today!",
-                            style: TextStyle(color: Colors.grey))
-                      else
-                        ...viewModel.events.map(
-                            (event) => _buildScheduleItem(event, viewModel)),
+                      _buildSectionTitle("Today's Schedule"),
+                      _buildEventList(
+                        context,
+                        eventsMap: viewModel.timeToEventMap,
+                        onDelete: viewModel.deleteEvent,
+                        onUpdate: viewModel.updateEvent,
+                        todayOnly: true,
+                      ),
                       const SizedBox(height: 24),
-                      const Text("Upcoming Events",
-                          style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold)),
-                      if (viewModel.events.isEmpty)
-                        const Text("No upcoming events.",
-                            style: TextStyle(color: Colors.grey))
-                      else
-                        ...viewModel.events.map(
-                            (event) => _buildScheduleItem(event, viewModel)),
+                      _buildSectionTitle("Upcoming Events"),
+                      _buildEventList(
+                        context,
+                        eventsMap: viewModel.timeToEventMap,
+                        onDelete: viewModel.deleteEvent,
+                        onUpdate: viewModel.updateEvent,
+                        todayOnly: false,
+                      ),
                     ],
                   ),
                 );
@@ -58,12 +55,11 @@ class ScheduleView extends StatelessWidget {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                final scheduleViewModel =
-                    Provider.of<ScheduleViewModel>(context, listen: false);
                 final authViewModel =
                     Provider.of<AuthViewModel>(context, listen: false);
+
                 if (authViewModel.userId != null) {
-                  scheduleViewModel.addSampleEvents(authViewModel.userId!);
+                  // Open event creation dialog
                 }
               },
               child: const Icon(Icons.add),
@@ -74,18 +70,107 @@ class ScheduleView extends StatelessWidget {
     );
   }
 
-  Widget _buildScheduleItem(AppModelEvent event, ScheduleViewModel viewModel) {
-    return StandardEditableItemWidget<AppModelEvent>(
-      data: event,
-      titleBuilder: (event) => event.eventName,
-      subtitle1Builder: (event) => "Time Slot: ${event.timeSlotId}",
-      subtitle2Builder: (event) => "Event ID: ${event.id ?? 'N/A'}",
-      onUpdate: () async {
-        await viewModel.updateEvent();
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+    );
+  }
+
+  Widget _buildEventList(
+    BuildContext context, {
+    required Map<AppModelTimeSlot, List<AppModelEvent>> eventsMap,
+    required Future<void> Function(
+            {required int timeslotId, required int eventId})
+        onDelete,
+    required Future<void> Function(int eventId) onUpdate,
+    required bool todayOnly,
+  }) {
+    final events = eventsMap.entries.where((entry) {
+      return !todayOnly ||
+          (entry.key.startDate != null &&
+              entry.key.startDate!.day == DateTime.now().day);
+    });
+
+    if (events.isEmpty) {
+      return const Text(
+        "No events available.",
+        style: TextStyle(color: Colors.grey),
+      );
+    }
+
+    return Column(
+      children: events.expand((entry) {
+        return entry.value.map((event) => _buildScheduleItem(
+              context: context,
+              event: event,
+              timeslot: entry.key,
+              onUpdate: onUpdate,
+              onDelete: onDelete,
+            ));
+      }).toList(),
+    );
+  }
+
+  Widget _buildScheduleItem({
+    required BuildContext context,
+    required AppModelEvent event,
+    required AppModelTimeSlot timeslot,
+    required void Function(int eventId) onUpdate,
+    required Future<void> Function(
+            {required int timeslotId, required int eventId})
+        onDelete,
+  }) {
+    return Dismissible(
+      key: Key(event.id.toString()),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        color: Colors.red,
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Icon(Icons.delete, color: Colors.white, size: 30),
+            SizedBox(width: 10),
+          ],
+        ),
+      ),
+      confirmDismiss: (direction) async {
+        return await showDialog<bool>(
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            title: const Text("Confirm Deletion"),
+            content: const Text("Are you sure you want to delete this event?"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(false),
+                child: const Text("Cancel"),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(true),
+                child:
+                    const Text("Delete", style: TextStyle(color: Colors.red)),
+              ),
+            ],
+          ),
+        );
       },
-      onDelete: () async {
-        await viewModel.deleteEvent();
+      onDismissed: (direction) {
+        onDelete(timeslotId: timeslot.id!, eventId: event.id!);
       },
+      child: Card(
+        elevation: 2,
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        child: ListTile(
+          title: Text(event.eventName),
+          subtitle: Text(timeslot.toString()),
+          trailing: IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () => onUpdate(event.id!),
+          ),
+        ),
+      ),
     );
   }
 }

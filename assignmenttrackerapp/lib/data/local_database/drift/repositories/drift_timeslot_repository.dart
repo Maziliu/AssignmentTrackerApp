@@ -52,10 +52,10 @@ class DriftTimeslotRepository implements TimeSlotRepository, DriftRepository {
     try {
       Timeslot? timeslot = await _driftTimeslotDao.getTimeslotById(id);
       return (timeslot == null)
-          ? Result.error(UnableToFindTimeSlotException())
+          ? Result.error(FailedToRetrieveTimeSlotException())
           : Result.ok(fromDriftDataClass(timeslot));
     } on Exception {
-      return Result.error(UnableToFindTimeSlotException());
+      return Result.error(FailedToRetrieveTimeSlotException());
     }
   }
 
@@ -79,6 +79,19 @@ class DriftTimeslotRepository implements TimeSlotRepository, DriftRepository {
       return Result.ok(null);
     } on Exception {
       return Result.error(UnableToUpdateTimeSlotException());
+    }
+  }
+
+  @override
+  Future<Result<List<AppModelTimeSlot>>> getAllTimeslotsBefore(
+      {required int userId, required DateTime date}) async {
+    try {
+      List<Timeslot> timeslots = await _driftTimeslotDao.getAllTimeslotsBefore(
+          userId: userId, date: date);
+      return Result.ok(
+          timeslots.map((timeslot) => fromDriftDataClass(timeslot)).toList());
+    } on Exception {
+      return Result.error(FailedToRetrieveTimeSlotException());
     }
   }
 }

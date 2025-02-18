@@ -55,10 +55,10 @@ class DriftEventRepository implements EventRepository, DriftRepository {
     try {
       Event? event = await _driftEventDao.getEventById(id);
       return (event == null)
-          ? Result.error(UnableToFindEventException())
+          ? Result.error(FailedToRetrieveEventException())
           : Result.ok(fromDriftDataClass(event));
     } on Exception {
-      return Result.error(UnableToFindEventException());
+      return Result.error(FailedToRetrieveEventException());
     }
   }
 
@@ -91,7 +91,7 @@ class DriftEventRepository implements EventRepository, DriftRepository {
       return Result.ok(
           events.map((event) => fromDriftDataClass(event)).toList());
     } on Exception {
-      return Result.error(UnableToFindEventException());
+      return Result.error(FailedToRetrieveEventException());
     }
   }
 
@@ -113,7 +113,7 @@ class DriftEventRepository implements EventRepository, DriftRepository {
       return Result.ok(
           events.map((event) => fromDriftDataClass(event)).toList());
     } on Exception {
-      return Result.error(UnableToFindEventException());
+      return Result.error(FailedToRetrieveEventException());
     }
   }
 
@@ -135,7 +135,24 @@ class DriftEventRepository implements EventRepository, DriftRepository {
       return Result.ok(
           events.map((event) => fromDriftDataClass(event)).toList());
     } on Exception {
-      return Result.error(UnableToFindEventException());
+      return Result.error(FailedToRetrieveEventException());
+    }
+  }
+
+  @override
+  Future<Result<Map<int, List<AppModelEvent>>>> getAllEventsByTimeslotIds(
+      {required List<int> timeslotIds}) async {
+    try {
+      Map<int, List<AppModelEvent>> result = {};
+
+      for (int id in timeslotIds) {
+        List<Event> events = await _driftEventDao.getEventsByTimeslotId(id);
+        result[id] = events.map((event) => fromDriftDataClass(event)).toList();
+      }
+
+      return Result.ok(result);
+    } on Exception {
+      return Result.error(FailedToRetrieveTimeSlotException());
     }
   }
 }

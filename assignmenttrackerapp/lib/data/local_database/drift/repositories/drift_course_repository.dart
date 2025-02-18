@@ -54,10 +54,10 @@ class DriftCourseRepository implements CourseRepository, DriftRepository {
     try {
       Course? course = await _driftCourseDao.getCourseById(id);
       return (course == null)
-          ? Result.error(UnableToFindCourseException())
+          ? Result.error(FailedToRetrieveCourseException())
           : Result.ok(fromDriftDataClass(course));
     } on Exception {
-      return Result.error(UnableToFindCourseException());
+      return Result.error(FailedToRetrieveCourseException());
     }
   }
 

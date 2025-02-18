@@ -52,10 +52,10 @@ class DriftGradeScaleRepository
     try {
       GradeScale? gradeScale = await _driftGradeScaleDao.getGradeScaleById(id);
       return (gradeScale == null)
-          ? Result.error(UnableToFindGradeScaleException())
+          ? Result.error(FailedToRetrieveGradeScaleException())
           : Result.ok(fromDriftDataClass(gradeScale));
     } on Exception {
-      return Result.error(UnableToFindGradeScaleException());
+      return Result.error(FailedToRetrieveGradeScaleException());
     }
   }
 

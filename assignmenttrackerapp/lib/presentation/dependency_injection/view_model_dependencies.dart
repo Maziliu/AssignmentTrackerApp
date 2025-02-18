@@ -7,6 +7,7 @@ import 'package:assignmenttrackerapp/presentation/views/auth/register/register_v
 import 'package:assignmenttrackerapp/presentation/views/dashboard/dashboard_view_model.dart';
 import 'package:assignmenttrackerapp/presentation/views/schedule/schedule_view_model.dart';
 import 'package:assignmenttrackerapp/services/auth/auth_services.dart';
+import 'package:assignmenttrackerapp/services/repository_services/schedule_repository_service.dart';
 import 'package:get_it/get_it.dart';
 
 void setupViewModelDependencies({required GetIt injector}) {
@@ -37,9 +38,8 @@ void setupViewModelDependencies({required GetIt injector}) {
 
   injector.registerLazySingleton<ScheduleViewModel>(
     () => ScheduleViewModel(
-      eventRepository: injector<EventRepository>(),
-      timeSlotRepository: injector<TimeSlotRepository>(),
       userId: injector<AuthViewModel>().userId,
+      scheduleRepositoryService: injector<ScheduleRepositoryService>(),
     ),
   );
 }
