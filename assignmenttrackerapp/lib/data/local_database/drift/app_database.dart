@@ -12,15 +12,7 @@ import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [
-  Assessments,
-  Courses,
-  Events,
-  GradeScales,
-  GradedComponents,
-  Timeslots,
-  Users
-])
+@DriftDatabase(tables: [Assessments, Courses, Events, GradeScales, GradedComponents, Timeslots, Users])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
@@ -30,8 +22,7 @@ class AppDatabase extends _$AppDatabase {
   static QueryExecutor _openConnection() {
     return driftDatabase(
       name: 'sqlite_database',
-      native: const DriftNativeOptions(
-          databaseDirectory: getApplicationSupportDirectory),
+      native: const DriftNativeOptions(databaseDirectory: getApplicationSupportDirectory),
     );
   }
 }

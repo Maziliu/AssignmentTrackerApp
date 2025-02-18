@@ -13,10 +13,7 @@ class AuthUser {
         uid: user.uid,
       );
 
-  const AuthUser(
-      {required bool isEmailVerified,
-      required String? email,
-      required String uid})
+  const AuthUser({required bool isEmailVerified, required String? email, required String uid})
       : _isEmailVerified = isEmailVerified,
         _email = email,
         _uid = uid;

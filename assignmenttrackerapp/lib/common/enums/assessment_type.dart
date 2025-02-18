@@ -4,6 +4,5 @@ enum AssessmentType {
   assignment,
   lab;
 
-  static String get allAssesmentTypes =>
-      AssessmentType.values.map((type) => "'${type.name}'").join(", ");
+  static String get allAssesmentTypes => AssessmentType.values.map((type) => "'${type.name}'").join(', ');
 }

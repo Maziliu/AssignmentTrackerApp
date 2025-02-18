@@ -9,14 +9,12 @@ class LoginViewModel extends ChangeNotifier {
   bool _isLoading = false;
   bool _isLoggingIn = false; // Prevents multiple requests
 
-  LoginViewModel({required AuthServices authService})
-      : _authService = authService;
+  LoginViewModel({required AuthServices authService}) : _authService = authService;
 
   bool get isLoading => _isLoading;
   bool get isLoggingIn => _isLoggingIn;
 
-  Future<void> login(
-      BuildContext context, String email, String password) async {
+  Future<void> login(BuildContext context, String email, String password) async {
     if (_isLoggingIn) return; // Prevent duplicate login attempts
     _isLoggingIn = true;
     _isLoading = true;
@@ -28,21 +26,19 @@ class LoginViewModel extends ChangeNotifier {
 
       if (context.mounted) {
         if (user?.isEmailVerified ?? false) {
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil(dashboardRoute, (route) => false);
+          Navigator.of(context).pushNamedAndRemoveUntil(dashboardRoute, (route) => false);
         } else {
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil(verifyEmailRoute, (route) => false);
+          Navigator.of(context).pushNamedAndRemoveUntil(verifyEmailRoute, (route) => false);
         }
       }
     } on UserNotFoundAuthException {
-      if (context.mounted) showErrorMessage("User not found");
+      if (context.mounted) showErrorMessage('User not found');
     } on InvalidCredentialsAuthException {
       if (context.mounted) {
-        showErrorMessage("Invalid Email or Password");
+        showErrorMessage('Invalid Email or Password');
       }
     } on GenericAuthException {
-      if (context.mounted) showErrorMessage("Authentication Error");
+      if (context.mounted) showErrorMessage('Authentication Error');
     } finally {
       _isLoggingIn = false;
       _isLoading = false;

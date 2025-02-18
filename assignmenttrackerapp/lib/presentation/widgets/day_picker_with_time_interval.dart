@@ -3,8 +3,7 @@ import 'package:assignmenttrackerapp/common/utils/pair.dart';
 import 'package:flutter/material.dart';
 
 class DayPickerWithTimeInterval extends StatefulWidget {
-  final void Function(int index, List<bool> statesVector)
-      _toggleDaysOfTheWeekButton;
+  final void Function(int index, List<bool> statesVector) _toggleDaysOfTheWeekButton;
   final List<bool> _daysToggleStates;
   final String? _label;
   final Pair<TimeOfDay, TimeOfDay> _timeInterval;
@@ -12,8 +11,7 @@ class DayPickerWithTimeInterval extends StatefulWidget {
   const DayPickerWithTimeInterval({
     super.key,
     required List<bool> daysToggleStates,
-    required void Function(int index, List<bool> statesVector)
-        toggleDaysOfTheWeekButton,
+    required void Function(int index, List<bool> statesVector) toggleDaysOfTheWeekButton,
     required String? label,
     required Pair<TimeOfDay, TimeOfDay> timeInterval,
   })  : _daysToggleStates = daysToggleStates,
@@ -22,16 +20,14 @@ class DayPickerWithTimeInterval extends StatefulWidget {
         _timeInterval = timeInterval;
 
   @override
-  State<DayPickerWithTimeInterval> createState() =>
-      _DayPickerWithTimeIntervalState();
+  State<DayPickerWithTimeInterval> createState() => _DayPickerWithTimeIntervalState();
 }
 
 class _DayPickerWithTimeIntervalState extends State<DayPickerWithTimeInterval> {
   TimeOfDay? _chosenLowerBound, _chosenUpperBound;
 
   Future<void> _pickTime(BuildContext context, bool isLowerBound) async {
-    final TimeOfDay? chosenTime =
-        await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    final TimeOfDay? chosenTime = await showTimePicker(context: context, initialTime: TimeOfDay.now());
 
     if (chosenTime == null) {
       return;
@@ -69,18 +65,11 @@ class _DayPickerWithTimeIntervalState extends State<DayPickerWithTimeInterval> {
                       : Color(0xFF121212), // Inactive background
                 ),
               ),
-              onPressed: () => widget._toggleDaysOfTheWeekButton(
-                  index, widget._daysToggleStates),
+              onPressed: () => widget._toggleDaysOfTheWeekButton(index, widget._daysToggleStates),
               icon: Text(
-                DaysOfTheWeek.values[index]
-                    .toString()
-                    .split('.')
-                    .last
-                    .substring(0, 2),
+                DaysOfTheWeek.values[index].toString().split('.').last.substring(0, 2),
                 style: TextStyle(
-                  color: widget._daysToggleStates[index]
-                      ? Color(0xFF00CFFD)
-                      : Color(0xFFBB86FC),
+                  color: widget._daysToggleStates[index] ? Color(0xFF00CFFD) : Color(0xFFBB86FC),
                 ),
               ),
             ),

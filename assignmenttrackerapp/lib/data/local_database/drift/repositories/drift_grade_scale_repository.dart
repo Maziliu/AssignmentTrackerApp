@@ -8,19 +8,15 @@ import 'package:assignmenttrackerapp/data/repositories/interfaces/grade_scale_re
 import 'package:assignmenttrackerapp/common/utils/result.dart';
 import 'package:drift/drift.dart';
 
-class DriftGradeScaleRepository
-    implements GradeScaleRepository, DriftRepository {
+class DriftGradeScaleRepository implements GradeScaleRepository, DriftRepository {
   final DriftGradeScaleDao _driftGradeScaleDao;
 
-  DriftGradeScaleRepository({required DriftGradeScaleDao driftGradeScaleDao})
-      : _driftGradeScaleDao = driftGradeScaleDao;
+  DriftGradeScaleRepository({required DriftGradeScaleDao driftGradeScaleDao}) : _driftGradeScaleDao = driftGradeScaleDao;
 
   @override
-  Future<Result<void>> createGradeScale(
-      {required AppModelGradeScale gradeScale}) async {
+  Future<Result<void>> createGradeScale({required AppModelGradeScale gradeScale}) async {
     try {
-      await _driftGradeScaleDao
-          .insertGradeScaleByCompanion(toDriftCompanion(gradeScale));
+      await _driftGradeScaleDao.insertGradeScaleByCompanion(toDriftCompanion(gradeScale));
       return Result.ok(null);
     } on Exception {
       return Result.error(UnableToCreateGradeScaleException());
@@ -40,20 +36,14 @@ class DriftGradeScaleRepository
   @override
   AppModelGradeScale fromDriftDataClass(DataClass driftDataClass) {
     GradeScale gradeScale = driftDataClass as GradeScale;
-    return AppModelGradeScale(
-        id: gradeScale.id,
-        thresholdsJson: gradeScale.thresholdsJson,
-        userId: gradeScale.userId);
+    return AppModelGradeScale(id: gradeScale.id, thresholdsJson: gradeScale.thresholdsJson, userId: gradeScale.userId);
   }
 
   @override
-  Future<Result<AppModelGradeScale>> getGradeScaleById(
-      {required int id}) async {
+  Future<Result<AppModelGradeScale>> getGradeScaleById({required int id}) async {
     try {
       GradeScale? gradeScale = await _driftGradeScaleDao.getGradeScaleById(id);
-      return (gradeScale == null)
-          ? Result.error(FailedToRetrieveGradeScaleException())
-          : Result.ok(fromDriftDataClass(gradeScale));
+      return (gradeScale == null) ? Result.error(FailedToRetrieveGradeScaleException()) : Result.ok(fromDriftDataClass(gradeScale));
     } on Exception {
       return Result.error(FailedToRetrieveGradeScaleException());
     }
@@ -69,11 +59,9 @@ class DriftGradeScaleRepository
   }
 
   @override
-  Future<Result<void>> updateGradeScale(
-      {required AppModelGradeScale gradeScale}) async {
+  Future<Result<void>> updateGradeScale({required AppModelGradeScale gradeScale}) async {
     try {
-      await _driftGradeScaleDao
-          .updateGradeScaleByCompanion(toDriftCompanion(gradeScale));
+      await _driftGradeScaleDao.updateGradeScaleByCompanion(toDriftCompanion(gradeScale));
       return Result.ok(null);
     } on Exception {
       return Result.error(UnableToUpdateGradeScaleException());

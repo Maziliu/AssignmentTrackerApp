@@ -6,12 +6,8 @@ abstract class EventRepository {
   Future<Result<void>> createEvent({required AppModelEvent event});
   Future<Result<void>> updateEvent({required AppModelEvent event});
   Future<Result<void>> deleteEventById({required int id});
-  Future<Result<List<AppModelEvent>>> getAllEventsByUserId(
-      {required int userId});
-  Future<Result<List<AppModelEvent>>> getAllEventsTodayByUserId(
-      {required int userId});
-  Future<Result<List<AppModelEvent>>> getAllEventsForNext14DaysByUserId(
-      {required int userId});
-  Future<Result<Map<int, List<AppModelEvent>>>> getAllEventsByTimeslotIds(
-      {required List<int> timeslotIds});
+  Future<Result<List<AppModelEvent>>> getAllEventsByUserId({required int userId});
+  Future<Result<List<AppModelEvent>>> getAllEventsTodayByUserId({required int userId});
+  Future<Result<List<AppModelEvent>>> getAllEventsForNext14DaysByUserId({required int userId});
+  Future<Result<Map<int, List<AppModelEvent>>>> getAllEventsByTimeslotIds({required List<int> timeslotIds});
 }

@@ -40,7 +40,7 @@ class ScheduleView extends StatelessWidget {
                         todayOnly: true,
                       ),
                       const SizedBox(height: 24),
-                      _buildSectionTitle("Upcoming Events"),
+                      _buildSectionTitle('Upcoming Events'),
                       _buildEventList(
                         context,
                         eventsMap: viewModel.timeToEventMap,
@@ -55,8 +55,7 @@ class ScheduleView extends StatelessWidget {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                final authViewModel =
-                    Provider.of<AuthViewModel>(context, listen: false);
+                final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
 
                 if (authViewModel.userId != null) {
                   // Open event creation dialog
@@ -80,21 +79,17 @@ class ScheduleView extends StatelessWidget {
   Widget _buildEventList(
     BuildContext context, {
     required Map<AppModelTimeSlot, List<AppModelEvent>> eventsMap,
-    required Future<void> Function(
-            {required int timeslotId, required int eventId})
-        onDelete,
+    required Future<void> Function({required int timeslotId, required int eventId}) onDelete,
     required Future<void> Function(int eventId) onUpdate,
     required bool todayOnly,
   }) {
     final events = eventsMap.entries.where((entry) {
-      return !todayOnly ||
-          (entry.key.startDate != null &&
-              entry.key.startDate!.day == DateTime.now().day);
+      return !todayOnly || (entry.key.startDate != null && entry.key.startDate!.day == DateTime.now().day);
     });
 
     if (events.isEmpty) {
       return const Text(
-        "No events available.",
+        'No events available.',
         style: TextStyle(color: Colors.grey),
       );
     }
@@ -117,9 +112,7 @@ class ScheduleView extends StatelessWidget {
     required AppModelEvent event,
     required AppModelTimeSlot timeslot,
     required void Function(int eventId) onUpdate,
-    required Future<void> Function(
-            {required int timeslotId, required int eventId})
-        onDelete,
+    required Future<void> Function({required int timeslotId, required int eventId}) onDelete,
   }) {
     return Dismissible(
       key: Key(event.id.toString()),
@@ -140,17 +133,16 @@ class ScheduleView extends StatelessWidget {
         return await showDialog<bool>(
           context: context,
           builder: (dialogContext) => AlertDialog(
-            title: const Text("Confirm Deletion"),
-            content: const Text("Are you sure you want to delete this event?"),
+            title: const Text('Confirm Deletion'),
+            content: const Text('Are you sure you want to delete this event?'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(dialogContext).pop(false),
-                child: const Text("Cancel"),
+                child: const Text('Cancel'),
               ),
               TextButton(
                 onPressed: () => Navigator.of(dialogContext).pop(true),
-                child:
-                    const Text("Delete", style: TextStyle(color: Colors.red)),
+                child: const Text('Delete', style: TextStyle(color: Colors.red)),
               ),
             ],
           ),

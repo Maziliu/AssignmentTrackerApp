@@ -66,8 +66,7 @@ class StandardEditableItemWidget<K> extends StatelessWidget {
                 ),
               ),
               IconButton(
-                icon: Icon(Icons.edit,
-                    color: theme.colorScheme.primary, size: 26),
+                icon: Icon(Icons.edit, color: theme.colorScheme.primary, size: 26),
                 onPressed: () async => await _handleUpdate(context),
               ),
             ],
@@ -90,10 +89,8 @@ class StandardEditableItemWidget<K> extends StatelessWidget {
     return showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor:
-            Theme.of(context).cardTheme.color, // ✅ Dark theme support
-        title: Text('Confirm Delete',
-            style: Theme.of(context).textTheme.headlineSmall),
+        backgroundColor: Theme.of(context).cardTheme.color, // ✅ Dark theme support
+        title: Text('Confirm Delete', style: Theme.of(context).textTheme.headlineSmall),
         content: const Text('Are you sure you want to delete this item?'),
         actions: [
           TextButton(

@@ -1,5 +1,3 @@
-import 'package:assignmenttrackerapp/data/repositories/interfaces/event_repository.dart';
-import 'package:assignmenttrackerapp/data/repositories/interfaces/time_slot_repository.dart';
 import 'package:assignmenttrackerapp/data/repositories/interfaces/user_repository.dart';
 import 'package:assignmenttrackerapp/presentation/views/auth/auth_view_model.dart';
 import 'package:assignmenttrackerapp/presentation/views/auth/login/login_view_model.dart';

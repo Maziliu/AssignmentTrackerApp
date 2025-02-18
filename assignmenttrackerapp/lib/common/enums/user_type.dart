@@ -2,5 +2,5 @@ enum UserType {
   local,
   cloud;
 
-  static String get allUserTypes => UserType.values.map((type) => "'${type.name}'").join(", ");
+  static String get allUserTypes => UserType.values.map((type) => "'${type.name}'").join(', ');
 }

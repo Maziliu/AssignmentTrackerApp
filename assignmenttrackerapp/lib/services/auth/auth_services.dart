@@ -10,9 +10,7 @@ class AuthServices implements AuthStrategy {
   factory AuthServices.firebase() => AuthServices(FirebaseAuthStrategy());
 
   @override
-  Future<AuthUser> createUser(
-          {required String email, required String password}) =>
-      _authStrategy.createUser(email: email, password: password);
+  Future<AuthUser> createUser({required String email, required String password}) => _authStrategy.createUser(email: email, password: password);
 
   @override
   AuthUser? get currentUser => _authStrategy.currentUser;
@@ -21,8 +19,7 @@ class AuthServices implements AuthStrategy {
   Future<void> initialize() => _authStrategy.initialize();
 
   @override
-  Future<AuthUser> login({required String email, required String password}) =>
-      _authStrategy.login(email: email, password: password);
+  Future<AuthUser> login({required String email, required String password}) => _authStrategy.login(email: email, password: password);
 
   @override
   Future<void> logout() => _authStrategy.logout();

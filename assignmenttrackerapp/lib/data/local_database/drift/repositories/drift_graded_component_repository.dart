@@ -8,20 +8,15 @@ import 'package:assignmenttrackerapp/data/repositories/interfaces/graded_compone
 import 'package:assignmenttrackerapp/common/utils/result.dart';
 import 'package:drift/drift.dart';
 
-class DriftGradedComponentRepository
-    implements GradedComponentRepository, DriftRepository {
+class DriftGradedComponentRepository implements GradedComponentRepository, DriftRepository {
   final DriftGradedComponentDao _driftGradedComponentDao;
 
-  DriftGradedComponentRepository(
-      {required DriftGradedComponentDao driftGradedComponentDao})
-      : _driftGradedComponentDao = driftGradedComponentDao;
+  DriftGradedComponentRepository({required DriftGradedComponentDao driftGradedComponentDao}) : _driftGradedComponentDao = driftGradedComponentDao;
 
   @override
-  Future<Result<void>> createGrDatabaseGradedComponent(
-      {required AppModelGradedComponent gradedComponent}) async {
+  Future<Result<void>> createGrDatabaseGradedComponent({required AppModelGradedComponent gradedComponent}) async {
     try {
-      await _driftGradedComponentDao
-          .insertGradedComponentByCompanion(toDriftCompanion(gradedComponent));
+      await _driftGradedComponentDao.insertGradedComponentByCompanion(toDriftCompanion(gradedComponent));
       return Result.ok(null);
     } on Exception {
       return Result.error(UnableToCreateGradedComponentException());
@@ -29,8 +24,7 @@ class DriftGradedComponentRepository
   }
 
   @override
-  Future<Result<void>> deleteGrDatabaseGradedComponentById(
-      {required int id}) async {
+  Future<Result<void>> deleteGrDatabaseGradedComponentById({required int id}) async {
     try {
       await _driftGradedComponentDao.deleteGradedComponentById(id);
       return Result.ok(null);
@@ -52,14 +46,10 @@ class DriftGradedComponentRepository
   }
 
   @override
-  Future<Result<AppModelGradedComponent>> getGrDatabaseGradedComponentById(
-      {required int id}) async {
+  Future<Result<AppModelGradedComponent>> getGrDatabaseGradedComponentById({required int id}) async {
     try {
-      GradedComponent? gradedComponent =
-          await _driftGradedComponentDao.getGradedComponentById(id);
-      return (gradedComponent == null)
-          ? Result.error(FailedToRetrieveGradedComponentException())
-          : Result.ok(fromDriftDataClass(gradedComponent));
+      GradedComponent? gradedComponent = await _driftGradedComponentDao.getGradedComponentById(id);
+      return (gradedComponent == null) ? Result.error(FailedToRetrieveGradedComponentException()) : Result.ok(fromDriftDataClass(gradedComponent));
     } on Exception {
       return Result.error(FailedToRetrieveGradedComponentException());
     }
@@ -69,9 +59,7 @@ class DriftGradedComponentRepository
   GradedComponentsCompanion toDriftCompanion(AppModel model) {
     AppModelGradedComponent gradedComponent = model as AppModelGradedComponent;
     return GradedComponentsCompanion(
-      id: (gradedComponent.id == null)
-          ? Value.absent()
-          : Value(gradedComponent.id!),
+      id: (gradedComponent.id == null) ? Value.absent() : Value(gradedComponent.id!),
       userId: Value(gradedComponent.ownerId),
       weightDecimal: Value(gradedComponent.weightDecimal ?? 0),
       gradeLetter: Value(gradedComponent.gradeLetter),
@@ -80,11 +68,9 @@ class DriftGradedComponentRepository
   }
 
   @override
-  Future<Result<void>> updateGrDatabaseGradedComponent(
-      {required AppModelGradedComponent gradedComponent}) async {
+  Future<Result<void>> updateGrDatabaseGradedComponent({required AppModelGradedComponent gradedComponent}) async {
     try {
-      await _driftGradedComponentDao
-          .updateGradedComponentByCompanion(toDriftCompanion(gradedComponent));
+      await _driftGradedComponentDao.updateGradedComponentByCompanion(toDriftCompanion(gradedComponent));
       return Result.ok(null);
     } on Exception {
       return Result.error(UnableToUpdateGradedComponentException());

@@ -1,6 +1,5 @@
 import 'package:assignmenttrackerapp/common/exceptions/service_exceptions.dart';
-import 'package:assignmenttrackerapp/common/utils/consume_result.dart';
-import 'package:assignmenttrackerapp/common/utils/pair.dart';
+import 'package:assignmenttrackerapp/common/utils/result_helpers.dart';
 import 'package:assignmenttrackerapp/common/utils/result.dart';
 import 'package:assignmenttrackerapp/data/models/app_model_event.dart';
 import 'package:assignmenttrackerapp/data/models/app_model_time_slot.dart';
@@ -11,60 +10,83 @@ class ScheduleRepositoryService {
   final EventRepository _eventRepository;
   final TimeSlotRepository _timeSlotRepository;
 
-  ScheduleRepositoryService(
-      {required EventRepository eventRepository,
-      required TimeSlotRepository timeSlotRepository})
+  ScheduleRepositoryService({required EventRepository eventRepository, required TimeSlotRepository timeSlotRepository})
       : _eventRepository = eventRepository,
         _timeSlotRepository = timeSlotRepository;
 
-  Future<void> processEvents({required List<AppModelEvent> events}) async {}
-  Future<void> processTimeSlots(
-      {required List<AppModelTimeSlot> timeSlots}) async {}
+  Future<Result<void>> processEvents({required List<AppModelEvent> events}) async {
+    return Result.ok(null);
+  }
 
-  Future<void> deleteEventWithTimeslotCleanup(
-      {required int timeslotId, required int eventId}) async {
-    Result eventDeleteResult =
-        await _eventRepository.deleteEventById(id: eventId);
+  Future<Result<void>> processTimeSlots({required List<AppModelTimeSlot> timeSlots}) async {
+    return Result.ok(null);
+  }
 
-    extractOrThrow(
-        result: eventDeleteResult,
-        throwIfFail: FailedServicingItemsException(
+  Future<Result<void>> deleteEventWithTimeslotCleanup({required int timeslotId, required int eventId}) async {
+    Result eventDeleteResult = await _eventRepository.deleteEventById(id: eventId);
+
+    if (eventDeleteResult is Error) {
+      return Result.error(
+        FailedServicingItemsException(
           location: 'ScheduleRepositoryService',
           failure: 'delete event with id: $eventId',
-        ));
-
-    await _cleanUpTimeslot(timeslotId: timeslotId);
-  }
-
-  Future<void> _cleanUpTimeslot({required int timeslotId}) async {
-    Map<int, List<AppModelEvent>> eventsForTimeslot =
-        await _fetchEventsByTimeslotIds(timeslotIds: [timeslotId]);
-
-    if ((eventsForTimeslot[timeslotId] ?? []).isEmpty) {
-      Result deleteTimeslotResult =
-          await _timeSlotRepository.deleteTimeSlotById(id: timeslotId);
-
-      extractOrThrow(
-        result: deleteTimeslotResult,
-        throwIfFail: FailedServicingItemsException(
-            location: 'ScheduleRepositoryService',
-            failure: 'cleanup timeslot with id: $timeslotId'),
+        ),
       );
     }
+
+    return await _cleanUpTimeslot(timeslotId: timeslotId);
   }
 
-  Future<Map<AppModelTimeSlot, List<AppModelEvent>>>
-      fetchAllEventsAndTimesBefore(
-          {required int userId, required DateTime upperBound}) async {
+  Future<Result<void>> _cleanUpTimeslot({required int timeslotId}) async {
+    Result<Map<int, List<AppModelEvent>>> eventsForTimeslotResult = await _fetchEventsByTimeslotIds(timeslotIds: [timeslotId]);
+
+    if (eventsForTimeslotResult is Error) {
+      return Result.error(
+        FailedServicingItemsException(
+          location: 'ScheduleRepositoryService',
+          failure: 'clean up timeslot with id: $timeslotId',
+        ),
+      );
+    }
+
+    Map<int, List<AppModelEvent>> eventsForTimeslot = (eventsForTimeslotResult as Ok).value;
+
+    if ((eventsForTimeslot[timeslotId] ?? []).isEmpty) {
+      return await _timeSlotRepository.deleteTimeSlotById(id: timeslotId);
+    }
+
+    return Result.ok(null);
+  }
+
+  Future<Result<Map<AppModelTimeSlot, List<AppModelEvent>>>> fetchAllEventsAndTimesBefore({required int userId, required DateTime upperBound}) async {
     DateTime date = _normalizedDate(date: upperBound);
 
-    List<AppModelTimeSlot> timeslots =
-        await _fetchTimeslotsBefore(userId: userId, date: date);
+    Result<List<AppModelTimeSlot>> timeslotsResult = await _fetchTimeslotsBefore(userId: userId, date: date);
 
-    Map<int, List<AppModelEvent>> idToEventsMap =
-        await _fetchEventsByTimeslotIds(
-      timeslotIds: timeslots.map((timeslot) => timeslot.id!).toList(),
-    );
+    if (timeslotsResult is Error) {
+      return Result.error(
+        FailedServicingItemsException(
+          location: 'ScheduleRepositoryService',
+          failure: 'Timeslots before ${date.toString()} userId: $userId',
+        ),
+      );
+    }
+
+    List<AppModelTimeSlot> timeslots = (timeslotsResult as Ok).value;
+
+    List<int> timeslotIds = timeslots.map((timeslot) => timeslot.id!).toList();
+    Result<Map<int, List<AppModelEvent>>> eventsMapResult = await _fetchEventsByTimeslotIds(timeslotIds: timeslotIds);
+
+    if (eventsMapResult is Error) {
+      return Result.error(
+        FailedServicingItemsException(
+          location: 'ScheduleRepositoryService',
+          failure: 'Events from ids: ${timeslotIds.toString()}',
+        ),
+      );
+    }
+
+    Map<int, List<AppModelEvent>> idToEventsMap = (eventsMapResult as Ok).value;
 
     return _combineTimeslotsAndEventMap(
       timeslots: timeslots,
@@ -76,44 +98,21 @@ class ScheduleRepositoryService {
     return DateTime(date.year, date.month, date.day, 23, 59, 59);
   }
 
-  Future<List<AppModelTimeSlot>> _fetchTimeslotsBefore(
-      {required int userId, required DateTime date}) async {
-    Result timeslotsResult = await _timeSlotRepository.getAllTimeslotsBefore(
-        userId: userId, date: date);
-
-    return extractOrThrow(
-      result: timeslotsResult,
-      throwIfFail: FailedServicingItemsException(
-        location: "ScheduleRepositoryService",
-        failure: "Timeslots before ${date.toString()} userId: $userId",
-      ),
-    );
+  Future<Result<List<AppModelTimeSlot>>> _fetchTimeslotsBefore({required int userId, required DateTime date}) async {
+    return await _timeSlotRepository.getAllTimeslotsBefore(userId: userId, date: date);
   }
 
-  Future<Map<int, List<AppModelEvent>>> _fetchEventsByTimeslotIds(
-      {required List<int> timeslotIds}) async {
-    Result eventsResult = await _eventRepository.getAllEventsByTimeslotIds(
-        timeslotIds: timeslotIds);
-
-    return extractOrThrow(
-      result: eventsResult,
-      throwIfFail: FailedServicingItemsException(
-        location: "ScheduleRepositoryService",
-        failure: "Events from ids: ${timeslotIds.toString()}",
-      ),
-    );
+  Future<Result<Map<int, List<AppModelEvent>>>> _fetchEventsByTimeslotIds({required List<int> timeslotIds}) async {
+    return await _eventRepository.getAllEventsByTimeslotIds(timeslotIds: timeslotIds);
   }
 
-  Future<Map<AppModelTimeSlot, List<AppModelEvent>>>
-      _combineTimeslotsAndEventMap(
-          {required List<AppModelTimeSlot> timeslots,
-          required Map<int, List<AppModelEvent>> eventMap}) async {
+  Future<Result<Map<AppModelTimeSlot, List<AppModelEvent>>>> _combineTimeslotsAndEventMap({required List<AppModelTimeSlot> timeslots, required Map<int, List<AppModelEvent>> eventMap}) async {
     Map<AppModelTimeSlot, List<AppModelEvent>> result = {};
 
     for (AppModelTimeSlot timeslot in timeslots) {
       result[timeslot] = eventMap[timeslot.id!] ?? [];
     }
 
-    return result;
+    return Result.ok(result);
   }
 }

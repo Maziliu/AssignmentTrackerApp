@@ -13,9 +13,7 @@ class DriftEventRepository implements EventRepository, DriftRepository {
   final DriftEventDao _driftEventDao;
   final DriftTimeslotDao _driftTimeslotDao;
 
-  DriftEventRepository(
-      {required DriftEventDao driftEventDao,
-      required DriftTimeslotDao driftTimeslotDao})
+  DriftEventRepository({required DriftEventDao driftEventDao, required DriftTimeslotDao driftTimeslotDao})
       : _driftEventDao = driftEventDao,
         _driftTimeslotDao = driftTimeslotDao;
 
@@ -54,9 +52,7 @@ class DriftEventRepository implements EventRepository, DriftRepository {
   Future<Result<AppModelEvent>> getEventById({required int id}) async {
     try {
       Event? event = await _driftEventDao.getEventById(id);
-      return (event == null)
-          ? Result.error(FailedToRetrieveEventException())
-          : Result.ok(fromDriftDataClass(event));
+      return (event == null) ? Result.error(FailedToRetrieveEventException()) : Result.ok(fromDriftDataClass(event));
     } on Exception {
       return Result.error(FailedToRetrieveEventException());
     }
@@ -84,64 +80,50 @@ class DriftEventRepository implements EventRepository, DriftRepository {
   }
 
   @override
-  Future<Result<List<AppModelEvent>>> getAllEventsByUserId(
-      {required int userId}) async {
+  Future<Result<List<AppModelEvent>>> getAllEventsByUserId({required int userId}) async {
     try {
       List<Event> events = await _driftEventDao.getAllEvents(userId: userId);
-      return Result.ok(
-          events.map((event) => fromDriftDataClass(event)).toList());
+      return Result.ok(events.map((event) => fromDriftDataClass(event)).toList());
     } on Exception {
       return Result.error(FailedToRetrieveEventException());
     }
   }
 
   @override
-  Future<Result<List<AppModelEvent>>> getAllEventsForNext14DaysByUserId(
-      {required int userId}) async {
+  Future<Result<List<AppModelEvent>>> getAllEventsForNext14DaysByUserId({required int userId}) async {
     try {
       DateTime now = DateTime.now();
 
-      List<Timeslot> timeslots = await _driftTimeslotDao.getAllTimeslotsBefore(
-          userId: userId,
-          date: DateTime(now.year, now.month, now.day + 14, 23, 59, 59, 999));
+      List<Timeslot> timeslots =
+          await _driftTimeslotDao.getAllTimeslotsBefore(userId: userId, date: DateTime(now.year, now.month, now.day + 14, 23, 59, 59, 999));
 
-      List<Event> events = (await Future.wait(timeslots.map((timeslot) async =>
-              await _driftEventDao.getEventsByTimeslotId(timeslot.id))))
-          .expand((event) => event)
-          .toList();
+      List<Event> events =
+          (await Future.wait(timeslots.map((timeslot) async => await _driftEventDao.getEventsByTimeslotId(timeslot.id)))).expand((event) => event).toList();
 
-      return Result.ok(
-          events.map((event) => fromDriftDataClass(event)).toList());
+      return Result.ok(events.map((event) => fromDriftDataClass(event)).toList());
     } on Exception {
       return Result.error(FailedToRetrieveEventException());
     }
   }
 
   @override
-  Future<Result<List<AppModelEvent>>> getAllEventsTodayByUserId(
-      {required int userId}) async {
+  Future<Result<List<AppModelEvent>>> getAllEventsTodayByUserId({required int userId}) async {
     try {
       DateTime now = DateTime.now();
 
-      List<Timeslot> timeslots = await _driftTimeslotDao.getAllTimeslotsBefore(
-          userId: userId,
-          date: DateTime(now.year, now.month, now.day, 23, 59, 59, 999));
+      List<Timeslot> timeslots = await _driftTimeslotDao.getAllTimeslotsBefore(userId: userId, date: DateTime(now.year, now.month, now.day, 23, 59, 59, 999));
 
-      List<Event> events = (await Future.wait(timeslots.map((timeslot) async =>
-              await _driftEventDao.getEventsByTimeslotId(timeslot.id))))
-          .expand((event) => event)
-          .toList();
+      List<Event> events =
+          (await Future.wait(timeslots.map((timeslot) async => await _driftEventDao.getEventsByTimeslotId(timeslot.id)))).expand((event) => event).toList();
 
-      return Result.ok(
-          events.map((event) => fromDriftDataClass(event)).toList());
+      return Result.ok(events.map((event) => fromDriftDataClass(event)).toList());
     } on Exception {
       return Result.error(FailedToRetrieveEventException());
     }
   }
 
   @override
-  Future<Result<Map<int, List<AppModelEvent>>>> getAllEventsByTimeslotIds(
-      {required List<int> timeslotIds}) async {
+  Future<Result<Map<int, List<AppModelEvent>>>> getAllEventsByTimeslotIds({required List<int> timeslotIds}) async {
     try {
       Map<int, List<AppModelEvent>> result = {};
 

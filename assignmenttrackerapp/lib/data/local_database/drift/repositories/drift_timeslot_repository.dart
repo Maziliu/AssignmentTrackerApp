@@ -11,15 +11,12 @@ import 'package:drift/drift.dart';
 class DriftTimeslotRepository implements TimeSlotRepository, DriftRepository {
   final DriftTimeslotDao _driftTimeslotDao;
 
-  DriftTimeslotRepository({required DriftTimeslotDao driftTimeslotDao})
-      : _driftTimeslotDao = driftTimeslotDao;
+  DriftTimeslotRepository({required DriftTimeslotDao driftTimeslotDao}) : _driftTimeslotDao = driftTimeslotDao;
 
   @override
-  Future<Result<void>> createTimeSlot(
-      {required AppModelTimeSlot timeSlot}) async {
+  Future<Result<void>> createTimeSlot({required AppModelTimeSlot timeSlot}) async {
     try {
-      await _driftTimeslotDao
-          .insertTimeslotByCompanion(toDriftCompanion(timeSlot));
+      await _driftTimeslotDao.insertTimeslotByCompanion(toDriftCompanion(timeSlot));
       return Result.ok(null);
     } on Exception {
       return Result.error(UnableToCreateTimeSlotException());
@@ -39,21 +36,14 @@ class DriftTimeslotRepository implements TimeSlotRepository, DriftRepository {
   @override
   AppModelTimeSlot fromDriftDataClass(DataClass driftDataClass) {
     Timeslot timeslot = driftDataClass as Timeslot;
-    return AppModelTimeSlot(
-        id: timeslot.id,
-        userId: timeslot.userId,
-        endingDay: timeslot.endingDay,
-        startDate: timeslot.startDate,
-        endDate: timeslot.endDate);
+    return AppModelTimeSlot(id: timeslot.id, userId: timeslot.userId, endingDay: timeslot.endingDay, startDate: timeslot.startDate, endDate: timeslot.endDate);
   }
 
   @override
   Future<Result<AppModelTimeSlot>> getTimeSlotById({required int id}) async {
     try {
       Timeslot? timeslot = await _driftTimeslotDao.getTimeslotById(id);
-      return (timeslot == null)
-          ? Result.error(FailedToRetrieveTimeSlotException())
-          : Result.ok(fromDriftDataClass(timeslot));
+      return (timeslot == null) ? Result.error(FailedToRetrieveTimeSlotException()) : Result.ok(fromDriftDataClass(timeslot));
     } on Exception {
       return Result.error(FailedToRetrieveTimeSlotException());
     }
@@ -71,11 +61,9 @@ class DriftTimeslotRepository implements TimeSlotRepository, DriftRepository {
   }
 
   @override
-  Future<Result<void>> updateTimeSlot(
-      {required AppModelTimeSlot timeSlot}) async {
+  Future<Result<void>> updateTimeSlot({required AppModelTimeSlot timeSlot}) async {
     try {
-      await _driftTimeslotDao
-          .updateTimeslotByCompanion(toDriftCompanion(timeSlot));
+      await _driftTimeslotDao.updateTimeslotByCompanion(toDriftCompanion(timeSlot));
       return Result.ok(null);
     } on Exception {
       return Result.error(UnableToUpdateTimeSlotException());
@@ -83,13 +71,10 @@ class DriftTimeslotRepository implements TimeSlotRepository, DriftRepository {
   }
 
   @override
-  Future<Result<List<AppModelTimeSlot>>> getAllTimeslotsBefore(
-      {required int userId, required DateTime date}) async {
+  Future<Result<List<AppModelTimeSlot>>> getAllTimeslotsBefore({required int userId, required DateTime date}) async {
     try {
-      List<Timeslot> timeslots = await _driftTimeslotDao.getAllTimeslotsBefore(
-          userId: userId, date: date);
-      return Result.ok(
-          timeslots.map((timeslot) => fromDriftDataClass(timeslot)).toList());
+      List<Timeslot> timeslots = await _driftTimeslotDao.getAllTimeslotsBefore(userId: userId, date: date);
+      return Result.ok(timeslots.map((timeslot) => fromDriftDataClass(timeslot)).toList());
     } on Exception {
       return Result.error(FailedToRetrieveTimeSlotException());
     }

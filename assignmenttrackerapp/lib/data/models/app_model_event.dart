@@ -5,11 +5,7 @@ class AppModelEvent extends AppModel implements Datastreamable {
   final String _eventName;
   final int _timeSlotId, _userId;
 
-  AppModelEvent(
-      {required super.id,
-      required String eventName,
-      required int timeSlotId,
-      required int userId})
+  AppModelEvent({required super.id, required String eventName, required int timeSlotId, required int userId})
       : _eventName = eventName,
         _timeSlotId = timeSlotId,
         _userId = userId;

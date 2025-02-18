@@ -3,6 +3,5 @@ enum TimeSlotType {
   deadline,
   tbd;
 
-  static String get allTimeSlotTypes =>
-      TimeSlotType.values.map((type) => "'${type.name}'").join(", ");
+  static String get allTimeSlotTypes => TimeSlotType.values.map((type) => "'${type.name}'").join(', ');
 }

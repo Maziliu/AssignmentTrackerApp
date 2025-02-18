@@ -8,19 +8,15 @@ import 'package:assignmenttrackerapp/data/local_database/drift/repositories/drif
 import 'package:assignmenttrackerapp/common/utils/result.dart';
 import 'package:drift/drift.dart';
 
-class DriftAssessmentRepository
-    implements AssessmentRepository, DriftRepository {
+class DriftAssessmentRepository implements AssessmentRepository, DriftRepository {
   final DriftAssessmentDao _driftAssessmentDao;
 
-  DriftAssessmentRepository({required DriftAssessmentDao driftAssessmentDao})
-      : _driftAssessmentDao = driftAssessmentDao;
+  DriftAssessmentRepository({required DriftAssessmentDao driftAssessmentDao}) : _driftAssessmentDao = driftAssessmentDao;
 
   @override
-  Future<Result<void>> createAssessment(
-      {required AppModelAssessment assessment}) async {
+  Future<Result<void>> createAssessment({required AppModelAssessment assessment}) async {
     try {
-      await _driftAssessmentDao
-          .insertAssessmentByCompanion(toDriftCompanion(assessment));
+      await _driftAssessmentDao.insertAssessmentByCompanion(toDriftCompanion(assessment));
       return Result.ok(null);
     } on Exception {
       return Result.error(UnableToCreateAssessmentException());
@@ -53,13 +49,10 @@ class DriftAssessmentRepository
   }
 
   @override
-  Future<Result<AppModelAssessment>> getAssessmentById(
-      {required int id}) async {
+  Future<Result<AppModelAssessment>> getAssessmentById({required int id}) async {
     try {
       Assessment? assessment = await _driftAssessmentDao.getAssessmentById(id);
-      return (assessment == null)
-          ? Result.error(FailedToRetrieveAssessmentException())
-          : Result.ok(fromDriftDataClass(assessment));
+      return (assessment == null) ? Result.error(FailedToRetrieveAssessmentException()) : Result.ok(fromDriftDataClass(assessment));
     } on Exception {
       return Result.error(FailedToRetrieveAssessmentException());
     }
@@ -81,11 +74,9 @@ class DriftAssessmentRepository
   }
 
   @override
-  Future<Result<void>> updateAssessment(
-      {required AppModelAssessment assessment}) async {
+  Future<Result<void>> updateAssessment({required AppModelAssessment assessment}) async {
     try {
-      await _driftAssessmentDao
-          .updateAssessmentByCompanion(toDriftCompanion(assessment));
+      await _driftAssessmentDao.updateAssessmentByCompanion(toDriftCompanion(assessment));
       return Result.ok(null);
     } on Exception {
       return Result.error(UnableToUpdateAssessmentException());

@@ -11,8 +11,7 @@ import 'package:drift/drift.dart';
 class DriftUserRepository implements UserRepository, DriftRepository {
   final DriftUserDao _driftUserDao;
 
-  DriftUserRepository({required DriftUserDao driftUserDao})
-      : _driftUserDao = driftUserDao;
+  DriftUserRepository({required DriftUserDao driftUserDao}) : _driftUserDao = driftUserDao;
 
   @override
   Future<Result<void>> createUser({required AppModelUser user}) async {
@@ -49,9 +48,7 @@ class DriftUserRepository implements UserRepository, DriftRepository {
   Future<Result<AppModelUser>> getUserById({required int id}) async {
     try {
       User? user = await _driftUserDao.getUserById(id);
-      return (user == null)
-          ? Result.error(FailedToRetrieveUserException())
-          : Result.ok(fromDriftDataClass(user));
+      return (user == null) ? Result.error(FailedToRetrieveUserException()) : Result.ok(fromDriftDataClass(user));
     } on Exception {
       return Result.error(FailedToRetrieveUserException());
     }
@@ -79,13 +76,10 @@ class DriftUserRepository implements UserRepository, DriftRepository {
   }
 
   @override
-  Future<Result<int>> getUserByCloudSyncId(
-      {required String? cloudSyncId}) async {
+  Future<Result<int>> getUserByCloudSyncId({required String? cloudSyncId}) async {
     try {
       User? user = await _driftUserDao.getUserByCloudSyncId(cloudSyncId);
-      return (user == null)
-          ? Result.error(FailedToRetrieveUserException())
-          : Result.ok(user.id);
+      return (user == null) ? Result.error(FailedToRetrieveUserException()) : Result.ok(user.id);
     } on Exception {
       return Result.error(FailedToRetrieveUserException());
     }

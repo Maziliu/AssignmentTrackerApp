@@ -63,16 +63,15 @@ class AuthViewModel extends ChangeNotifier {
   Future<int?> _fetchOrCreateUserId(String? uid) async {
     if (uid == null) return null;
 
-    final Result<int> result =
-        await _userRepository.getUserByCloudSyncId(cloudSyncId: uid);
+    final Result<int> result = await _userRepository.getUserByCloudSyncId(cloudSyncId: uid);
 
     switch (result) {
       case Ok():
         return result.value;
       case Error():
         final newUser = AppModelUser(
-          email: _authService.currentUser?.email ?? "unknown",
-          username: _authService.currentUser?.email ?? "Unknown User",
+          email: _authService.currentUser?.email ?? 'unknown',
+          username: _authService.currentUser?.email ?? 'Unknown User',
           cloudDBSyncId: uid,
           id: null,
         );

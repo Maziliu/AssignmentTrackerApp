@@ -13,8 +13,7 @@ class DashboardView extends StatelessWidget {
 
     if (viewModel.isLoggedOut) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil('/login', (route) => false);
+        Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
         viewModel.resetLogoutFlag();
       });
     }

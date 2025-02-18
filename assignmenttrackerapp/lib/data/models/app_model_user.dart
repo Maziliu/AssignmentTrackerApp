@@ -4,11 +4,7 @@ class AppModelUser extends AppModel {
   final String? _email;
   final String _username, _cloudDBSyncId;
 
-  AppModelUser(
-      {required super.id,
-      required String? email,
-      required String username,
-      required String cloudDBSyncId})
+  AppModelUser({required super.id, required String? email, required String username, required String cloudDBSyncId})
       : _email = email,
         _username = username,
         _cloudDBSyncId = cloudDBSyncId;

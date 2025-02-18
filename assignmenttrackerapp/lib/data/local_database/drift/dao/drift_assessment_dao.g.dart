@@ -6,8 +6,7 @@ part of 'drift_assessment_dao.dart';
 mixin _$DriftAssessmentDaoMixin on DatabaseAccessor<AppDatabase> {
   $UsersTable get users => attachedDatabase.users;
   $GradeScalesTable get gradeScales => attachedDatabase.gradeScales;
-  $GradedComponentsTable get gradedComponents =>
-      attachedDatabase.gradedComponents;
+  $GradedComponentsTable get gradedComponents => attachedDatabase.gradedComponents;
   $TimeslotsTable get timeslots => attachedDatabase.timeslots;
   $EventsTable get events => attachedDatabase.events;
   $CoursesTable get courses => attachedDatabase.courses;

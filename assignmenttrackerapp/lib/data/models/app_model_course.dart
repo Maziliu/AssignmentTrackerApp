@@ -3,11 +3,7 @@ import 'package:assignmenttrackerapp/data/models/abstracts/app_model.dart';
 
 class AppModelCourse extends AppModel implements Datastreamable {
   final String _courseName, _courseCode;
-  final int _scheduleBitMask,
-      _gradedComponentId,
-      _gradeScaleId,
-      _eventId,
-      _userId;
+  final int _scheduleBitMask, _gradedComponentId, _gradeScaleId, _eventId, _userId;
 
   AppModelCourse(
       {required super.id,

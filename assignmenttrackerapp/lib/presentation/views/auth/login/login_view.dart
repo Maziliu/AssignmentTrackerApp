@@ -36,7 +36,7 @@ class _LoginViewState extends State<LoginView> {
       child: Consumer<LoginViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
-            appBar: AppBar(title: const Text("Login")),
+            appBar: AppBar(title: const Text('Login')),
             body: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -45,7 +45,7 @@ class _LoginViewState extends State<LoginView> {
                     controller: _email,
                     autocorrect: false,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(labelText: "Email"),
+                    decoration: const InputDecoration(labelText: 'Email'),
                   ),
                   const SizedBox(height: 16),
                   TextField(
@@ -53,20 +53,18 @@ class _LoginViewState extends State<LoginView> {
                     obscureText: true,
                     enableSuggestions: false,
                     autocorrect: false,
-                    decoration: const InputDecoration(labelText: "Password"),
+                    decoration: const InputDecoration(labelText: 'Password'),
                   ),
                   const SizedBox(height: 24),
                   viewModel.isLoading
                       ? const CircularProgressIndicator()
                       : ElevatedButton(
-                          onPressed:
-                              viewModel.isLoading || viewModel.isLoggingIn
-                                  ? null
-                                  : () async {
-                                      await viewModel.login(
-                                          context, _email.text, _password.text);
-                                    },
-                          child: const Text("Login"),
+                          onPressed: viewModel.isLoading || viewModel.isLoggingIn
+                              ? null
+                              : () async {
+                                  await viewModel.login(context, _email.text, _password.text);
+                                },
+                          child: const Text('Login'),
                         ),
                   TextButton(
                     onPressed: () {

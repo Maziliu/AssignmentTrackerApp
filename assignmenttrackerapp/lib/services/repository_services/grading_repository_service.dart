@@ -7,14 +7,10 @@ class GradingRepositoryService {
   final GradeScaleRepository _gradeScaleRepository;
   final GradedComponentRepository _gradedComponentRepository;
 
-  GradingRepositoryService(
-      {required GradeScaleRepository gradeScaleRepository,
-      required GradedComponentRepository gradedComponentRepository})
+  GradingRepositoryService({required GradeScaleRepository gradeScaleRepository, required GradedComponentRepository gradedComponentRepository})
       : _gradeScaleRepository = gradeScaleRepository,
         _gradedComponentRepository = gradedComponentRepository;
 
-  Future<void> processGradeScales(
-      {required List<AppModelGradeScale> gradeScales}) async {}
-  Future<void> processGradedComponents(
-      {required List<AppModelGradedComponent> gradedComponents}) async {}
+  Future<void> processGradeScales({required List<AppModelGradeScale> gradeScales}) async {}
+  Future<void> processGradedComponents({required List<AppModelGradedComponent> gradedComponents}) async {}
 }

@@ -3,11 +3,8 @@ import 'package:assignmenttrackerapp/common/utils/pair.dart';
 import 'package:flutter/material.dart';
 
 String formatTimeOfDay(TimeOfDay time, {bool use24HourFormat = false}) {
-  final int hour = use24HourFormat
-      ? time.hour
-      : (time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod);
-  final String period =
-      use24HourFormat ? '' : (time.period == DayPeriod.am ? ' AM' : ' PM');
+  final int hour = use24HourFormat ? time.hour : (time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod);
+  final String period = use24HourFormat ? '' : (time.period == DayPeriod.am ? ' AM' : ' PM');
   final String minute = time.minute.toString().padLeft(2, '0');
 
   return '$hour:$minute$period';
@@ -57,12 +54,8 @@ List<Pair<TimeOfDay?, TimeOfDay?>> decodeTimeSlots(String encodedString) {
     if (pair.isNotEmpty) {
       List<String> timeStrings = pair.split(',');
 
-      TimeOfDay? startTime = timeStrings[0].isNotEmpty
-          ? TimeOfDay.fromDateTime(DateTime.tryParse(timeStrings[0])!)
-          : null;
-      TimeOfDay? endTime = timeStrings.length > 1 && timeStrings[1].isNotEmpty
-          ? TimeOfDay.fromDateTime(DateTime.tryParse(timeStrings[1])!)
-          : null;
+      TimeOfDay? startTime = timeStrings[0].isNotEmpty ? TimeOfDay.fromDateTime(DateTime.tryParse(timeStrings[0])!) : null;
+      TimeOfDay? endTime = timeStrings.length > 1 && timeStrings[1].isNotEmpty ? TimeOfDay.fromDateTime(DateTime.tryParse(timeStrings[1])!) : null;
 
       result.add(Pair.pair(first: startTime, second: endTime));
     }

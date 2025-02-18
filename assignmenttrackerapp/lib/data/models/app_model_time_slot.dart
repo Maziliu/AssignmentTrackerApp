@@ -7,12 +7,7 @@ class AppModelTimeSlot extends AppModel {
   final DateTime? _startDate;
   final DateTime _endDate;
 
-  AppModelTimeSlot(
-      {required super.id,
-      required int userId,
-      required DaysOfTheWeek endingDay,
-      required DateTime? startDate,
-      required DateTime endDate})
+  AppModelTimeSlot({required super.id, required int userId, required DaysOfTheWeek endingDay, required DateTime? startDate, required DateTime endDate})
       : _userId = userId,
         _endingDay = endingDay,
         _startDate = startDate,
@@ -31,6 +26,6 @@ class AppModelTimeSlot extends AppModel {
       return _endDate.toString();
     }
 
-    return "${_startDate.toString()} - ${_endDate.toString()}";
+    return '${_startDate.toString()} - ${_endDate.toString()}';
   }
 }

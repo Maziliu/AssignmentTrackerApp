@@ -7,11 +7,7 @@ class AppModelGradedComponent extends AppModel {
   final int _userId;
 
   AppModelGradedComponent(
-      {required super.id,
-      required double? weightDecimal,
-      required double gradePercentage,
-      required String gradeLetter,
-      required int userId})
+      {required super.id, required double? weightDecimal, required double gradePercentage, required String gradeLetter, required int userId})
       : _weightDecimal = weightDecimal,
         _gradePercentage = gradePercentage,
         _gradeLetter = gradeLetter,

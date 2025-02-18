@@ -36,7 +36,7 @@ class _RegisterViewState extends State<RegisterView> {
       child: Consumer<RegisterViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
-            appBar: AppBar(title: const Text("Register")),
+            appBar: AppBar(title: const Text('Register')),
             body: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -45,7 +45,7 @@ class _RegisterViewState extends State<RegisterView> {
                     controller: _email,
                     autocorrect: false,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(labelText: "Email"),
+                    decoration: const InputDecoration(labelText: 'Email'),
                   ),
                   const SizedBox(height: 16),
                   TextField(
@@ -53,17 +53,16 @@ class _RegisterViewState extends State<RegisterView> {
                     obscureText: true,
                     enableSuggestions: false,
                     autocorrect: false,
-                    decoration: const InputDecoration(labelText: "Password"),
+                    decoration: const InputDecoration(labelText: 'Password'),
                   ),
                   const SizedBox(height: 24),
                   viewModel.isLoading
                       ? const CircularProgressIndicator()
                       : ElevatedButton(
                           onPressed: () async {
-                            await viewModel.register(
-                                context, _email.text, _password.text);
+                            await viewModel.register(context, _email.text, _password.text);
                           },
-                          child: const Text("Register"),
+                          child: const Text('Register'),
                         ),
                   TextButton(
                     onPressed: () {
@@ -72,7 +71,7 @@ class _RegisterViewState extends State<RegisterView> {
                         (route) => false,
                       );
                     },
-                    child: const Text("Back to Login"),
+                    child: const Text('Back to Login'),
                   ),
                 ],
               ),

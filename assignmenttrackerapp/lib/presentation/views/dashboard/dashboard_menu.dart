@@ -18,7 +18,7 @@ class DashboardMenu extends StatelessWidget {
       itemBuilder: (context) => const [
         PopupMenuItem(
           value: OverflowMenuOptions.logout,
-          child: Text("Logout"),
+          child: Text('Logout'),
         ),
       ],
     );

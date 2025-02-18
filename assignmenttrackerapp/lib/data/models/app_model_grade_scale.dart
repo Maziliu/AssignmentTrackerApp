@@ -4,8 +4,7 @@ class AppModelGradeScale extends AppModel {
   final String _thresholdsJson;
   final int _userId;
 
-  AppModelGradeScale(
-      {required super.id, required String thresholdsJson, required int userId})
+  AppModelGradeScale({required super.id, required String thresholdsJson, required int userId})
       : _thresholdsJson = thresholdsJson,
         _userId = userId;
 

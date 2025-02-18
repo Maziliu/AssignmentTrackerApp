@@ -9,12 +9,10 @@ class RegisterViewModel extends ChangeNotifier {
 
   bool _isLoading = false;
 
-  RegisterViewModel({required AuthServices authService})
-      : _authService = authService;
+  RegisterViewModel({required AuthServices authService}) : _authService = authService;
   bool get isLoading => _isLoading;
 
-  Future<void> register(
-      BuildContext context, String email, String password) async {
+  Future<void> register(BuildContext context, String email, String password) async {
     _isLoading = true;
     notifyListeners();
 

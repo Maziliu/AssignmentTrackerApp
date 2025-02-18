@@ -11,8 +11,7 @@ import 'package:drift/drift.dart';
 class DriftCourseRepository implements CourseRepository, DriftRepository {
   final DriftCourseDao _driftCourseDao;
 
-  DriftCourseRepository({required DriftCourseDao driftCourseDao})
-      : _driftCourseDao = driftCourseDao;
+  DriftCourseRepository({required DriftCourseDao driftCourseDao}) : _driftCourseDao = driftCourseDao;
 
   @override
   Future<Result<void>> createCourse({required AppModelCourse course}) async {
@@ -53,9 +52,7 @@ class DriftCourseRepository implements CourseRepository, DriftRepository {
   Future<Result<AppModelCourse>> getCourseById({required int id}) async {
     try {
       Course? course = await _driftCourseDao.getCourseById(id);
-      return (course == null)
-          ? Result.error(FailedToRetrieveCourseException())
-          : Result.ok(fromDriftDataClass(course));
+      return (course == null) ? Result.error(FailedToRetrieveCourseException()) : Result.ok(fromDriftDataClass(course));
     } on Exception {
       return Result.error(FailedToRetrieveCourseException());
     }

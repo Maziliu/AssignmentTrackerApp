@@ -47,7 +47,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Verify Email"),
+        title: const Text('Verify Email'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -56,22 +56,22 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Text(
-              "An email has been sent to your registered address.",
+              'An email has been sent to your registered address.',
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             const Text(
-              "If you have not received the email, click the button below to resend it.",
+              'If you have not received the email, click the button below to resend it.',
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
             TextButton(
               onPressed: _verifyEmail,
-              child: const Text("Resend Verification Email"),
+              child: const Text('Resend Verification Email'),
             ),
             TextButton(
               onPressed: _restart,
-              child: const Text("Restart"),
+              child: const Text('Restart'),
             ),
           ],
         ),

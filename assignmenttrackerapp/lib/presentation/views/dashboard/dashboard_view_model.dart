@@ -10,8 +10,7 @@ class DashboardViewModel extends ChangeNotifier {
   bool _isLoggedOut = false;
   bool get isLoggedOut => _isLoggedOut;
 
-  DashboardViewModel({required AuthServices authService})
-      : _authService = authService;
+  DashboardViewModel({required AuthServices authService}) : _authService = authService;
 
   void selectTab(int index) {
     _selectedTabIndex = index;

@@ -7,8 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 class FirebaseAuthStrategy implements AuthStrategy {
   @override
-  Future<AuthUser> createUser(
-      {required String email, required String password}) async {
+  Future<AuthUser> createUser({required String email, required String password}) async {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
@@ -63,8 +62,7 @@ class FirebaseAuthStrategy implements AuthStrategy {
   }
 
   @override
-  Future<AuthUser> login(
-      {required String email, required String password}) async {
+  Future<AuthUser> login({required String email, required String password}) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
@@ -79,7 +77,7 @@ class FirebaseAuthStrategy implements AuthStrategy {
       }
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
-        case "invalid-credential":
+        case 'invalid-credential':
           throw InvalidCredentialsAuthException();
         default:
           throw GenericAuthException();
@@ -115,12 +113,7 @@ class FirebaseAuthStrategy implements AuthStrategy {
   @override
   Stream<AuthUser?> get authStateChanges {
     return FirebaseAuth.instance.authStateChanges().map((user) {
-      return (user != null)
-          ? AuthUser(
-              uid: user.uid,
-              email: user.email,
-              isEmailVerified: user.emailVerified)
-          : null;
+      return (user != null) ? AuthUser(uid: user.uid, email: user.email, isEmailVerified: user.emailVerified) : null;
     });
   }
 }

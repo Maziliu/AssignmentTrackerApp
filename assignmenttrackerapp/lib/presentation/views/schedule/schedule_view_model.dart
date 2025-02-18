@@ -1,3 +1,4 @@
+import 'package:assignmenttrackerapp/common/utils/snackbar_helpers.dart';
 import 'package:assignmenttrackerapp/data/models/app_model_time_slot.dart';
 import 'package:assignmenttrackerapp/data/repositories/interfaces/event_repository.dart';
 import 'package:assignmenttrackerapp/data/repositories/interfaces/time_slot_repository.dart';
@@ -13,13 +14,9 @@ class ScheduleViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   Map<AppModelTimeSlot, List<AppModelEvent>> _timeToEventMap = {};
-  Map<AppModelTimeSlot, List<AppModelEvent>> get timeToEventMap =>
-      _timeToEventMap;
+  Map<AppModelTimeSlot, List<AppModelEvent>> get timeToEventMap => _timeToEventMap;
 
-  ScheduleViewModel(
-      {required ScheduleRepositoryService scheduleRepositoryService,
-      required userId})
-      : _scheduleRepositoryService = scheduleRepositoryService {
+  ScheduleViewModel({required ScheduleRepositoryService scheduleRepositoryService, required userId}) : _scheduleRepositoryService = scheduleRepositoryService {
     if (userId != null) {
       loadEvents(userId);
     }
@@ -31,10 +28,14 @@ class ScheduleViewModel extends ChangeNotifier {
 
     DateTime now = DateTime.now();
 
-    _timeToEventMap =
-        await _scheduleRepositoryService.fetchAllEventsAndTimesBefore(
-            userId: userId,
-            upperBound: DateTime(now.year, now.month, now.day + 14));
+    Result result = await _scheduleRepositoryService.fetchAllEventsAndTimesBefore(userId: userId, upperBound: DateTime(now.year, now.month, now.day + 14));
+
+    switch (result) {
+      case Ok():
+        _timeToEventMap = result.value;
+      case Error():
+        showErrorMessage(result.error.toString());
+    }
 
     _isLoading = false;
     notifyListeners();
@@ -42,6 +43,20 @@ class ScheduleViewModel extends ChangeNotifier {
 
   Future<void> updateEvent(int id) async {}
 
-  Future<void> deleteEvent(
-      {required int timeslotId, required int eventId}) async {}
+  Future<void> deleteEvent({required int timeslotId, required int eventId}) async {
+    Result result = await _scheduleRepositoryService.deleteEventWithTimeslotCleanup(eventId: eventId, timeslotId: timeslotId);
+
+    switch (result) {
+      case Ok():
+        _timeToEventMap.forEach((timeslotKey, eventList) {
+          eventList.removeWhere((event) => event.id! == eventId);
+        });
+
+        _timeToEventMap.removeWhere((timeslotKey, eventList) => eventList.isEmpty);
+
+        notifyListeners();
+      case Error():
+        showErrorMessage(result.error.toString());
+    }
+  }
 }
