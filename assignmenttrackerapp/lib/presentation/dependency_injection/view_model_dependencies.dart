@@ -34,7 +34,7 @@ void setupViewModelDependencies({required GetIt injector}) {
     ),
   );
 
-  injector.registerLazySingleton<ScheduleViewModel>(
+  injector.registerFactory<ScheduleViewModel>(
     () => ScheduleViewModel(
       userId: injector<AuthViewModel>().userId,
       scheduleRepositoryService: injector<ScheduleRepositoryService>(),

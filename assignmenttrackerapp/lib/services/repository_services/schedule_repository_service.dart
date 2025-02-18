@@ -1,5 +1,4 @@
 import 'package:assignmenttrackerapp/common/exceptions/service_exceptions.dart';
-import 'package:assignmenttrackerapp/common/utils/result_helpers.dart';
 import 'package:assignmenttrackerapp/common/utils/result.dart';
 import 'package:assignmenttrackerapp/data/models/app_model_event.dart';
 import 'package:assignmenttrackerapp/data/models/app_model_time_slot.dart';

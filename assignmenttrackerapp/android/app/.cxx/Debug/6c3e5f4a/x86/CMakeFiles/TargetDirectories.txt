@@ -1,0 +1,2 @@
+D:/Repos/AssignmentTrackerApp/assignmenttrackerapp/android/app/.cxx/Debug/6c3e5f4a/x86/CMakeFiles/edit_cache.dir
+D:/Repos/AssignmentTrackerApp/assignmenttrackerapp/android/app/.cxx/Debug/6c3e5f4a/x86/CMakeFiles/rebuild_cache.dir

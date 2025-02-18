@@ -1,10 +1,10 @@
-import 'package:assignmenttrackerapp/data/models/app_model_time_slot.dart';
-import 'package:assignmenttrackerapp/dependency_injection_container.dart';
-import 'package:assignmenttrackerapp/presentation/views/auth/auth_view_model.dart';
-import 'package:assignmenttrackerapp/presentation/views/schedule/schedule_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:assignmenttrackerapp/presentation/views/schedule/schedule_view_model.dart';
+import 'package:assignmenttrackerapp/presentation/views/auth/auth_view_model.dart';
 import 'package:assignmenttrackerapp/data/models/app_model_event.dart';
+import 'package:assignmenttrackerapp/data/models/app_model_time_slot.dart';
+import 'package:assignmenttrackerapp/dependency_injection_container.dart';
 
 class ScheduleView extends StatelessWidget {
   const ScheduleView({super.key});
@@ -19,50 +19,69 @@ class ScheduleView extends StatelessWidget {
 
         return ChangeNotifierProvider(
           create: (context) => injector<ScheduleViewModel>(),
-          child: Scaffold(
-            body: Consumer<ScheduleViewModel>(
-              builder: (context, viewModel, child) {
-                if (viewModel.isLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+          child: Consumer<ScheduleViewModel>(
+            builder: (context, viewModel, child) {
+              if (viewModel.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildSectionTitle("Today's Schedule"),
-                      _buildEventList(
-                        context,
-                        eventsMap: viewModel.timeToEventMap,
-                        onDelete: viewModel.deleteEvent,
-                        onUpdate: viewModel.updateEvent,
-                        todayOnly: true,
-                      ),
-                      const SizedBox(height: 24),
-                      _buildSectionTitle('Upcoming Events'),
-                      _buildEventList(
-                        context,
-                        eventsMap: viewModel.timeToEventMap,
-                        onDelete: viewModel.deleteEvent,
-                        onUpdate: viewModel.updateEvent,
-                        todayOnly: false,
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+              return Scaffold(
+                body: Stack(
+                  children: [
+                    CustomScrollView(
+                      controller: viewModel.scrollController,
+                      slivers: [
+                        SliverPadding(
+                          padding: const EdgeInsets.all(16),
+                          sliver: SliverList(
+                            delegate: SliverChildListDelegate(
+                              [
+                                _buildSectionTitle("Today's Schedule"),
+                                _buildEventList(
+                                  context,
+                                  eventsMap: viewModel.timeToEventMap,
+                                  onDelete: viewModel.deleteEvent,
+                                  onUpdate: viewModel.updateEvent,
+                                  todayOnly: true,
+                                ),
+                                const SizedBox(height: 24),
+                                _buildSectionTitle('Upcoming Events'),
+                                _buildEventList(
+                                  context,
+                                  eventsMap: viewModel.timeToEventMap,
+                                  onDelete: viewModel.deleteEvent,
+                                  onUpdate: viewModel.updateEvent,
+                                  todayOnly: false,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
 
-                if (authViewModel.userId != null) {
-                  // Open event creation dialog
-                }
-              },
-              child: const Icon(Icons.add),
-            ),
+                    // FAB Positioned at the Bottom
+                    Positioned(
+                      bottom: 20,
+                      right: 16,
+                      child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 300),
+                        opacity: viewModel.isFloatingActionButtonVisible ? 1.0 : 0.0,
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+                            if (authViewModel.userId != null) {
+                              // Open event creation dialog
+                            }
+                          },
+                          child: const Icon(Icons.add),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         );
       },
@@ -84,7 +103,10 @@ class ScheduleView extends StatelessWidget {
     required bool todayOnly,
   }) {
     final events = eventsMap.entries.where((entry) {
-      return !todayOnly || (entry.key.startDate != null && entry.key.startDate!.day == DateTime.now().day);
+      final eventDay = entry.key.startDate?.day;
+      final today = DateTime.now().day;
+
+      return todayOnly ? (eventDay != null && eventDay == today) : (eventDay == null || eventDay != today);
     });
 
     if (events.isEmpty) {
@@ -118,16 +140,9 @@ class ScheduleView extends StatelessWidget {
       key: Key(event.id.toString()),
       direction: DismissDirection.endToStart,
       background: Container(
-        color: Colors.red,
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Icon(Icons.delete, color: Colors.white, size: 30),
-            SizedBox(width: 10),
-          ],
-        ),
+        child: const Icon(Icons.delete, color: Colors.white, size: 30),
       ),
       confirmDismiss: (direction) async {
         return await showDialog<bool>(
@@ -155,12 +170,9 @@ class ScheduleView extends StatelessWidget {
         elevation: 2,
         margin: const EdgeInsets.symmetric(vertical: 8),
         child: ListTile(
+          onTap: () => onUpdate(event.id!),
           title: Text(event.eventName),
           subtitle: Text(timeslot.toString()),
-          trailing: IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () => onUpdate(event.id!),
-          ),
         ),
       ),
     );
